@@ -1,0 +1,209 @@
+﻿body{background:#e5e5eb none repeat scroll 0 0;font-size:12px;}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+.navbar-inverse {
+    background-color: #212a76;
+    border-color: #212a76;
+}
+.navbar-default .navbar-brand {
+    color: #fff;
+}
+hr{margin-bottom: 15px;margin-top: 10px;}
+.login-disclaimer{font-size:10px;text-align:center;}
+i.warning{color:#e3b100;font-size:14px;}
+
+.form-control {
+    border-radius: 1px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+    font-size: 12px;
+    padding: 6px 8px;
+    height: 30px;
+}
+.input-group-addon {
+    border-radius: 2px;
+    padding: 6px 11px;
+}
+.form-group{margin-bottom: 10px;}
+hr{margin-bottom:10px;margin-top:10px;}
+p.login-options{font-size:11px;margin:0 0 5px;}
+.btn-default {
+    background-color: #212a76;
+    border-color: #1a215e;
+    color: #fef3e7;
+}
+.btn-default:hover,.btn-default:active,.btn-default:focus {
+    background-color: #4d5491;
+    border-color: #1a215e;
+    color: #fef3e7;
+}
+
+.btn {
+    -moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 4px 10px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error {color: #f00;font-size:10px;}
+.field-validation-valid {display: none;}
+.input-validation-error {border: 1px solid #f00!important;background-color: #fee!important;}
+.validation-summary-errors {font-weight: normal;color: #f00;font-size:12px;}
+.validation-summary-valid {display: none;}
+.validation-summary-errors ul{list-style:none;}
+.validation-summary-errors span{font-weight:bold;}
+.field-error-box{color: #f00;font-size:10px;background-color:#ffcccc;margin:3px 0;padding:3px 7px;border-radius:4px;border:1px solid #ff6666;}
+.field-error-box i{margin-right:5px;}
+.hidden{display:none;}
+
+.page-content{padding:5px 30px;}
+.block-flat, .block-wizard {
+    background: #fff none repeat scroll 0 0;
+    border-bottom: 1px solid #e2e2e2;
+    border-left: 1px solid #efefef;
+    border-radius: 3px;
+    border-right: 1px solid #efefef;
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.04);
+    margin-bottom: 20px;
+    margin-top: 10px;
+    padding: 20px;
+}
+
+.help-tip{
+	/*position: absolute;*/
+	/*top: 18px;*/
+	/*right: -10px;*/
+	text-align: center;
+	background-color: #BCDBEA;
+	border-radius: 50%;
+	width: 24px;
+	height: 24px;
+	font-size: 14px;
+	line-height: 26px;
+	cursor: default;
+}
+
+.help-tip:before{
+	content:'?';
+	font-weight: bold;
+	color:#fff;
+}
+
+.help-tip:hover p{
+	display:block;
+	transform-origin: 100% 0%;
+
+	-webkit-animation: fadeIn 0.3s ease-in-out;
+	animation: fadeIn 0.3s ease-in-out;
+
+}
+
+.help-tip p{	/* The tooltip */
+	display: none;
+	text-align: left;
+	background-color: #FFFFFF;
+	padding: 20px;
+	width: 300px;
+	position: absolute;
+	border-radius: 3px;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	right: -4px;
+	color: black;
+	font-size: 13px;
+	line-height: 1.4;
+}
+
+.help-tip p:before{ /* The pointer of the tooltip */
+	position: absolute;
+	content: '';
+	width:0;
+	height: 0;
+	border:6px solid transparent;
+	border-bottom-color:#1E2021;
+	right:10px;
+	top:-12px;
+}
+
+.help-tip p:after{ /* Prevents the tooltip from being hidden */
+	width:100%;
+	height:40px;
+	content:'';
+	position: absolute;
+	top:-40px;
+	left:0;
+}
+
+/* CSS animation */
+
+@-webkit-keyframes fadeIn {
+	0% { 
+		opacity:0; 
+		transform: scale(0.6);
+	}
+
+	100% {
+		opacity:100%;
+		transform: scale(1);
+	}
+}
+
+@keyframes fadeIn {
+	0% { opacity:0; }
+	100% { opacity:100%; }
+}
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}

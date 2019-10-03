@@ -1,0 +1,123 @@
+﻿@model IEnumerable<eBroker.Vw_Policy_Report>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Insurance Policies";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("ListPolicy", "Policy", FormMethod.Get))
+{
+    <div class="container">
+        <div class="panel panel-green">
+            <div class="panel-heading">Insurance Policy List</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <i class="fa fa-briefcase"></i>@Html.ActionLink(" New Policy", "PolicyInfo")
+                            </div>
+                            <div class="col-sm-10">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="input-group  text-center col-sm-12">
+                                                <input type="text" name="query" id="query" class="form-control input-lg" placeholder="Search by Client Name, Policy No., Product or Insurer....." />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Search by Expiry Date</td>
+                                        <td>
+                                            <input type="text" name="ExpStartDate" id="ExpStartDate" class="form-control input-lg" placeholder="Start Date" />
+                                        </td>
+                                        <td>
+                                            <div class="input-group  text-center">
+                                                <input type="text" name="ExpEndDate" id="ExpEndDate" class="form-control input-lg" placeholder="End Date" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Search by Effective Date</td>
+                                        <td>
+                                            <input type="text" name="EffStartDate" id="EffStartDate" class="form-control input-lg" placeholder="Start Date" />
+                                        </td>
+                                        <td>
+                                            <div class="input-group  text-center">
+                                                <input type="text" name="EffEndDate" id="EffEndDate" class="form-control input-lg" placeholder="End Date" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="table table-bordered">
+                                @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(m => m.Id, true);
+                               col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Edit", "PolicyInfo").RouteValues(new { Id = m.Id }).PrependIcon("fa fa-pencil-square-o"));
+                               col.Add(m => m.policy_no).Titled("Policy No.");
+                               //col.Add(m => m.policy_type).Titled("Type");
+                               col.Add(m => m.product_name).Titled("Product");
+                               col.Add(m => m.insurer).Titled("Insurer");
+                               col.Add(m => m.client_name).Titled("Client Name");
+                               col.Add(m => m.effective_dt).Titled("Effective Date").Format("{0:yyyy-MM-dd}");
+                               col.Add(m => m.expiry_dt).Titled("Expiry Date").Format("{0:yyyy-MM-dd}");
+                               col.Add(m => m.net_premium).Titled("Premium").Format("{0:#,##0}");
+                               //col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("View Insurance Policy(ies)", "InsurancePolicy"));
+                               col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Items", "PolicyItems").RouteValues(new { CId = m.Id }).PrependIcon("fa fa-search-plus"));
+                               col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Loan Acct", "ListPolicyLoan").RouteValues(new { CId = m.Id }).PrependIcon("fa fa-search-plus"));
+                               //col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Renew", "PolicyRenew").RouteValues(new { CId = m.Id }).PrependIcon("fa fa-search-plus"));
+                           }).WithPaging(10).Sortable(true)
+
+                            </div>
+                                @Html.Bootstrap().ActionLinkButton("Excel", "ExportToExcel", "Policy").PrependIcon("fa fa-file-excel-o")
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <script>
+            $('#ExpStartDate').datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-20:+1"
+            });
+
+            $('#ExpEndDate').datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-20:+20"
+            });
+
+            $('#EffStartDate').datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-20:+1"
+            });
+            $('#EffEndDate').datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-20:+1"
+            });
+        </script>
+
+    </div>
+}

@@ -1,0 +1,83 @@
+﻿@model eBroker.AppointmentDetail
+
+@{
+    ViewBag.Title = "Event Details";
+    var appointmentType = ViewBag.AppointmentTypes as List<SelectListItem>;
+    var appointmentStatus = ViewBag.EventStatus as List<SelectListItem>;
+    var employees = ViewBag.Employees as List<SelectListItem>;
+}
+
+@using (Html.BeginForm("CreateEvent", "Appointment"))
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.AppointmentID)
+    @Html.HiddenFor(m => m.DoneBy)
+    @Html.HiddenFor(m => m.EventDate)
+    var eventTypes = ViewBag.EventTypes as List<SelectListItem>;
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Policy info</h4>
+    </div>
+    <div class="modal-body modal-data">
+        <div class="box-body">
+            <div class="row">
+                @Html.ValidationSummary(true)
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.EventTypeID)
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(model => model.EventTypeID, eventTypes, "-- Event Type --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.EventTypeID)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.Comments)
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.Comments, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Comments)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.AssignedTo)
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(model => model.AssignedTo, employees, "-- Employee --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AssignedTo)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.AppointmentStatus)
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(model => model.AppointmentStatus, appointmentStatus, "-- Select Status --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AppointmentStatus)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+
+        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
+
+    </div>
+}

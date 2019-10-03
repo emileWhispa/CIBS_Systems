@@ -1,0 +1,94 @@
+﻿@model IEnumerable<eBroker.Policy_Loan_Account>
+@using eBroker
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Loan Insurance Policies";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Policy_Loan_Account loanDetails = ViewBag.LoanDetails;
+    //var loanTypes = ViewBag.LoanTypes as List<SelectListItem>;
+}
+@using (Html.BeginForm("ListPolicy", "Policy", FormMethod.Get))
+{
+    <div class="content">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-info"></i> Loan Insurance Policies</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="box-body">
+                        @if(loanDetails!=null)
+                        {
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.Label("Loan Account")
+                                </label>
+                                <div class="col-sm-2">
+                                    @Html.TextBox("txtAccount", loanDetails.loan_account, new { @disabled = "disabled", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.Label("Loan Type")
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.DropDownList("LoanType", loanTypes, "-- Loan Type --", new { @disabled = "disabled", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>*@
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.Label("Disbursement Date")</label>
+                                <div class="col-sm-2">
+                                    @Html.TextBox("loan_disbursement_date", loanDetails.loan_disbursement_date, "{0:yyyy-MM-dd}", new { @id = "txtDisbursementDate", @class = "form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.Label("Maturity Date")</label>
+                                <div class="col-sm-2">
+                                    @Html.TextBox("loan_expiry_date", loanDetails.loan_expiry_date, "{0:yyyy-MM-dd}", new { @disabled = "disabled", @id = "txtExpiryDate", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        }
+                        <div class="form-group">
+
+                            <div class="table-responsive">
+                                <div class="table table-bordered">
+                                    @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(m => m.Id, true);
+                               //col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Edit", "PolicyInfo").RouteValues(new { Id = m.Id }).PrependIcon("fa fa-pencil-square-o"));
+                               col.Add(m => m.InsurancePolicies.policy_no).Titled("Policy No.");
+                               col.Add(m => m.InsurancePolicies.policy_type).Titled("Type");
+                               col.Add(m => m.InsurancePolicies.InsuranceProducts.product_name).Titled("Product");
+                               //col.Add(m => m.InsurancePolicies.Partners.company_short_name).Titled("Insurer");
+                               col.Add(m => m.InsurancePolicies.Clients.client_name).Titled("Client Name");
+                               col.Add(m => m.InsurancePolicies.effective_dt).Titled("Effective Date").Format("{0:yyyy-MM-dd}");
+                               col.Add(m => m.InsurancePolicies.expiry_dt).Titled("Expiry Date").Format("{0:yyyy-MM-dd}");
+                               col.Add(m => m.InsurancePolicies.net_premium).Titled("Premium").Format("{0:#,##0}");
+                               //col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("View Insurance Policy(ies)", "InsurancePolicy"));
+                               col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Items", "PolicyInfoView","Policy").RouteValues(new { Id = m.contract_id}).PrependIcon("fa fa-search-plus"));
+                               //col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Loan Accounts", "ListPolicyLoan").RouteValues(new { CId = m.Id, Ds=1 }).PrependIcon("fa fa-search-plus"));
+                           }).WithPaging(10).Sortable(true)
+
+                                </div>
+                                @*                                @Html.Bootstrap().ActionLinkButton("Excel", "ExportToExcel", "Policy").PrependIcon("fa fa-file-excel-o")*@
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

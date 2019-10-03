@@ -1,0 +1,154 @@
+﻿@model IEnumerable<eBroker.Invoice_Detail>
+@using GridMvc.Html
+@using eBroker
+@{
+    ViewBag.Title = "Invoice Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Invoice InvoiceInfo = ViewBag.InvoiceInfo;
+        int counter = 0;
+    if (@Model != null)
+    {
+        counter = @Model.Count();
+    }
+}
+
+}
+@using (Html.BeginForm("InvoicePolicySearch", "Invoicing", FormMethod.Post))
+{
+    @Html.Hidden("Id", InvoiceInfo.Id);
+    <div class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Invoice Details {Records: @counter.ToString()}</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="panel-body">
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.Label("Insurance Company")
+                                </label>
+                                <div class="col-sm-2">
+                                    @Html.TextBox("txtInsuranceCompany", InvoiceInfo.Insurers.company_short_name, new { @disabled = "disabled", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.Label("Invoice Date")
+                                </label>
+                                <div class="col-sm-2">
+                                    @Html.TextBox("txtInvoiceDate", InvoiceInfo.invoice_dt, "{0:yyyy-MM-dd}", new { @disabled = "disabled", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.Label("Invoice Due Date")
+                                </label>
+                                <div class="col-sm-2">
+                                    @Html.TextBox("txtInvoiceDueDate", InvoiceInfo.invoice_due_dt, "{0:yyyy-MM-dd}", new { @disabled = "disabled", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.Label("Status")
+                                </label>
+                                <div class="col-sm-2">
+                                    @Html.TextBox("txtStatus", InvoiceInfo.Status, new { @disabled = "disabled", @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <hr />
+                            <label class="col-sm-2 control-label"></label>
+
+                            <div class="col-sm-10">
+                                @Html.Bootstrap().ActionLinkButton("Print Invoice", "ExportToPDF", "Reporting").RouteValues(new { Id = InvoiceInfo.Id.ToString(), ReportName = "Invoice_Broker", FilterName = "invoice_id", OrderBy = "" }).PrependIcon("fa fa-file-pdf-o")
+                                @if (@Model.Count() > 0)
+                                {
+                                    @Html.Bootstrap().ActionLinkButton("Excel", "ExportToExcel", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-file-excel-o")
+                                }
+                                @if (InvoiceInfo.Status == "Pending")
+                                {
+                                    if (@Model.Count() > 0)
+                                    {
+                                    @Html.Bootstrap().ActionLinkButton("Confirm Payment", "ConfirmInvoice", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-check-circle")
+                                    @Html.Bootstrap().ActionLinkButton("Delete Invoice", "DeleteInvoice", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-trash-o")
+                                    @Html.Bootstrap().ActionLinkButton("Delete Invoice Details", "DeleteInvoiceDetails", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-trash-o")
+                                    }
+                                    else
+                                    {
+                                    @Html.Bootstrap().ActionLinkButton("Delete Invoice", "DeleteInvoice", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-trash-o")
+                                    }
+                                }
+                                
+                            </div>
+                        </div>
+                        @*                        <div class="row">
+                            <hr />
+                            <div class="col-sm-12">
+                                <div id="custom-search-input">
+                                    <div class="input-group  text-center">
+                                        <input type="text" name="query" id="query" class="form-control input-lg" placeholder="Search Policy...." />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                        <br />
+                        <div class="row">
+                            <div class="table table-bordered">
+                                @if (InvoiceInfo.Status == "Pending")
+                                {
+                                    @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(excel => excel.Id, true);
+                               col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(x => Html.Bootstrap().ActionLink("Exclude", "PolicyExclusion", "Invoicing").RouteValues(new { CId = x.Id.ToString(), Id = x.invoice_id.ToString() }).PrependIcon("fa fa-times"));
+                               col.Add(excel => excel.InsurancePolicies.policy_no).Titled("Policy No.");
+                               col.Add(excel => excel.InsurancePolicies.Clients.client_name).Titled("Client Name");
+                               col.Add(excel => excel.InsurancePolicies.InsuranceProducts.product_name).Titled("Product");
+                               col.Add(excel => excel.InsurancePolicies.effective_dt).Titled("Start Date").Format("{0:yyyy-MM-dd}");
+                               col.Add(excel => excel.InsurancePolicies.expiry_dt).Titled("Expiry Date").Format("{0:yyyy-MM-dd}");
+                               col.Add(excel => excel.InsurancePolicies.net_premium).Titled("Net Premium").Format("{0:#,##0}");
+                               col.Add(excel => excel.commission_percentage).Titled("Commission(%)");
+                               col.Add(excel => excel.commission_amt).Titled("Commission Amount").Format("{0:#,##0}");
+                           }).WithPaging(10).Sortable(true)
+                                }
+                                else
+                                {
+                                    @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(excel => excel.Id, true);
+                               col.Add(excel => excel.InsurancePolicies.policy_no).Titled("Policy No.");
+                               col.Add(excel => excel.InsurancePolicies.Clients.client_name).Titled("Client Name");
+                               col.Add(excel => excel.InsurancePolicies.InsuranceProducts.product_name).Titled("Product");
+                               col.Add(excel => excel.InsurancePolicies.net_premium).Titled("Net Premium").Format("{0:#,##0}");
+                               col.Add(excel => excel.commission_percentage).Titled("Commission(%)");
+                               col.Add(excel => excel.commission_amt).Titled("Commission Amount").Format("{0:#,##0}");
+                           }).WithPaging(10).Sortable(true)                                
+                                }
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="panel-footer">
+                <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to Invoice List", "ListInvoice", "Invoicing")</span>
+            </div>
+        </div>
+    </div>
+}

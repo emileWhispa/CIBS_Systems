@@ -1,0 +1,102 @@
+﻿@model IEnumerable<eBroker.Invoice>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Invoice List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+string startDate = ViewBag.StartDate;
+    string endDate = ViewBag.EndDate;
+
+}
+
+                      <div class="content">
+                          <div class="modal fade f-modal" id="modal-default">
+                              <div class="modal-dialog">
+                                  <div class="modal-content">
+                                      @Html.Partial("InvoiceInfo", new eBroker.Invoice { invoice_due_dt = DateTime.Now, invoice_until_dt = DateTime.Now })
+
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                          </div>
+                          <div class="clearfix">
+                              <button class="btn btn-primary edit-button pull-right"><i class="fa fa-pencil-square"></i> New invoice</button>
+                          </div>
+                          <div class="box box-primary">
+                              <div class="box-header">
+                                  <div class="pull-right">
+
+                                      <form action="ListInvoice" method="post" class="form-inline">
+                                          <div class="row">
+                                              <div class="col-sm-12">
+                                                  <div id="custom-search-input">
+                                                      <div class="input-group">
+                                                          <div>
+                                                              <input type="text" name="startDate" id="startDate" class="form-control input-sm" placeholder="Start Date" />
+                                                          </div>
+                                                      </div>
+                                                      <div class="input-group">
+                                                          <div>
+                                                              <input type="text" name="endDate" id="endDate" class="form-control input-sm" placeholder="End Date" />
+                                                          </div>
+                                                          <span class="input-group-btn">
+                                                              <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                                          </span>
+
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </form>
+                                  </div>
+                                  <h3 class="box-title"><i class="fa fa-info-circle"></i> Invoice List{@ViewBag.StartDate - @ViewBag.EndDate} Count: @Model.Count()</h3>
+                              </div>
+                              <div class="box-body">
+                                  <div class="row">
+                                      <div class="box-body">
+                                          <div class="table-responsive">
+                                              <div class="table table-bordered">
+                                                  @Html.Grid(Model).Named("ga").Columns(col =>
+                                             {
+                                                 col.Add(m => m.Id, true);
+                                                 col.Add(m => m.Insurers.company_short_name).Titled("Insurance Company");
+                                                 col.Add(m => m.invoice_dt).Titled("Invoice Date").Format("{0:yyyy-MM-dd}");
+                                                 col.Add(m => m.invoice_due_dt).Titled("Invoice Due Date").Format("{0:yyyy-MM-dd}");
+                                                 col.Add(m => m.invoice_until_dt).Titled("Invoice Until").Format("{0:yyyy-MM-dd}");
+                                                 col.Add(m => m.vatable).Titled("Vatable");
+                                                 col.Add(m => m.Status).Titled("Status");
+                                                 col.Add().Sanitized(false).Encoded(false).RenderValueAs(xc => Html.Bootstrap().ActionLink("Details", "InvoicePolicyList").RouteValues(new { Id = xc.Id }));
+                                                 col.Add().Sanitized(false).Encoded(false).RenderValueAs(xc => Html.ActionLink("Edit", "InvoiceInfo", "Invoicing", new { Id = xc.Id }, new { @class = "edit-button btn-sm btn-flat btn btn-primary" }));
+                                             }).WithPaging(10).Sortable(true)
+
+                                              </div>
+                                              @if (Model.Count() > 0)
+                                              {
+                                                  @Html.Bootstrap().ActionLinkButton("Excel", "InvoiceToExcel", "Invoicing").RouteValues(new { startDate = startDate, endDate = endDate }).PrependIcon("fa fa-file-excel-o")
+                                              }
+
+                                          </div>
+                                      </div>
+
+                                  </div>
+                              </div>
+
+                          </div>
+                          <script>
+                              $('#startDate').datepicker({
+                                  dateFormat: "dd-M-yy",
+                                  changeMonth: true,
+                                  changeYear: true,
+                                  yearRange: "-20:+0"
+                              });
+
+                              $('#endDate').datepicker({
+                                  dateFormat: "dd-M-yy",
+                                  changeMonth: true,
+                                  changeYear: true,
+                                  yearRange: "-1:+20"
+                              });
+                          </script>
+
+                      </div>
+

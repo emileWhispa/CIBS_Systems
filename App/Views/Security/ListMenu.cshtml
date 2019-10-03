@@ -1,0 +1,44 @@
+﻿@model IEnumerable<eBroker.eCategoryMenu>
+@using GridMvc.Html;
+
+@{
+    ViewBag.Title = ViewBag.Profile + " Menus";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("CreateCategoryMenu", "Security", FormMethod.Get))
+{
+    <div class="container">
+        <div class="panel panel-primary col-sm-6">
+            <div class="panel-heading ">@ViewBag.Profile Menus</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <span><i class="fa fa-plus-square"></i>@Html.ActionLink("Add Menu", "eCategoryMenuInfo", new {CategoryId=ViewBag.CategoryId})</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <br />
+                            <div class="table table-bordered">
+                                @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(uc => uc.Id, true);
+                               col.Add().Sanitized(false).Encoded(false).RenderValueAs(b => Html.Bootstrap().ActionLink("Remove", "RemoveMenu", "Security").RouteValues(new { Id = b.Id, CategoryId=b.CategoryId }).PrependIcon("fa fa-pencil-square-o"));
+                               col.Add(uc => uc.eUserCategories.Category).Titled("Category");
+                               col.Add(uc => uc.Menus.MenuName).Titled("Menu");
+
+                           }).WithPaging(20).Sortable(true)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to User Groups", "ListUserCategory", "eUserCategory")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+}

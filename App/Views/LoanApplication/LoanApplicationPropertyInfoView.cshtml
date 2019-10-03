@@ -1,0 +1,192 @@
+﻿@model eBroker.LoanApplication_Property
+
+@{
+    ViewBag.Title = "Property Info";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var wallMaterial = ViewBag.WallMaterial as List<SelectListItem>;
+    var roofMaterial = ViewBag.RoofMaterial as List<SelectListItem>;
+    var windowMaterial = ViewBag.WindowMaterial as List<SelectListItem>;
+    var propertyUse = ViewBag.PropertyUse as List<SelectListItem>;
+    var Insurers = ViewBag.Insurers as List<SelectListItem>;
+
+}
+<div class="container">
+    <div class="col-sm-12">
+        @using (Html.BeginForm("SetPremiumLoanApplicationProperty", "LoanApplication"))
+        {
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.loan_application_id)
+            @Html.HiddenFor(m => m.entry_date)
+            @Html.HiddenFor(m => m.entry_user)
+            @Html.HiddenFor(m => m.PremiumUser)
+            @Html.HiddenFor(m => m.entry_user)
+            @Html.HiddenFor(m => m.PremiumDate)
+            @Html.HiddenFor(m => m.Insurer_Id)
+
+            <div class="panel panel-green">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Property Details</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        @Html.ValidationSummary(true)
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.plot_number)
+                            </label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.plot_number, new { @class = "form-control", @Disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.plot_number)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.property_description)
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(model => model.property_description, new { @class = "form-control", @Disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.property_description)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.physical_address)
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(model => model.physical_address, new { @class = "form-control", @Disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.physical_address)
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.property_use)</label>
+                            <div class="col-sm-2">
+                                @Html.DropDownListFor(model => model.property_use, propertyUse, "--Property Use--", new { @class = "form-control", @Disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.property_use)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.wall_material)</label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.wall_material, wallMaterial, "--Wall Material--", new { @class = "form-control", @Disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.wall_material)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.roof_material)</label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.roof_material, roofMaterial, "--Roof Material--", new { @class = "form-control", @Disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.roof_material)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.window_material)</label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.window_material, windowMaterial, "--Windows Material--", new { @class = "form-control", @Disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.window_material)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.floors)</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.floors, new { @class = "form-control", @Disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.floors)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.insured_value)</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.insured_value, new { @class = "form-control", @Disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.insured_value)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.Insurer_Id)</label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.Insurer_Id, Insurers, "--Insurance Company--", new { @class = "form-control"})
+                                @Html.ValidationMessageFor(model => model.Insurer_Id)
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.PremiumAmount)
+                            </label>
+                            <div class="col-sm-1">
+                                @Html.TextBoxFor(model => model.PremiumAmount, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.PremiumAmount)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <div class="row">
+                            <hr />
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-6">
+                                <span>@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>
+                                @Html.Bootstrap().ActionLinkButton("Cancel", "ListLoanApplicationProperties", "LoanApplication").PrependIcon("fa fa-times").RouteValues(new { loanAppId = Model.loan_application_id })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListLoanApplicationProperties", new { loanAppId = Model.loan_application_id })</span>
+                </div>
+            </div>
+            <script>
+                $(function () {
+                    $('#volcanic_region').bootstrapToggle({
+                        on: 'Yes',
+                        off: 'No'
+                    });
+
+                    $('#inflammable_neighborhood').bootstrapToggle({
+                        on: 'Yes',
+                        off: 'No'
+                    });
+                })
+            </script>
+        }
+    </div>
+</div>

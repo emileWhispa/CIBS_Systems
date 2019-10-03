@@ -1,0 +1,93 @@
+﻿@model eBroker.Policy_Loan_Account
+
+@{
+    ViewBag.Title = "Loan Info";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var loanTypes = ViewBag.LoanTypes as List<SelectListItem>;
+}
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.entry_date)
+    @Html.HiddenFor(model => model.entered_by)
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4 class="panel-title">Loan Information</h4>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                @Html.ValidationSummary(true)
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-2">
+                        @Html.LabelFor(model => model.loan_type_id)
+                    </label>
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(model => model.loan_type_id, loanTypes, "--Loan Type--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.loan_type_id)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-2">
+                        @Html.LabelFor(model => model.loan_account)
+                    </label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.loan_account, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.loan_account)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-2">
+                        @Html.LabelFor(model => model.loan_disbursement_date)
+                    </label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.loan_disbursement_date, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.loan_disbursement_date)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-2">
+                        @Html.LabelFor(model => model.loan_expiry_date)
+                    </label>
+                    <div class="col-sm-2">
+                        @Html.TextBoxFor(model => model.loan_expiry_date, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.loan_expiry_date)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+
+                <div class="row">
+                    <hr />
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-6">
+                        @*<button type="submit" class="btn btn-default">Save</button>*@
+                        @Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")
+                        @Html.Bootstrap().ActionLinkButton("Cancel", "ListManifesto").PrependIcon("fa fa-times")
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListManifesto")</span>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

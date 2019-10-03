@@ -1,0 +1,52 @@
+﻿@model IEnumerable<eBroker.LoanApplication>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Loan Applications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //var banks = ViewBag.Banks as List<SelectListItem>;
+    string BankName = ViewBag.BankName;
+    string startDate = ViewBag.StartDate;
+    string endDate = ViewBag.EndDate; 
+}
+@using (Html.BeginForm())
+{
+@Html.Hidden("BankName",BankName)
+@Html.Hidden("txtApplicationStartDate",startDate)
+@Html.Hidden("txtApplicationEndDate",endDate)
+
+<div class="container">
+    <div class="panel panel-green">
+        <div class="panel-heading">Loan Applications {@Model.Count()}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="table table-bordered">
+                            @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(m => m.Id, true);
+                               col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Edit", "LoanApplicationInfo").RouteValues(new { Id = m.Id,BankName=BankName,StartDate=startDate,EndDate=endDate }).PrependIcon("fa fa-pencil-square-o"));
+                               col.Add(m => m.ApplicationDate).Titled("Application Date").Format("{0:yyyy-MM-dd}");
+                               col.Add(m => m.CustomerNames).Titled("Customer Name");
+                               col.Add(m => m.BirthDate).Titled("Date Of Birth").Format("{0:yyyy-MM-dd}");
+                               col.Add(m => m.PhoneNumber).Titled("Phone");
+                               col.Add(m => m.ApplicationAmount).Titled("Amount").Format("{0:#,##0}");
+                               col.Add(m => m.Term).Titled("Term");
+                               col.Add(m => m.Branch).Titled("Branch");
+                               col.Add(m => m.CollateralType).Titled("Collateral Type");
+                               col.Add(m => m.Status).Titled("Status");
+                               col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Collateral", "LoanApplicationCollateral").RouteValues(new { loanAppId = m.Id,BankName=BankName,StartDate=startDate,EndDate=endDate }).PrependIcon("fa fa-pencil-square-o"));
+                           }).WithPaging(10).Sortable(true)
+
+                        </div>
+                        @*@Html.Bootstrap().ActionLinkButton("Excel", "ExportCollateralToExcel", "BankPolicy").PrependIcon("fa fa-file-excel-o").RouteValues(new { BankId = 0})*@
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+}

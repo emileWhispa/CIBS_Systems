@@ -1,0 +1,194 @@
+﻿@model eBroker.LoanApplication_Vehicle
+
+@{
+    ViewBag.Title = "Vehicle Info";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var VehicleUsage = ViewBag.VehicleUsage as List<SelectListItem>;
+    var VehicleClass = ViewBag.VehicleClass as List<SelectListItem>;
+    var TerritoryCover = ViewBag.TerritoryCover as List<SelectListItem>;
+    var OccupantCategory = ViewBag.OccupantCategory as List<SelectListItem>;
+    var Insurers = ViewBag.Insurers as List<SelectListItem>;
+}
+<div class="container">
+    <div class="col-sm-12">
+        @using (Html.BeginForm("SetPremiumLoanApplicationVehicle", "LoanApplication"))
+        {
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.loan_application_id)
+            @Html.HiddenFor(m => m.entry_date)
+            @Html.HiddenFor(m => m.entry_user)
+            @Html.HiddenFor(m => m.PremiumUser)
+            @Html.HiddenFor(m => m.entry_user)
+            @Html.HiddenFor(m => m.PremiumDate)
+            
+            <div class="panel panel-green">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Vehicle Details</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        @Html.ValidationSummary(true)
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.plate_no)
+                            </label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.plate_no, new { @class = "form-control", @disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.plate_no)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.make)
+                            </label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.make, new { @class = "form-control", @disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.make)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.model)
+                            </label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.model, new { @class = "form-control", @disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.model)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.class_id)</label>
+                            <div class="col-sm-2">
+                                @Html.DropDownListFor(model => model.class_id, VehicleClass, "--Vehicle Type--", new { @class = "form-control", @disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.class_id)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.manufacture_year)
+                            </label>
+                            <div class="col-sm-1">
+                                @Html.TextBoxFor(model => model.manufacture_year, new { @class = "form-control", @disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.manufacture_year)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.chassis_no)
+                            </label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.chassis_no, new { @class = "form-control", @disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.chassis_no)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.value)</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.value, new { @class = "form-control", @disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.value)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.vehicle_usage_id)</label>
+                            <div class="col-sm-2">
+                                @Html.DropDownListFor(model => model.vehicle_usage_id, VehicleUsage, "--Vehicle Usage--", new { @class = "form-control", @disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.vehicle_usage_id)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.number_occupants)
+                            </label>
+                            <div class="col-sm-1">
+                                @Html.TextBoxFor(model => model.number_occupants, new { @class = "form-control", @disabled = "Disabled" })
+                                @Html.ValidationMessageFor(model => model.number_occupants)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.Insurer_Id)</label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.Insurer_Id, Insurers, "--Insurance Company--", new { @class = "form-control"})
+                                @Html.ValidationMessageFor(model => model.Insurer_Id)
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.PremiumAmount)
+                            </label>
+                            <div class="col-sm-1">
+                                @Html.TextBoxFor(model => model.PremiumAmount, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.PremiumAmount)
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <div class="row">
+                            <hr />
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-6">
+                                <span>@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>
+                                @Html.Bootstrap().ActionLinkButton("Cancel", "ListLoanApplicationVehicles", "LoanApplication").PrependIcon("fa fa-times").RouteValues(new { loanAppId = Model.loan_application_id })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListLoanApplicationVehicles", new { loanAppId = Model.loan_application_id })</span>
+                </div>
+            </div>
+            <script>
+                $(function () {
+                    $('#family_extension').bootstrapToggle({
+                        on: 'Yes',
+                        off: 'No'
+                    });
+
+                    $('#waive_excess').bootstrapToggle({
+                        on: 'Yes',
+                        off: 'No'
+                    });
+                })
+            </script>
+        }
+    </div>
+</div>

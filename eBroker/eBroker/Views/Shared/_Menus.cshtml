@@ -1,0 +1,46 @@
+﻿@using  eBroker
+@model List<eBroker.Menu>
+    @{
+        IEnumerable<Menu> mainMenus = ViewBag.MainMenus;
+    }
+    <!--- Divider -->
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">MAIN NAVIGATION</li>
+                <li class="text-muted menu-title">Menus</li>
+                <li class="has_sub">
+                    <a href="@Url.Action("Index","Home")" class="waves-effect active"><i class="fa fa-home"></i> <span> Home </span></a>
+                </li>
+                @if (Model.Count() > 0)
+                {
+                    foreach (var group in mainMenus)
+                    {
+                        <li class="treeview">
+                            <a href="javascript:void(0);">
+                                <i class="@group.IconName"></i> 
+                                <span>@group.MenuName</span>
+
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+
+                            <ul class="treeview-menu">
+
+                                @foreach (var item in Model.Where(x => x.ParentId == group.Id).ToList())
+                                {
+                                    <li><a href="~/@item.Url"><i class="@item.IconName.Trim()"></i><span>@item.MenuName.Trim()</span> </a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                }
+                <li class="">
+                    <a href="@Url.Action("LogOff","Account")" class="waves-effect"><i class="fa fa-sign-out"></i><span> Sign out </span> </a>
+                </li>
+
+            </ul>
+            <div class="clearfix"></div>
+        </section>
+        </aside>

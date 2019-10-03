@@ -1,0 +1,60 @@
+﻿@*@model IEnumerable<eBroker.BankLoan>*@
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Loan Applications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var banks = ViewBag.Banks as List<SelectListItem>;
+
+}
+@using (Html.BeginForm("ListLoanApplicationView", "LoanApplication", FormMethod.Get))
+{
+    <div class="container">
+        <div class="panel panel-green">
+            <div class="panel-heading">Loan Applications</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                @Html.DropDownList("BankName", banks, "-- Select Bank --", new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-3">
+                                @Html.TextBox("txtApplicationStartDate", "", "{0:yyyy-MM-dd}", new { @id = "txtApplicationStartDate", @class = "form-control" })
+                            </div>
+                            <div class="col-sm-3">
+                                <div id="custom-search-input">
+                                    <div class="input-group  text-center">
+                                        @Html.TextBox("txtApplicationEndDate", "", "{0:yyyy-MM-dd}", new { @id = "txtApplicationEndDate", @class = "form-control" })
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+@*                            <div class="col-sm-3">
+                                @Html.TextBox("txtApplicationStartDate", "", "{0:yyyy-MM-dd}", new { @id = "txtApplicationStartDate", @class = "form-control" })
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <script>
+        $('#txtApplicationStartDate').datepicker({
+            dateFormat: "dd-M-yy",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-20:+0"
+        });
+
+        $('#txtApplicationEndDate').datepicker({
+            dateFormat: "dd-M-yy",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-1:+20"
+        });
+    </script>
+}

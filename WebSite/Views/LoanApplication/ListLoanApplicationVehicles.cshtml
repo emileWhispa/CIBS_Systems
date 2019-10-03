@@ -1,0 +1,59 @@
+﻿@model IEnumerable<eBroker.LoanApplication_Vehicle>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Loan Application Vehicle List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string BankName = ViewBag.BankName;
+    string startDate = ViewBag.StartDate;
+    string endDate = ViewBag.EndDate; 
+
+}
+<div class="container">
+    <div class="panel panel-green">
+        <div class="panel-heading">Loan Application Vehicle List</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="panel-body">
+                    <div class="row">
+@*                        @if( ViewBag.DisableAddNew==0)//
+                        {
+                        *@<div class="col-sm-2">
+                            <span><i class="fa fa-briefcase"></i>@Html.ActionLink(" Add Vehicle", "LoanApplicationVehicleInfo", new {AId=ViewBag.LoanApplicationId, Id=0})</span>
+                        </div>
+                        @*}*@
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="table table-bordered">
+                            @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(m => m.Id, true);
+                               col.Add().Titled("Edit").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Edit", "LoanApplicationVehicleInfo").RouteValues(new { Id = m.Id, AId = ViewBag.LoanApplicationId }).PrependIcon("fa fa-pencil-square-o"));
+                               //col.Add(m => m.InsurancePolicies.policy_no).Titled("Policy No.");
+                               //col.Add(m => m.InsurancePolicies.InsuranceProducts.product_name).Titled("Product");
+                               col.Add(m => m.plate_no).Titled("Plate Number");
+                               col.Add(m => m.make).Titled("Make");
+                               col.Add(m => m.model).Titled("Model");
+                               col.Add(m => m.manufacture_year).Titled("Year");
+                               col.Add(m => m.value).Titled("Value").Format("{0:#,##}");
+                               col.Add(m => m.number_occupants).Titled("Occupants");
+                               col.Add(m => m.VehicleUsages.usage).Titled("Usage");
+                           }).WithPaging(10).Sortable(true)
+
+                        </div>
+                    </div>
+                </div>
+                @if(@Model.Count()>0)
+                {
+                            <div class="col-sm-6">
+                                @Html.Bootstrap().ActionLinkButton("Submit", "SubmitLoanApplication", "LoanApplication").PrependIcon("fa fa-send").RouteValues(new { AId = ViewBag.LoanApplicationId  })
+                            </div>
+                }
+            </div>
+        </div>
+                <div class="panel-footer">
+                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to Loan Applications", "ListLoanApplicationView", new {txtApplicationStartDate=startDate, txtApplicationEndDate=endDate,BankName=BankName })</span>
+                </div>
+    </div>
+
+</div>

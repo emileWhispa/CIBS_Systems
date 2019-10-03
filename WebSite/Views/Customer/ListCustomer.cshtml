@@ -1,0 +1,60 @@
+﻿@model IEnumerable<eBroker.Client>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Customers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("ListCustomer", "Customer", FormMethod.Get))
+{
+
+    <div class="container">
+        <div class="panel panel-green">
+            <div class="panel-heading">Customer List {@Model.Count()}</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <span><i class="fa fa-users"></i>@Html.ActionLink(" New Customer", "CustomerInfo")</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <div id="custom-search-input">
+                                    <div class="input-group  text-center">
+                                        <input type="text" name="query" id="query" class="form-control input-lg" placeholder="Search Customer by Name, Contact Person, Mobile....." />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="table table-bordered">
+                                @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(m => m.Id, true);
+                               col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Edit", "CustomerInfo").RouteValues(new { Id = m.Id }).PrependIcon("fa fa-pencil-square-o"));
+                               col.Add(m => m.client_name).Titled("Client Name");
+                               col.Add(m => m.client_type).Titled("Type");
+                               col.Add(m => m.mobile).Titled("Mobile Phone");
+                               col.Add(m => m.email).Titled("E-mail");
+                               col.Add(m => m.language).Titled("Language");
+                               col.Add(m => m.recruited_by).Titled("Recruiter");
+                               //col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Insurance Policy(ies)", "InsurancePolicy"));
+                               col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Insurance Policy(ies)", "CustomerPolicy","Policy").RouteValues(new { ccode = m.Id }));
+                           }).WithPaging(10).Sortable(true)
+
+                            </div>
+                            @Html.Bootstrap().ActionLinkButton("Excel", "ExportToExcel", "Customer").PrependIcon("fa fa-file-excel-o")
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+}

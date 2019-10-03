@@ -1,0 +1,43 @@
+﻿@model IEnumerable<eBroker.eUserCategory>
+@using GridMvc.Html;
+
+@{
+    ViewBag.Title = "User Group List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("ListUserCategory", "eUserCategory", FormMethod.Get))
+{
+    <div class="container">
+        <div class="panel panel-primary col-sm-6 ">
+            <div class="panel-heading ">User Groups Info</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <span><i class="fa fa-plus-square"></i>@Html.ActionLink("New Entry", "UserCategoryInfo")</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <br/>
+                            <div class="table table-bordered">
+                                @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(uc => uc.Id, true);
+                               col.Add().Sanitized(false).Encoded(false).RenderValueAs(b => Html.Bootstrap().ActionLink("Edit", "UserCategoryInfo").RouteValues(new { Id = b.Id }).PrependIcon("fa fa-pencil-square-o"));
+                               col.Add(uc => uc.Category).Titled("Category");
+                               col.Add(uc => uc.Description).Titled("Description");
+                               col.Add().Sanitized(false).Encoded(false).RenderValueAs(b => Html.Bootstrap().ActionLink("Menus", "ListMenu", "Security").RouteValues(new { CategoryId = b.Id }).PrependIcon("fa fa-list-ul"));
+                               col.Add().Sanitized(false).Encoded(false).RenderValueAs(b => Html.Bootstrap().ActionLink("Users", "ListProfileUsers", "Security").RouteValues(new { CategoryId = b.Id }).PrependIcon("fa fa-users"));
+
+                           }).WithPaging(10).Sortable(true)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,139 @@
+﻿@using eBroker
+@using eBroker.Models
+@{
+    UserModel currentUser = (UserModel)this.ViewData["UserData"];
+    string policyCounter = this.ViewData["expiredPolicies"].ToString();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300" rel="stylesheet">
+
+    <link href="~/Content/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/_all-skins.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
+    <link href="~/Content/site.css" rel="stylesheet" />
+    <link href="~/Content/index.css" rel="stylesheet" />
+    <link href="~/Content/select2.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/select2.full.min.js"></script>
+
+</head>
+<body class="hold-transition skin-blue fixed sidebar-mini sidebar-collapse">
+
+    <div class="wrapper">
+        @{Html.RenderAction("Menus", "Shared", null);}
+        <header class="main-header light-shadow">
+            <!-- Logo -->
+            <a href="#" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>E</b>BR</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>Smart Broker</b></span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- Messages: style can be found in dropdown.less-->
+                        <!-- Notifications: style can be found in dropdown.less -->
+                        <!-- Tasks: style can be found in dropdown.less -->
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/Content/images/ui-icons_2e83ff_256x240.png" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@currentUser.Names</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="~/Content/images/ui-icons_2e83ff_256x240.png" class="img-circle" alt="User Image">
+
+                                    <p>
+                                        @currentUser.Names
+                                        <small>@currentUser.Category</small>
+                                    </p>
+                                </li>
+                                <!-- Menu Body -->
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="@Url.Action("MyAccount", "Security")" class="btn btn-default btn-flat">My Account</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="@Url.Action("LogOff", "Account")" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <!-- Left Sidebar End -->
+
+            <div class="content-wrapper">
+                <!-- Start content -->
+
+                @RenderBody()
+                <div class="content">
+                    <div id="AlertsContainer">
+                        @{ Html.RenderPartial("_Alerts"); }
+                    </div>
+                </div>
+                <!-- End container -->
+                <!-- End content -->
+                <div class="footer text-right">
+                    @*<footer class="footer text-right">*@
+                    <span style="color: #171d52; font-weight: bold"></span>
+                    @*</footer>*@
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+
+
+
+
+
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 2.4.0
+            </div>
+            Orion Systems & Design Ltd &copy; @DateTime.Now.Year - All Rights Reserved.
+            reserved.
+        </footer>
+    </div>
+    <script src="~/Scripts/fastclick.js"></script>
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/adminlte.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/gridmvc.min.js"></script>
+    <script src="~/Scripts/jquery.slimscroll.min.js"></script>
+    <script src="~/Scripts/app.js"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

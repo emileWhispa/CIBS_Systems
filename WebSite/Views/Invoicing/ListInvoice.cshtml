@@ -1,0 +1,86 @@
+﻿@model IEnumerable<eBroker.Invoice>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Invoice List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+string startDate = ViewBag.StartDate;
+    string endDate = ViewBag.EndDate;
+
+}
+<form action="ListInvoice" method="post" class="form-inline">
+    <div class="container">
+        <div class="panel panel-green">
+            <div class="panel-heading">Invoice List{@ViewBag.StartDate - @ViewBag.EndDate} Count: @Model.Count()</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <span><i class="fa fa-users"></i>@Html.ActionLink(" New Invoice", "InvoiceInfo")</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <div id="custom-search-input">
+
+                                    <div class="col-sm-3">
+                                        <input type="text" name="startDate" id="startDate" class="form-control" placeholder="Start Date" />
+                                    </div>
+                                    <div class="input-group">
+                                        <div>
+                                            <input type="text" name="endDate" id="endDate" class="form-control" placeholder="End Date" />
+                                        </div>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="table table-bordered">
+                                @Html.Grid(Model).Named("ga").Columns(col =>
+                       {
+                           col.Add(m => m.Id, true);
+                           col.Add().Sanitized(false).Encoded(false).RenderValueAs(xc => Html.Bootstrap().ActionLink("Edit", "InvoiceInfo").RouteValues(new { Id = xc.Id }).PrependIcon("fa fa-pencil-square-o"));
+                           col.Add(m => m.Insurers.company_short_name).Titled("Insurance Company");
+                           col.Add(m => m.invoice_dt).Titled("Invoice Date").Format("{0:yyyy-MM-dd}");
+                           col.Add(m => m.invoice_due_dt).Titled("Invoice Due Date").Format("{0:yyyy-MM-dd}");
+                           col.Add(m => m.invoice_until_dt).Titled("Invoice Until").Format("{0:yyyy-MM-dd}");
+                           col.Add(m => m.vatable).Titled("Vatable");
+                           col.Add(m => m.Status).Titled("Status");
+                           col.Add().Sanitized(false).Encoded(false).RenderValueAs(xc => Html.Bootstrap().ActionLink("Details", "InvoicePolicyList").RouteValues(new { Id = xc.Id }));
+                       }).WithPaging(10).Sortable(true)
+
+                            </div>
+                            @if (Model.Count() > 0)
+                            {
+                                @Html.Bootstrap().ActionLinkButton("Excel", "InvoiceToExcel", "Invoicing").RouteValues(new { startDate = startDate, endDate = endDate }).PrependIcon("fa fa-file-excel-o")
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <script>
+            $('#startDate').datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-20:+0"
+            });
+
+            $('#endDate').datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-1:+20"
+            });
+        </script>
+
+    </div>
+</form>
+

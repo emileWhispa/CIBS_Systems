@@ -1,0 +1,40 @@
+﻿@*@model IEnumerable<eBroker.Vw_Bank_Collateral>*@
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Bank Collateral";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var banks = ViewBag.Banks as List<SelectListItem>;
+
+}
+@using (Html.BeginForm("ListBankCollateralView", "BankPolicy", FormMethod.Get))
+{
+<div class="container">
+    <div class="panel panel-green">
+        <div class="panel-heading">Bank Collateral Display</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                                @Html.DropDownList("BankName", banks, "-- Select Bank --", new { @class = "form-control" })
+                            </div>
+                        <div class="col-sm-9">
+                            <div id="custom-search-input">
+                                <div class="input-group  text-center">
+                                    <input type="text" name="query" id="query" class="form-control input-lg" placeholder="Search by Loan Account, Customer Name, Collateral Type, Collateral Description....." />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+}

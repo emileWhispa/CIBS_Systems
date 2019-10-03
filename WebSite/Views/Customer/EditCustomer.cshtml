@@ -1,0 +1,102 @@
+﻿@model eBroker.Client
+
+@{
+    ViewBag.Title = "EditCustomer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>EditCustomer</h2>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Client</legend>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.client_name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.client_name)
+            @Html.ValidationMessageFor(model => model.client_name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.client_type)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.client_type)
+            @Html.ValidationMessageFor(model => model.client_type)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.contact_person)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.contact_person)
+            @Html.ValidationMessageFor(model => model.contact_person)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.physical_address)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.physical_address)
+            @Html.ValidationMessageFor(model => model.physical_address)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.mobile)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.mobile)
+            @Html.ValidationMessageFor(model => model.mobile)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.mobile2)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.mobile2)
+            @Html.ValidationMessageFor(model => model.mobile2)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.email)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.email)
+            @Html.ValidationMessageFor(model => model.email)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.language)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.language)
+            @Html.ValidationMessageFor(model => model.language)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.recruited_by)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.recruited_by)
+            @Html.ValidationMessageFor(model => model.recruited_by)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

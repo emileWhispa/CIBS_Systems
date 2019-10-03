@@ -1,0 +1,72 @@
+﻿@model IEnumerable<eBroker.Partner>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Partners";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+                      <div class="content">
+                          <div class="modal fade f-modal" id="modal-default">
+                              <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+                                      @Html.Partial("PartnerInfo", new eBroker.Partner())
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                          </div>
+                          <!-- /.modal -->
+                          <div class="clearfix">
+                              <button type="button" class="btn btn-primary edit-button pull-right">
+                                  <i class="fa fa-pencil-square"></i>
+                                  New Partner
+                              </button>
+                          </div>
+                          <div class="box box-primary">
+                              <div class="box-header">
+                                  <div class="col-sm-7 pull-right">
+                                      @using (Html.BeginForm("ListPartner", "Partner", FormMethod.Get))
+                                      {
+                                          <div id="">
+                                              <div class="input-group  text-center">
+                                                  <input type="text" name="query" id="query" class="form-control input-sm" placeholder="Search Partner by Name, Contact Person, Mobile Phone....." />
+                                                  <span class="input-group-btn">
+                                                      <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                                  </span>
+                                              </div>
+                                          </div>
+                                      }
+                                  </div>
+
+                                      <h3 class="box-title"><i class="fa fa-info-circle"></i> Partners</h3>
+                                  </div>
+                              <div class="box-body">
+                                  <div class="row">
+                                      <div class="box-body">
+                                          <div class="table-responsive">
+                                              <div class="table table-bordered">
+                                                  @Html.Grid(Model).Named("ga").Columns(col =>
+                                                 {
+                                                     col.Add(m => m.Id, true);
+                                                     col.Add(m => m.company_name).Titled("Name");
+                                                     col.Add(m => m.contact_person).Titled("Contact Person");
+                                                     col.Add(m => m.partnership_type).Titled("Category");
+                                                     col.Add(m => m.mobile1).Titled("Mobile");
+                                                     col.Add(m => m.group_email).Titled("E-mail");
+                                                     col.Add(m => m.TIN).Titled("TIN");
+                                                     col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "PartnerInfo", "Partner", new { Id = m.Id }, new { @class = "edit-button btn btn-sm btn-primary btn-flat" }));
+                                                 }).WithPaging(10).Sortable(true)
+
+                                              </div>
+                                              @Html.Bootstrap().ActionLinkButton("Excel", "ExportToExcel", "Partner").PrependIcon("fa fa-file-excel-o")
+                                          </div>
+                                      </div>
+
+                                  </div>
+                              </div>
+
+                          </div>
+
+                      </div>

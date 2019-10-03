@@ -1,0 +1,57 @@
+﻿@model IEnumerable<eBroker.Temp_Client>
+@using GridMvc.Html;
+@{
+    ViewBag.Title = " Bulk Client Loaded Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    <div class="container">
+        <div class="panel panel-primary">
+                <div class="panel-heading">Bulk Client Loaded Data {Valid Records: @Model.Count()}</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <hr />
+                            @*<label class="col-sm-2 control-label"></label>*@
+                            @if (Model.Count()>0)
+                            {
+                                <div class="col-sm-2">
+                                    @Html.Bootstrap().ActionLinkButton("Validate", "ValidateExcelBatch", "Customer").PrependIcon("fa fa-check-circle")
+                                </div>
+                            }
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="table table-bordered">
+                                @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(excel => excel.client_name).Titled("Client Name");
+                               col.Add(excel => excel.client_type).Titled("Client Type");
+                               col.Add(excel => excel.contact_person).Titled("Contact Person");
+                               col.Add(excel => excel.physical_address).Titled("Address");
+                               col.Add(excel => excel.mobile).Titled("Mobile 1");
+                               col.Add(excel => excel.mobile2).Titled("Mobile 2");
+
+                               col.Add(excel => excel.email).Titled("E-mail");
+                               col.Add(excel => excel.language).Titled("Language");
+                               col.Add(excel => excel.recruited_by).Titled("Recruited By");
+                               col.Add(excel => excel.reference_number).Titled("Ref.No.");
+
+                           }).WithPaging(10).Sortable(true)
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="panel-footer">
+                <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to Upload", "ExcelFileUpload", "Customer", null)</span>
+            </div>
+        </div>
+    </div>
+}

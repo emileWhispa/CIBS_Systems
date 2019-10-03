@@ -1,0 +1,130 @@
+﻿@using eBroker
+@using eBroker.Models
+@{
+    UserModel currentUser = (UserModel)this.ViewData["UserData"];
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">         
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">   
+
+    <title>@ViewBag.Title | Smart Broker</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @*@Scripts.Render("~/Content/font-awesome.min.css")*@
+</head>
+<body class="widescreen fixed-left">
+    <div id="wrapper" class="forced">
+        <div class="topbar">
+            <div class="topbar-left">
+                <div class="text-center">
+                    
+                    <a  href="@Url.Action("Index","Home")" class="logo">
+                      <i class="fa fa-umbrella icon-c-logo"></i>
+                        <span class="h5">CIBS Smart Broker</span>  
+                        </a>
+                    </div>
+                </div>
+                <div class="navbar navbar-default" role="navigation">
+                    <div class="container">
+                        <div class="">
+                            <div class="pull-left">
+                                <button class="button-menu-mobile open-left waves-effect waves-light">
+                                    <i class="fa fa-navicon"></i>
+                                </button>
+                                <span class="clearfix"></span>
+                            </div>
+
+                            <ul class="nav navbar-nav navbar-right pull-right">
+                                <li class="dropdown top-menu-item-xs open">
+                                    <a href="#" data-target="#" class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
+                                        <i class="fa fa-bell"></i> <span class="badge badge-xs badge-danger">3</span>
+                                    </a>
+                                </li>
+                                <li class="hidden-xs">
+                                    <a href="#" id="btn-fullscreen" class="waves-effect waves-light"><i class="glyphicon glyphicon-fullscreen"></i></a>
+                                </li>
+
+                                @if (Request.IsAuthenticated && currentUser != null)
+                                {
+                                    <li class="dropdown top-menu-item-xs open">
+                                        <a href="" class="dropdown-toggle profile waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
+                                            <img src="@Url.Content("~/Imgs/user.png")" alt="user-img" class="img-circle">
+                                            <span>@currentUser.Names</span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="javascript:void(0)"><i class=" m-r-10 text-custom"></i> Profile</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="@Url.Action("MyAccount", "Security")"><i class="fa fa-user-circle m-r-10 text-danger"></i> My Account</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="@Url.Action("LogOff", "Account")"><i class="fa fa-sign-out m-r-10 text-danger"></i> Logout</a></li>
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="left side-menu">
+                <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 231px;">
+                    <div class="sidebar-inner slimscrollleft" style="overflow: hidden; width: auto; height: 231px;">
+                        @{Html.RenderAction("Menus", "Shared", null);}
+                        <div class="clearfix"></div>
+                    </div><div class="slimScrollBar" style="background: rgb(152, 166, 173) none repeat scroll 0% 0%; width: 5px; position: absolute; top: -107px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 56.6465px; visibility: visible;"></div><div class="slimScrollRail" style="width: 5px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51) none repeat scroll 0% 0%; opacity: 0.2; z-index: 90; right: 1px;"></div>
+                </div>
+            </div>
+            <!-- Left Sidebar End -->
+
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div class="container">
+                        <div id="AlertsContainer">
+                           @* @{ Html.RenderPartial("_Alerts"); }*@
+                        </div>
+                        @RenderBody()
+                    </div>
+                    <!-- End container -->
+                </div>
+                <!-- End content -->
+                <footer class="footer text-right">
+                    <span  style="color:#171d52;font-weight:bold">Orion Systems & Design Ltd &copy; @DateTime.Now.Year - All Rights Reserved.</span>
+                </footer>              
+            </div>
+        </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+
+
+        <div id="ascrail2000" class="nicescroll-rails" style="width: 6px; z-index: 99; cursor: default; position: fixed; top: 60px; left: 1609px; height: 201px; display: block; opacity: 0;"><div style="position: relative; top: 0px; float: right; width: 6px; height: 422px; background-color: rgb(152, 166, 173); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div>
+        <div id="ascrail2000-hr" class="nicescroll-rails" style="height: 6px; z-index: 99; top: 255px; left: 1375px; position: fixed; cursor: default; display: none; width: 234px; opacity: 0;"><div style="position: relative; top: 0px; height: 6px; width: 240px; background-color: rgb(152, 166, 173); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div></div>
+
+        @Scripts.Render("~/bundles/jquery")
+        <script src="~/Scripts/moment.js"></script>
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/template")
+
+        <script type="text/javascript">
+            $(function () {
+                $('.dtp').datetimepicker({
+                    format: 'DD MMM YYYY hh:mmA'
+                });
+                $('.dp').datetimepicker({
+                    format: 'DD MMM YYYY'
+                });
+
+            });
+
+
+        </script>
+        @RenderSection("scripts", required: false)
+
+    </body>
+    </html>

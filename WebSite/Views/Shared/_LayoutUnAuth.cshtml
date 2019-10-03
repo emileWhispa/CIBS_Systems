@@ -1,0 +1,49 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header" >
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="#" class="navbar-brand"><span>CIBS Smart Broker</span></a>
+
+            </div>
+
+            <ul class="nav navbar-nav navbar-right pull-right">
+
+                <li class="hidden-xs">
+                    <a href="#" class="waves-effect waves-light"><i class="glyphicon glyphicon-question-sign"></i></a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        @*<footer  style="color:#171d52;">*@
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4 text-center"><span style="color:#171d52;font-weight:bold">Orion Systems & Design Ltd &copy; @DateTime.Now.Year - All Rights Reserved.</span></div>
+            <div class="col-sm-4"></div>
+          
+        @*</footer>*@
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

@@ -1,0 +1,101 @@
+﻿@model eBroker.Policy_Loan_Account
+
+@{
+    ViewBag.Title = "Policy Loan Info";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var loanTypes = ViewBag.LoanTypes as List<SelectListItem>;
+}
+<div class="container">
+    <div class="col-sm-12">
+        @using (Html.BeginForm("CreatePolicyLoan", "Policy"))
+        {
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.contract_id)
+            @Html.HiddenFor(m => m.entry_date)
+            @Html.HiddenFor(m => m.entered_by)
+            
+            <div class="panel panel-green">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Policy Loan Details</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        @Html.ValidationSummary(true)
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.loan_account)
+                            </label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.loan_account, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.loan_account)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.loan_type_id)
+                            </label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.loan_type_id, loanTypes, "-- Loan Type --", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.loan_type_id)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.loan_disbursement_date)</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.loan_disbursement_date, "{0:yyyy-MM-dd}", new { @id = "txtDisbursementDate", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.loan_disbursement_date)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.loan_expiry_date)</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.loan_expiry_date, "{0:yyyy-MM-dd}", new { @id = "txtExpiryDate", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.loan_expiry_date)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <div class="row">
+                            <hr />
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-6">
+                                <span>@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>
+                                @Html.Bootstrap().ActionLinkButton("Cancel", "ListPolicyLoan", "Policy").PrependIcon("fa fa-times").RouteValues(new { CId = Model.contract_id })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListPolicyLoan", new { CId = Model.contract_id })</span>
+                </div>
+            </div>
+            <script>
+                $('#txtDisbursementDate').datepicker({
+                    dateFormat: "dd-M-yy",
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: "-20:+0"
+                });
+
+                $('#txtExpiryDate').datepicker({
+                    dateFormat: "dd-M-yy",
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: "-1:+20"
+                });
+            </script>
+        }
+    </div>
+</div>

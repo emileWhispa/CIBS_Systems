@@ -1,0 +1,142 @@
+﻿@model eBroker.Client
+
+@{
+    var recruiters = ViewBag.recruiter as List<SelectListItem>;
+    List<SelectListItem>
+    listItems = new List<SelectListItem>
+        ();
+    listItems.Add(new SelectListItem
+    {
+        Text = "INDIVIDUAL",
+        Value = "INDIVIDUAL"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "CORPORATE",
+        Value = "CORPORATE",
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "SME",
+        Value = "SME"
+    });
+
+    List<SelectListItem>
+        listLanguages = new List<SelectListItem>
+            ();
+    listLanguages.Add(new SelectListItem
+    {
+        Text = "Kinyarwanda",
+        Value = "Kinyarwanda"
+    });
+    listLanguages.Add(new SelectListItem
+    {
+        Text = "English",
+        Value = "English",
+    });
+    listLanguages.Add(new SelectListItem
+    {
+        Text = "French",
+        Value = "French"
+    });
+}
+
+@Html.HiddenFor(model => model.Id)
+@Html.HiddenFor(model => model.user_id)
+@Html.HiddenFor(model => model.create_dt)
+
+@using (Html.BeginForm("CreateCustomer", "Customer", FormMethod.Post, new { id = "submitForm" }))
+{
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Client</h4>
+    </div>
+    <div class="modal-body modal-data">
+
+
+        <div class="row">
+            @Html.ValidationSummary(true)
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-6">
+                    @Html.LabelFor(model => model.client_national_id)
+                    @Html.TextBoxFor(model => model.client_national_id, new { @class = "form-control search-customer" })
+                    @Html.ValidationMessageFor(model => model.client_national_id)
+                </div>
+                <div class="col-sm-6">
+                    @Html.LabelFor(model => model.mobile)
+                    @Html.TextBoxFor(model => model.mobile, new { @class = "form-control search-customer" })
+                    @Html.ValidationMessageFor(model => model.mobile)
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-6">
+                    @Html.LabelFor(model => model.client_name)
+                    @Html.TextBoxFor(model => model.client_name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.client_name)
+                </div>
+                <div class="col-sm-6">
+                    @Html.LabelFor(model => model.contact_person)
+                    @Html.TextBoxFor(model => model.contact_person, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.contact_person)
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-6">
+                    @Html.LabelFor(model => model.client_type)
+                    @Html.DropDownListFor(model => model.client_type, listItems, "-- Customer Type --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.client_type)
+                </div>
+                <div class="col-sm-6">
+                    @Html.LabelFor(model => model.language)
+                    @Html.DropDownListFor(model => model.language, listLanguages, "-- Select Language --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.language)
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-6">
+                    @Html.LabelFor(model => model.mobile2)
+                    @Html.TextBoxFor(model => model.mobile2, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.mobile2)
+                </div>
+                <div class="col-sm-6">
+                    @Html.LabelFor(model => model.email)
+                    @Html.TextBoxFor(model => model.email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.email)
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-6">
+                    @Html.LabelFor(model => model.physical_address)
+                    @Html.TextBoxFor(model => model.physical_address, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.physical_address)
+                </div>
+                <div class="col-sm-6">
+                    @Html.LabelFor(model => model.recruited_by)
+                    @Html.DropDownListFor(model => model.recruited_by, recruiters, "--Select Recruiter--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.recruited_by)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
+    </div>
+}
+

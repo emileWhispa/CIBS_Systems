@@ -1,0 +1,58 @@
+﻿@model IEnumerable<eBroker.BankLoan>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Bank Loans";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string BankName = ViewBag.BankName;
+
+}
+@using (Html.BeginForm("ListBankLoansView", "BankPolicy", FormMethod.Get))
+{
+        @Html.Hidden("BankName",BankName)
+<div class="container">
+    <div class="panel panel-green">
+        <div class="panel-heading">Bank Loans {@Model.Count()}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="custom-search-input">
+                                <div class="input-group  text-center">
+                                    <input type="text" name="query" id="query" class="form-control input-lg" placeholder="Search by Loan Account, Customer Name, Loan Type....." />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="table table-bordered">
+                            @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(m => m.AccountNumber).Titled("Loan Account");
+                               col.Add(m => m.Branch).Titled("Branch");
+                               col.Add(m => m.ProductName).Titled("Product Name");
+                               col.Add(m => m.AccountName).Titled("Account Name");                              
+                               col.Add(m => m.PhoneNumber).Titled("Mobile");
+                               col.Add(m => m.DisbursementDate).Titled("Disburs. Date").Format("{0:yyyy-MM-dd}");
+                               col.Add(m => m.MaturityDate).Titled("Maturity Date").Format("{0:yyyy-MM-dd}");
+                               //col.Add(m => m.AccountManager).Titled("Account Manager");
+                               //col.Add(m => m.InsuranceStatus).Titled("Insurance Status");
+                               col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Policies", "ListLoanPolicy").RouteValues(new { AN = m.AccountNumber }).PrependIcon("fa fa-pencil-square-o"));
+                           }).WithPaging(10).Sortable(true)
+
+                        </div>
+                        @*@Html.Bootstrap().ActionLinkButton("Excel", "ExportCollateralToExcel", "BankPolicy").PrependIcon("fa fa-file-excel-o").RouteValues(new { BankId = 0})*@
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+}

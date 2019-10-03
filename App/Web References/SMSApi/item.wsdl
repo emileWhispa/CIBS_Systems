@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://207.45.181.42/soap/ksms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://207.45.181.42/soap/ksms" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://207.45.181.42/soap/ksms">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+      <xsd:complexType name="ksendRequestType">
+        <xsd:all>
+          <xsd:element form="unqualified" name="account" type="xsd:string" />
+          <xsd:element form="unqualified" name="pin" type="xsd:string" />
+          <xsd:element form="unqualified" name="sender" type="xsd:string" />
+          <xsd:element form="unqualified" name="message" type="xsd:string" />
+          <xsd:element form="unqualified" name="phone" type="xsd:string" />
+          <xsd:element form="unqualified" name="msgid" type="xsd:string" />
+          <xsd:element form="unqualified" name="receivedlr" type="xsd:string" />
+          <xsd:element form="unqualified" name="callurl" type="xsd:string" />
+          <xsd:element form="unqualified" name="messagetype" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="ksendResponseType">
+        <xsd:all>
+          <xsd:element form="unqualified" name="success" type="xsd:string" />
+          <xsd:element form="unqualified" name="message" type="xsd:string" />
+          <xsd:element form="unqualified" name="msgid" type="xsd:string" />
+          <xsd:element form="unqualified" name="cost" type="xsd:string" />
+          <xsd:element form="unqualified" name="balance" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="kchkRequestType">
+        <xsd:all>
+          <xsd:element form="unqualified" name="account" type="xsd:string" />
+          <xsd:element form="unqualified" name="pin" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="kchkResponseType">
+        <xsd:all>
+          <xsd:element form="unqualified" name="reply" type="xsd:string" />
+          <xsd:element form="unqualified" name="balance" type="xsd:string" />
+          <xsd:element form="unqualified" name="status" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="kchangeRequestType">
+        <xsd:all>
+          <xsd:element form="unqualified" name="account" type="xsd:string" />
+          <xsd:element form="unqualified" name="newpin" type="xsd:string" />
+          <xsd:element form="unqualified" name="pin" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="kchangeResponseType">
+        <xsd:all>
+          <xsd:element form="unqualified" name="reply" type="xsd:string" />
+          <xsd:element form="unqualified" name="status" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:element name="ksend" type="tns:ksendRequestType" />
+      <xsd:element name="ksendResponse" type="tns:ksendResponseType" />
+      <xsd:element name="kchk" type="tns:kchkRequestType" />
+      <xsd:element name="kchkResponse" type="tns:kchkResponseType" />
+      <xsd:element name="kchange" type="tns:kchangeRequestType" />
+      <xsd:element name="kchangeResponse" type="tns:kchangeResponseType" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ksendRequest">
+    <wsdl:part name="parameters" element="tns:ksend" />
+  </wsdl:message>
+  <wsdl:message name="ksendResponse">
+    <wsdl:part name="parameters" element="tns:ksendResponse" />
+  </wsdl:message>
+  <wsdl:message name="kchkRequest">
+    <wsdl:part name="parameters" element="tns:kchk" />
+  </wsdl:message>
+  <wsdl:message name="kchkResponse">
+    <wsdl:part name="parameters" element="tns:kchkResponse" />
+  </wsdl:message>
+  <wsdl:message name="kchangeRequest">
+    <wsdl:part name="parameters" element="tns:kchange" />
+  </wsdl:message>
+  <wsdl:message name="kchangeResponse">
+    <wsdl:part name="parameters" element="tns:kchangeResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ksmsPortType">
+    <wsdl:operation name="ksend">
+      <documentation>This service is about sending sms</documentation>
+      <wsdl:input message="tns:ksendRequest" />
+      <wsdl:output message="tns:ksendResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="kchk">
+      <documentation>This service is about checking the remaining sms balance</documentation>
+      <wsdl:input message="tns:kchkRequest" />
+      <wsdl:output message="tns:kchkResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="kchange">
+      <documentation>This service is about changing the PIN of your soap account</documentation>
+      <wsdl:input message="tns:kchangeRequest" />
+      <wsdl:output message="tns:kchangeResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ksmsBinding" type="tns:ksmsPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="ksend">
+      <soap:operation soapAction="urn:ksend" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" namespace="urn:ksms" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" namespace="urn:ksms" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="kchk">
+      <soap:operation soapAction="urn:kchk" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" namespace="urn:ksms" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" namespace="urn:ksms" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="kchange">
+      <soap:operation soapAction="urn:kchange" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" namespace="urn:ksms" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" namespace="urn:ksms" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ksms">
+    <wsdl:port name="ksmsPort" binding="tns:ksmsBinding">
+      <soap:address location="http://207.45.181.42/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

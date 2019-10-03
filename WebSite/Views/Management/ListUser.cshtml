@@ -1,0 +1,57 @@
+﻿@model IEnumerable<eBroker.eUser>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Users List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("ListUser", "Management", FormMethod.Get))
+{
+<div class="container">
+    <div class="panel panel-green">
+        <div class="panel-heading">Users</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <span><i class="fa fa-user"></i>@Html.ActionLink(" New User", "UserInfo")</span>
+                        </div>
+                        <div class="col-sm-10">
+                            <div id="custom-search-input">
+                                <div class="input-group  text-center">
+                                    <input type="text" name="query" id="query" class="form-control input-lg" placeholder="Search User....." />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="table table-bordered">
+                            @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(m => m.Id, true);
+                               col.Add().Titled("Edit").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "UserInfo", new { Id = m.Id }));//.RouteValues(new { scode = m.Id }).PrependIcon("fa fa-search-plus"));
+                               col.Add(m => m.Login).Titled("Login");
+                               col.Add(m => m.Names).Titled("Full Names");
+                               col.Add(m => m.eUserCategories.Category ).Titled("Category");
+                               col.Add(m => m.Phone ).Titled("Mobile");
+                               col.Add(m => m.Email ).Titled("E-mail");
+                               col.Add(m => m.Active).Titled("Active");
+                               col.Add(m => m.Locked).Titled("Locked");
+                               col.Add().Titled("Edit").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Reset Password", "ResetPassword", new { Id = m.Id }));//.RouteValues(new { scode = m.Id }).PrependIcon("fa fa-search-plus"));
+                           }).WithPaging(10).Sortable(true)
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+}

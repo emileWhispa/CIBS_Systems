@@ -1,0 +1,186 @@
+﻿@model eBroker.LoanApplication
+
+@{
+    ViewBag.Title = "Loan Application Info";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<SelectListItem> collateralTypes = new List<SelectListItem>();
+    collateralTypes.Add(new SelectListItem() { Text = "Property", Value = "Property" });
+    collateralTypes.Add(new SelectListItem() { Text = "Vehicle", Value = "Vehicle" });
+    collateralTypes.Add(new SelectListItem() { Text = "Stock", Value = "Stock" });
+    collateralTypes.Add(new SelectListItem() { Text = "None", Value = "None" });
+
+    string BankName = ViewBag.BankName;
+    string startDate = ViewBag.StartDate;
+    string endDate = ViewBag.EndDate; 
+}
+<div class="content">
+    <div class="col-sm-12">
+        @using (Html.BeginForm("CreateLoanApplication", "LoanApplication", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.BankId)
+            @Html.HiddenFor(m => m.Status)
+            @Html.HiddenFor(m => m.User)
+            @Html.Hidden("BankName", BankName)
+            @Html.Hidden("StartDate", startDate)
+            @Html.Hidden("EndDate", endDate)
+
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h4 class="box-title">Loan Application Details</h4>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        @Html.ValidationSummary(true)
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.ApplicationDate)
+                            </label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.ApplicationDate, "{0:yyyy-MM-dd}", new {  @class = "form-control", @id = "txtApplicationDate" })
+                                @Html.ValidationMessageFor(model => model.ApplicationDate)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.CustomerNames)
+                            </label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.CustomerNames, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CustomerNames)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.BirthDate)
+                            </label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.BirthDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @Id = "txtDOB" })
+                                @Html.ValidationMessageFor(model => model.BirthDate)
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.PhoneNumber)
+                            </label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.PhoneNumber)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.ApplicationAmount)
+                            </label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.ApplicationAmount,  new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ApplicationAmount)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.Term)
+                            </label>
+                            <div class="col-sm-1">
+                                @Html.TextBoxFor(model => model.Term, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Term)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.Branch)
+                            </label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.Branch, new {@class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Branch)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.RM)
+                            </label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.RM, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.RM)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.LifeInsuranceRequired)
+                            </label>
+                            <div class="col-sm-1">
+                                @Html.CheckBoxFor(model => model.LifeInsuranceRequired, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.LifeInsuranceRequired)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-sm-2">
+                                @Html.LabelFor(model => model.CollateralType)
+                            </label>
+                            <div class="col-sm-2">
+                                @Html.DropDownListFor(model => model.CollateralType, collateralTypes, "--Collateral Type--", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CollateralType)
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <div class="row">
+                            <hr />
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-6">
+                                <span>@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>
+                                @Html.Bootstrap().ActionLinkButton("Cancel", "ListLoanApplicationView", "LoanApplication").PrependIcon("fa fa-times").RouteValues(new { BankName = BankName, txtApplicationStartDate = startDate, txtApplicationEndDate = endDate })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListLoanApplicationView", new { BankName = BankName, txtApplicationStartDate = startDate, txtApplicationEndDate = endDate })</span>
+                </div>
+            </div>
+            <script>
+                $('#txtDOB').datepicker({
+                    dateFormat: "yy-m-dd",
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: "-20:+0"
+                });
+
+                $('#txtApplicationDate').datepicker({
+                    dateFormat: "yy-m-dd",
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: "-1:+20"
+                });
+            </script>
+        }
+    </div>
+</div>

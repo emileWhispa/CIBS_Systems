@@ -1,0 +1,19 @@
+﻿@model List<eBroker.Vw_Policy_Report>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Policies Listing"; }
+@{ Layout = null; }
+@using (Html.BeginForm())
+{
+@Html.Grid(Model).Columns(col =>
+{
+    col.Add(m => m.Id, true);
+    col.Add(m => m.policy_no).Titled("Policy No");
+    col.Add(m => m.product_name ).Titled("Policy Type");
+    col.Add(m => m.insurer).Titled("Insurer");
+    col.Add(m => m.effective_dt ).Titled("Start Date").Format("{0:yyyy-MM-dd}");
+    col.Add(m => m.expiry_dt).Titled("Expiry Date").Format("{0:yyyy-MM-dd}");
+    col.Add(m => m.net_premium).Titled("Premium").Format("{0:#,##0}");
+    col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("View", "PolicyInfoView", "Policy").RouteValues(new { Id = m.Id }).PrependIcon("fa fa-search-plus"));
+}).WithPaging(5).Sortable(true).Filterable(true)
+}

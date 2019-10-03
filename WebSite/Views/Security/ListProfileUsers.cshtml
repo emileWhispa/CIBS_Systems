@@ -1,0 +1,43 @@
+﻿@model IEnumerable<eBroker.eUser>
+@using GridMvc.Html
+@{
+    ViewBag.Title = ViewBag.Profile +" Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("ListUser", "Management", FormMethod.Get))
+{
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">@ViewBag.Profile Users</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="table table-bordered">
+                            @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(m => m.Id, true);
+                               col.Add(m => m.Login).Titled("Login");
+                               col.Add(m => m.Names).Titled("Full Names");
+                               col.Add(m => m.eUserCategories.Category ).Titled("Category");
+                               col.Add(m => m.Phone ).Titled("Mobile");
+                               col.Add(m => m.Email ).Titled("E-mail");
+                               col.Add(m => m.Active).Titled("Active");
+                               col.Add(m => m.Locked).Titled("Locked");
+                           }).WithPaging(10).Sortable(true)
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+                        <div class="panel-footer">
+                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to User Groups", "ListUserCategory", "eUserCategory")</span>
+                </div>
+
+    </div>
+
+</div>
+}
