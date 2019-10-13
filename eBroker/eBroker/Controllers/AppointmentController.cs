@@ -174,13 +174,13 @@ namespace eBroker.Controllers
                 ViewBag.EventStatus = eventStatus;
                 var employees = (from r in dc.eUser.Where(x=>x.eUserCategories.Category!="Bank" || x.eUserCategories.Category!="Insurer").ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();
                 ViewBag.Employees = employees;
-                return View(Model);
+                return PartialView(Model);
             }
             catch (Exception ex)
             {
                 Danger(ex.Message, true);
             }
-            return View();
+            return PartialView();
         }
 
         public ActionResult AppointmentToExcel(string startDate, string endDate)
