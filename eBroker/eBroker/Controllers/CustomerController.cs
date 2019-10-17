@@ -9,6 +9,7 @@ using System.IO;
 using Excel;
 using System.Data.SqlClient;
 using System.Data;
+using eBroker.Models;
 
 namespace eBroker.Controllers
 {
@@ -33,6 +34,24 @@ namespace eBroker.Controllers
             }
             return View();
 
+        }
+
+        public ActionResult NewCustomerReport(DateData date)
+        {
+            List<Client> clients = dc.Client.Where(e=>e.create_dt <= date.end && e.create_dt>=date.start).ToList();
+            return View(clients);
+        }
+
+
+        public ActionResult DeleteCustomer(int id)
+        {
+            Client client = dc.Client.Find(id);
+            if( client != null)
+            {
+                dc.Client.Remove(client);
+                dc.SaveChanges();
+            }
+            return RedirectToAction("ListCustomer");
         }
 
         //

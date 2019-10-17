@@ -57,6 +57,7 @@
                                                      col.Add(m => m.group_email).Titled("E-mail");
                                                      col.Add(m => m.TIN).Titled("TIN");
                                                      col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "PartnerInfo", "Partner", new { Id = m.Id }, new { @class = "edit-button btn btn-sm btn-primary btn-flat" }));
+                                                     col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Delete", "DeletePartner", "Partner", new { Id = m.Id }, new { @class = "btn btn-sm btn-danger btn-flat",onclick="return confirm('are you sure to delete ?');" }));
                                                  }).WithPaging(10).Sortable(true)
 
                                               </div>

@@ -25,5 +25,7 @@ public int product_id{get;set;}
 public virtual Insurance_Product InsuranceProducts { get; set; }
 [Column("commission_percentage")]
 public double commission_percentage {get;set;}
+
+ public String iName { get { return Insurers != null ? Insurers.company_name : "..."; } }
 }
 }

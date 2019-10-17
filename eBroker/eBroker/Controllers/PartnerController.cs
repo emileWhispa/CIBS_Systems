@@ -33,6 +33,16 @@ namespace eBroker.Controllers
 
         }
 
+        public ActionResult DeletePartner(int id)
+        {
+            Partner partner = dc.Partner.Find(id);
+            if (partner != null) {
+                dc.Partner.Remove(partner);
+                dc.SaveChanges();
+            }
+            return RedirectToAction("ListPartner");
+        }
+
         [HttpPost]
         public ActionResult CreatePartner(eBroker.Partner p)
         {

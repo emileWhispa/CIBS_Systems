@@ -55,7 +55,7 @@
                                                   @Html.Grid(Model).Named("ga").Columns(col =>
                                              {
                                                  col.Add(m => m.Id, true);
-                                                     col.Add(m => m.Insurers.company_name).Titled("Insurer");
+                                                     col.Add(m => m.iName).Titled("Insurer");
                                                      col.Add(m => m.InsuranceProducts.product_name).Titled("Product");
                                                      col.Add(m => m.commission_percentage).Titled("Commission percentage (%)");
                                                  col.Add().Sanitized(false).Encoded(false).RenderValueAs(xc => Html.ActionLink("Edit", "TariffInfo", "Invoicing", new { Id = xc.Id }, new { @class = "edit-button btn-sm btn btn-primary btn-flat" }));

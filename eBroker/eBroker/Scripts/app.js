@@ -66,6 +66,15 @@ $(document).on('click', '.edit-button', function (e) {
                     $(ld).hide();
                     $(cnt).html(res);
                 }
+            },
+            error: function (err) {
+                $(ld).hide();
+                var elem = document.createElement("span");
+                elem.innerText = err;
+                $(".modal-body").prepend(elem);
+                setTimeout(function () {
+                    elem.remove();
+                }, 5000);
             }
         });
         return false;
