@@ -2,188 +2,152 @@
 
 @{
     ViewBag.Title = "Appointment Info";
-    Layout = "~/Views/Shared/_Layout.cshtml";
     var appointmentType = ViewBag.AppointmentTypes as List<SelectListItem>;
+    var dt = Model.Id == 0 ? "" : Model.AppointmentDate.ToString();
 }
-<div class="container">
-    <div class="col-sm-12">
-        @using (Html.BeginForm("CreateAppointment", "Appointment"))
-        {
-            @Html.HiddenFor(m => m.Id)
-            @Html.HiddenFor(m => m.BookedBy)
-            @Html.HiddenFor(m => m.BookedOn)
-            @Html.HiddenFor(m => m.Status)
-            List<SelectListItem> listLanguages = new List<SelectListItem>();
-            listLanguages.Add(new SelectListItem
-            {
-                Text = "Kinyarwanda",
-                Value = "Kinyarwanda"
-            });
-            listLanguages.Add(new SelectListItem
-            {
-                Text = "English",
-                Value = "English",
-            });
-            listLanguages.Add(new SelectListItem
-            {
-                Text = "French",
-                Value = "French"
-            });
-            <div class="panel panel-green">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Appointment Details</h4>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        @Html.ValidationSummary(true)
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.AppointmentDate)
-                            </label>
-                            <div class="col-sm-2">
-                                @Html.TextBoxFor(model => model.AppointmentDate, "{0:yyyy-MM-dd}", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.AppointmentDate)
-                            </div>
-                        </div>
-                    </div>
+@using (Html.BeginForm("CreateAppointment", "Appointment"))
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.BookedBy)
+    @Html.HiddenFor(m => m.BookedOn)
+    @Html.HiddenFor(m => m.Status)
+    List<SelectListItem> listLanguages = new List<SelectListItem>();
+    listLanguages.Add(new SelectListItem
+    {
+        Text = "Kinyarwanda",
+        Value = "Kinyarwanda"
+    });
+    listLanguages.Add(new SelectListItem
+    {
+        Text = "English",
+        Value = "English",
+    });
+    listLanguages.Add(new SelectListItem
+    {
+        Text = "French",
+        Value = "French"
+    });
 
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.AppointmentTime)
-                            </label>
-                            <div class="col-sm-2">
-                                @Html.TextBoxFor(model => model.AppointmentTime, new {@id="txtAppointmentTime", @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.AppointmentTime)
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.AppointmentVenue)</label>
-                            <div class="col-sm-3">
-                                @Html.TextBoxFor(model => model.AppointmentVenue, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.AppointmentVenue)
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.AppointmentTypeID)</label>
-                            <div class="col-sm-3">
-                                @Html.DropDownListFor(model => model.AppointmentTypeID, appointmentType, "-- Select Type --", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.AppointmentTypeID)
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.ClientName)</label>
-                            <div class="col-sm-4">
-                                @Html.TextBoxFor(model => model.ClientName, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.ClientName)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.ClientPhone)</label>
-                            <div class="col-sm-3">
-                                @Html.TextBoxFor(model => model.ClientPhone, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.ClientPhone)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.ClientEmail)</label>
-                            <div class="col-sm-4">
-                                @Html.TextBoxFor(model => model.ClientEmail, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.ClientEmail)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.Language)</label>
-                            <div class="col-sm-3">
-                                @Html.DropDownListFor(model => model.Language, listLanguages, "-- Select Language --", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.Language)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.Comments)</label>
-                            <div class="col-sm-6">
-                                @Html.TextBoxFor(model => model.Comments, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.Comments)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.SendReminderToClient)</label>
-                            <div class="col-sm-3">
-                                @Html.CheckBoxFor(model => model.SendReminderToClient, new { @id = "SendReminderToClient", @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.SendReminderToClient)
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-
-                        <div class="row">
-                            <hr />
-                            <label class="col-sm-2 control-label"></label>
-                            <div class="col-sm-6">
-                                @Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")
-                                @Html.Bootstrap().ActionLinkButton("Cancel", "ListAppointment").PrependIcon("fa fa-times")
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListAppointment")</span>
-                </div>
-                <script>
-                    $('#AppointmentDate').datepicker({
-                        dateFormat: "dd-M-yy",
-                        changeMonth: true,
-                        changeYear: true,
-                        yearRange: "-20:+0"
-                    }); 
-                    $('#SendReminderToClient').bootstrapToggle({
-                        on: 'Yes',
-                        off: 'No'
-                    });
-                </script>
-            </div>
-            @section Scripts{
-            <script type="text/javascript">
-                $(function () {
-                    $('#SendReminderToClient').bootstrapToggle({
-                        on: 'Yes',
-                        off: 'No'
-                    });
-
-
-                })
-                </script>
-                }
-        }
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Appointment</h4>
     </div>
-</div>
+    <div class="modal-body modal-data">
+        <div class="box-body">
+            <div class="row">
+                @Html.ValidationSummary(true)
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.AppointmentDate)
+                        <input class="form-control" data-val="true" data-val-date="The field Appointment Date must be a date." data-val-required="The Appointment Date field is required." id="AppointmentDate" name="AppointmentDate" type="text" value="@dt">
+                        @Html.ValidationMessageFor(model => model.AppointmentDate)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.AppointmentTime)
+                        @Html.TextBoxFor(model => model.AppointmentTime, new { @id = "txtAppointmentTime", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AppointmentTime)
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.AppointmentVenue)
+                        @Html.TextBoxFor(model => model.AppointmentVenue, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AppointmentVenue)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.AppointmentTypeID)
+                        @Html.DropDownListFor(model => model.AppointmentTypeID, appointmentType, "-- Select Type --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AppointmentTypeID)
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.ClientName)
+                        @Html.TextBoxFor(model => model.ClientName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ClientName)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.ClientPhone)
+                        @Html.TextBoxFor(model => model.ClientPhone, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ClientPhone)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.ClientEmail)
+                        @Html.TextBoxFor(model => model.ClientEmail, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ClientEmail)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.Language)
+                        @Html.DropDownListFor(model => model.Language, listLanguages, "-- Select Language --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Language)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.Comments)
+                        @Html.TextBoxFor(model => model.Comments, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Comments)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.SendReminderToClient)
+                        @Html.CheckBoxFor(model => model.SendReminderToClient, new { @id = "SendReminderToClient", @class = "" })
+                        @Html.ValidationMessageFor(model => model.SendReminderToClient)
+                    </div>
+                </div>
+            </div>
+
+            <span class="didHide">@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
+
+    </div>
+    <script>
+        $('#AppointmentDate').datepicker({
+            dateFormat: "dd-M-yy",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-20:+0"
+        });
+        $('#SendReminderToClient').bootstrapToggle({
+            on: 'Yes',
+            off: 'No'
+        });
+    </script>
+
+    @section Scripts{
+        <script type="text/javascript">
+            $(function () {
+                $('#SendReminderToClient').bootstrapToggle({
+                    on: 'Yes',
+                    off: 'No'
+                });
+
+
+            })
+        </script>
+    }
+}

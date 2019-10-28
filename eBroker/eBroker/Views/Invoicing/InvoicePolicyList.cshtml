@@ -72,32 +72,7 @@
                                           </div>
 
 
-                                          <div class="row">
-                                              <hr />
-                                              <label class="col-sm-3 control-label"></label>
-
-                                              <div class="col-sm-12 col-centered">
-                                                  @Html.Bootstrap().ActionLinkButton("Print Invoice", "ExportToPDF", "Reporting").RouteValues(new { Id = InvoiceInfo.Id.ToString(), ReportName = "Invoice_Broker", FilterName = "invoice_id", OrderBy = "" }).PrependIcon("fa fa-file-pdf-o")
-                                                  @if (@Model.Count() > 0)
-                                                  {
-                                                      @Html.Bootstrap().ActionLinkButton("Excel", "ExportToExcel", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-file-excel-o")
-                                                  }
-                                                  @if (InvoiceInfo.Status == "Pending")
-                                                  {
-                                                      if (@Model.Count() > 0)
-                                                      {
-                                                          @Html.Bootstrap().ActionLinkButton("Confirm Payment", "ConfirmInvoice", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-check-circle")
-                                                          @Html.Bootstrap().ActionLinkButton("Delete Invoice", "DeleteInvoice", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-trash-o")
-                                                          @Html.Bootstrap().ActionLinkButton("Delete Invoice Details", "DeleteInvoiceDetails", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-trash-o")
-                                                      }
-                                                      else
-                                                      {
-                                                          @Html.Bootstrap().ActionLinkButton("Delete Invoice", "DeleteInvoice", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-trash-o")
-                                                      }
-                                                  }
-
-                                              </div>
-                                          </div>
+                                          
                                       </div>
                                       <div class="modal-footer">
 
@@ -112,22 +87,47 @@
                                   <h3 class="box-title"><i class="fa fa-info-circle"></i> Invoice Details {Records: @counter.ToString()}</h3>
                               </div>
                               <div class="box-body">
-                                  <button class="btn btn-primary edit-button">More info</button>
+                                  <div class="row">
+
+
+                                      <div class="col-sm-12 col-centered">
+                                          <button class="btn btn-primary edit-button">More info</button>
+                                          @Html.Bootstrap().ActionLinkButton("Print Invoice", "ExportToPDF", "Reporting").RouteValues(new { Id = InvoiceInfo.Id.ToString(), ReportName = "Invoice_Broker", FilterName = "invoice_id", OrderBy = "" }).PrependIcon("fa fa-file-pdf-o")
+                                          @if (@Model.Count() > 0)
+                                          {
+                                              @Html.Bootstrap().ActionLinkButton("Excel", "ExportToExcel", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-file-excel-o")
+                                          }
+                                          @if (InvoiceInfo.Status == "Pending")
+                                          {
+                                              if (@Model.Count() > 0)
+                                              {
+                                                  @Html.Bootstrap().ActionLinkButton("Confirm Payment", "ConfirmInvoice", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-check-circle")
+                                                  @Html.Bootstrap().ActionLinkButton("Delete Invoice", "DeleteInvoice", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-trash-o")
+                                                  @Html.Bootstrap().ActionLinkButton("Delete Invoice Details", "DeleteInvoiceDetails", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-trash-o")
+                                              }
+                                              else
+                                              {
+                                                  @Html.Bootstrap().ActionLinkButton("Delete Invoice", "DeleteInvoice", "Invoicing").RouteValues(new { Id = InvoiceInfo.Id.ToString() }).PrependIcon("fa fa-trash-o")
+                                              }
+                                          }
+
+                                      </div>
+</div>
                                   <div class="">
                                       <div>
                                           @*                        <div class="row">
-                            <hr />
-                            <div class="col-sm-12">
-                                <div id="custom-search-input">
-                                    <div class="input-group  text-center">
-                                        <input type="text" name="query" id="query" class="form-control input-sm" placeholder="Search Policy...." />
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
-                                        </span>
-                                    </div>
-                                </div>
+                    <hr />
+                    <div class="col-sm-12">
+                        <div id="custom-search-input">
+                            <div class="input-group  text-center">
+                                <input type="text" name="query" id="query" class="form-control input-sm" placeholder="Search Policy...." />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                </span>
                             </div>
-                        </div>*@
+                        </div>
+                    </div>
+                </div>*@
                                           <br />
                                           <div class="table-responsive">
                                               <div class="table table-bordered">

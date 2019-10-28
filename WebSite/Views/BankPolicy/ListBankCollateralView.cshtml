@@ -14,12 +14,14 @@
 @using (Html.BeginForm("ListBankCollateralView", "BankPolicy", FormMethod.Get))
 {
     @Html.Hidden("BankName",BankName)
-<div class="container">
-    <div class="panel panel-green">
-        <div class="panel-heading">Bank Collateral {@counter.ToString()}</div>
-        <div class="panel-body">
+<div class="content">
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title"> <i class="fa fa-info"></i> Bank Collateral {@counter.ToString()}</h3>
+        </div>
+        <div class="box-body">
             <div class="row">
-                <div class="panel-body">
+                <div class="box-body">
                     <div class="row">
                         @*<div class="col-sm-3">
                                 @Html.DropDownList("BankId", banks, "-- Select Bank --", new { @class = "form-control"})
@@ -27,7 +29,7 @@
                         <div class="col-sm-12">
                             <div id="custom-search-input">
                                 <div class="input-group  text-center">
-                                    <input type="text" name="query" id="query" class="form-control input-lg" placeholder="Search by Loan Account, Customer Name, Collateral Type, Collateral Description....." />
+                                    <input type="text" name="query" id="query" class="form-control input-sm" placeholder="Search by Loan Account, Customer Name, Collateral Type, Collateral Description....." />
                                     <span class="input-group-btn">
                                         <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
                                     </span>
@@ -36,13 +38,13 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="table-responsive">
                         <div class="table table-bordered">
                             @Html.Grid(Model).Named("ga").Columns(col =>
                            {
                                col.Add(m => m.Id, true);
                                col.Add(m => m.AccountNumber).Titled("Loan Account");
-                               col.Add(m => m.BankLoans.AccountName).Titled("Account Name");
+                               col.Add(m => m.getAccName).Titled("Account Name");
                                col.Add(m => m.CollateralDescription).Titled("Collateral Description");
                                col.Add(m => m.CollateralType).Titled("Collateral Type");
                                col.Add(m => m.MarketValue).Titled("Market Value").Format("{0:#,##0}");

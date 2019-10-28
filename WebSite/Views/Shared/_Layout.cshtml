@@ -2,7 +2,8 @@
 @using eBroker.Models
 @{
     UserModel currentUser = (UserModel)this.ViewData["UserData"];
-    string policyCounter = this.ViewData["expiredPolicies"].ToString();
+    var exp = this.ViewData["expiredPolicies"];
+    string policyCounter = exp == null ? "" : exp.ToString();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -10,175 +11,130 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300" rel="stylesheet">
 
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/bootstrapjs")
-    @Scripts.Render("~/bundles/templatejs")
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/moment.js"></script>
-    <script src="~/Scripts/jquery.smartWizard.min.js"></script>
-    <script src="~/Scripts/bootstrap-toggle.min.js"></script>
-    <script src="~/Scripts/respond.js"></script>
+    <link href="~/Content/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/_all-skins.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
+    <link href="~/Content/site.css" rel="stylesheet" />
+    <link href="~/Content/index.css" rel="stylesheet" />
+    <link href="~/Content/select2.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/select2.full.min.js"></script>
 
-    @Styles.Render("~/Content/css")
-    <link href="/Content/bootstrap-toggle.min.css" rel="stylesheet">
-    <script src="/Scripts/bootstrap-toggle.min.js"></script>
-    @*@Styles.Render("~/Content/themes/base/css")*@
-    <script src="/Scripts/jquery-1.12.4.js"></script>
-    <script src="/Scripts/jquery-ui.js"></script>
-
-
-    <script src="@Url.Content("~/Scripts/jquery-1.12.4.js")" 
-    type="text/javascript"></script>
-    <link href="@Url.Content("~/Content/themes/base/jquery-ui.css")" 
-    rel="stylesheet"  type="text/css" />
-    <link href="@Url.Content("~/Content/themes/base/jquery-ui.min.css")" 
-    rel="stylesheet" type="text/css" />
-    <link href="@Url.Content("~/Content/themes/base/datepicker.css")" 
-    rel="stylesheet" type="text/css" />
-
-    <script src="@Url.Content("~/Scripts/jquery-ui-1.12.1.js")" 
-    type="text/javascript"></script>
-
-
-    @*<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>*@
-
-    @*@Scripts.Render("~/Content/font-awesome.min.css")*@
-    <script type="text/javascript" src="/Scripts/jquery.slimscroll.min.js"></script>
 </head>
-<body class="widescreen fixed-left">
-    <div id="wrapper" class="forced">
-        <div class="topbar">
-            <div class="topbar-left">
-                <div class="text-center">
+<body class="hold-transition skin-blue fixed sidebar-mini sidebar-collapse">
 
-                    <a  href="@Url.Action("Index", "Home")" class="logo">
-                        <i class="fa fa-umbrella icon-c-logo"></i>
-                        <span class="h5">CIBS Smart Broker</span>
-                    </a>
-                </div>
-            </div>
-            <div class="navbar navbar-default" role="navigation">
-                <div class="container">
-                    <div class="">
-                        <div class="pull-left">
-                            <button class="button-menu-mobile open-left waves-effect waves-light">
-                                <i class="fa fa-navicon"></i>
-                            </button>
-                            <span class="clearfix"></span>
-                        </div>
+    <div class="wrapper">
+        @{Html.RenderAction("Menus", "Shared", null);}
+        <header class="main-header light-shadow">
+            <!-- Logo -->
+            <a href="#" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>E</b>BR</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>Smart Broker</b></span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
 
-                        <ul class="nav navbar-nav navbar-right pull-right">
-                            <li class="dropdown top-menu-item-xs">
-                                <a href="#" data-target="#" class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
-                                    <i class="fa fa-bell"></i><span class="badge badge-xs badge-danger">@policyCounter</span>
-                                </a>
-                            </li>
-                            <li class="hidden-xs">
-                                <a href="#" id="btn-fullscreen" class="waves-effect waves-light"><i class="glyphicon glyphicon-fullscreen"></i></a>
-                            </li>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- Messages: style can be found in dropdown.less-->
+                        <!-- Notifications: style can be found in dropdown.less -->
+                        <!-- Tasks: style can be found in dropdown.less -->
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/Content/images/ui-icons_2e83ff_256x240.png" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@currentUser.Names</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="~/Content/images/ui-icons_2e83ff_256x240.png" class="img-circle" alt="User Image">
 
-                            @if (Request.IsAuthenticated && currentUser != null)
-                            {
-                                <li class="dropdown top-menu-item-xs">
-                                    <a href="" class="dropdown-toggle profile waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">
-                                        <img src="@Url.Content("~/Imgs/user.png")" alt="user-img" class="img-circle">
-                                        <span>@currentUser.Names</span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="javascript:void(0)"><i class=" m-r-10 text-custom"></i>Profile</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="@Url.Action("MyAccount", "Security")"><i class="fa fa-user-circle m-r-10 text-danger"></i>My Account</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="@Url.Action("LogOff", "Account")"><i class="fa fa-sign-out m-r-10 text-danger"></i>Logout</a></li>
-                                    </ul>
+                                    <p>
+                                        @currentUser.Names
+                                        <small>@currentUser.Category</small>
+                                    </p>
                                 </li>
-                            }
-                        </ul>
-                    </div>
-
+                                <!-- Menu Body -->
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="@Url.Action("MyAccount", "Security")" class="btn btn-default btn-flat">My Account</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="@Url.Action("LogOff", "Account")" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                    </ul>
                 </div>
-            </div>
-        </div>
-        <!-- ========== Left Sidebar Start ========== -->
-        <div class="left side-menu">
-            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 231px;">
-                <div class="sidebar-inner slimscrollleft" style="overflow: hidden; width: auto; height: 231px;">
-                    @{Html.RenderAction("Menus", "Shared", null);}
-                    <div class="clearfix"></div>
-                </div>
-                <div class="slimScrollBar" style="background: rgb(152, 166, 173) none repeat scroll 0% 0%; width: 5px; position: absolute; top: -107px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 56.6465px; visibility: visible;"></div>
-                <div class="slimScrollRail" style="width: 5px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51) none repeat scroll 0% 0%; opacity: 0.2; z-index: 90; right: 1px;"></div>
-            </div>
-        </div>
-        <!-- Left Sidebar End -->
+            </nav>
+        </header>
+        <div>
 
-        <div class="content-page">
-            <!-- Start content -->
-            <div class="content">
-                <div class="container">
+            <!-- ========== Left Sidebar Start ========== -->
+            <!-- Left Sidebar End -->
+
+            <div class="content-wrapper">
+                <!-- Start content -->
+
+                @RenderBody()
+                <div class="content">
                     <div id="AlertsContainer">
                         @{ Html.RenderPartial("_Alerts"); }
                     </div>
-                    @RenderBody()
                 </div>
                 <!-- End container -->
-            </div>
-            <!-- End content -->
-            <div class="footer text-right">
-                @*<footer class="footer text-right">*@
-                <span style="color: #171d52; font-weight: bold">Orion Systems & Design Ltd &copy; @DateTime.Now.Year - All Rights Reserved.</span>
-                @*</footer>*@
+                <!-- End content -->
+                <div class="footer text-right">
+                    @*<footer class="footer text-right">*@
+                    <span style="color: #171d52; font-weight: bold"></span>
+                    @*</footer>*@
+                </div>
             </div>
         </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+
+
+
+
+
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 2.4.0
+            </div>
+            Orion Systems & Design Ltd &copy; @DateTime.Now.Year - All Rights Reserved.
+            reserved.
+        </footer>
     </div>
+    <script src="~/Scripts/fastclick.js"></script>
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/adminlte.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/gridmvc.min.js"></script>
+    <script src="~/Scripts/jquery.slimscroll.min.js"></script>
+    <script src="~/Scripts/app.js"></script>
 
-    <script>
-        var resizefunc = [];
-    </script>
-
-
-    <div id="ascrail2000" class="nicescroll-rails" style="width: 6px; z-index: 99; cursor: default; position: fixed; top: 60px; left: 1609px; height: 201px; display: block; opacity: 0;">
-        <div style="position: relative; top: 0px; float: right; width: 6px; height: 422px; background-color: rgb(152, 166, 173); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div>
-    </div>
-    <div id="ascrail2000-hr" class="nicescroll-rails" style="height: 6px; z-index: 99; top: 255px; left: 1375px; position: fixed; cursor: default; display: none; width: 234px; opacity: 0;">
-        <div style="position: relative; top: 0px; height: 6px; width: 240px; background-color: rgb(152, 166, 173); border: 1px solid rgb(255, 255, 255); background-clip: padding-box; border-radius: 5px;"></div>
-    </div>
-
-    <script src="/Scripts/jquery-1.12.4.js"></script>
-    <script src="/Scripts/jquery-ui.js"></script>
-
-    @Scripts.Render("~/bundles/jqueryui")
-    @*@Scripts.Render("~/bundles/bootstrapjs")*@
-    @Scripts.Render("~/bundles/templatejs")
-    <script src="~/Scripts/moment.js"></script>
-    <script src="~/Scripts/respond.js"></script>
-    <script src="~/Scripts/.js"></script>
-    <script src="~/Scripts/respond.js"></script>
-    <script src="/Scripts/bootstrap.min.js"></script>
-    <script src="/Scripts/moment.js"></script>
-    <script src="/Scripts/jquery.smartWizard.min.js"></script>
-    <script src="/Scripts/bootstrap-toggle.min.js"></script>
-    <script src="/Scripts/respond.js"></script>
-    <link href="/Content/basic.css" rel="stylesheet">
-    <link href="/Content/bootstrap-toggle.min.css" rel="stylesheet">
-
-    <script type="text/javascript">
-        $(function () {
-            $('#inner-content-div').slimScroll({
-                size: '10px',
-                height: 'auto',
-                alwaysVisible: true,
-                railVisible: true,
-            });
-        });
-    </script>
-    @Scripts.Render("~/bundles/jqueryval")
     @RenderSection("scripts", required: false)
-
 </body>
 </html>
 

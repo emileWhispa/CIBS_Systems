@@ -9,12 +9,14 @@
 }
 @using (Html.BeginForm("ListPolicy", "Policy", FormMethod.Get))
 {
-    <div class="container">
-        <div class="panel panel-green">
-            <div class="panel-heading">Loan Insurance Policies </div>
-            <div class="panel-body">
+    <div class="content">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title"><i class="fa fa-info"></i> Loan Insurance Policies</h3>
+            </div>
+            <div class="box-body">
                 <div class="row">
-                    <div class="panel-body">
+                    <div class="box-body">
                         @if(loanDetails!=null)
                         {
                         <div class="form-group">
@@ -59,7 +61,7 @@
                         }
                         <div class="form-group">
 
-                            <div class="row">
+                            <div class="table-responsive">
                                 <div class="table table-bordered">
                                     @Html.Grid(Model).Named("ga").Columns(col =>
                            {

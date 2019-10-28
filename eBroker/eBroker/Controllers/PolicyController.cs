@@ -396,6 +396,19 @@ namespace eBroker.Controllers
             ViewBag.UserId = Id;
         }
 
+        public ActionResult DeletePolicy(int Id)
+        {
+            InsurancePolicy ins = dc.InsurancePolicy.Find(Id);
+            if( ins != null)
+            {
+                List<Invoice_Detail> _list = dc.Invoice_Detail.Where(e => e.contract_id == Id).ToList();
+                dc.Invoice_Detail.RemoveRange(_list);
+                dc.InsurancePolicy.Remove(ins);
+                dc.SaveChanges();
+            }
+            return RedirectToAction("ListPolicy");
+        }
+
         [HttpPost]
         public ActionResult CreatePolicyProperty(eBroker.Policy_Property ip)
         {

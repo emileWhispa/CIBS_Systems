@@ -7,12 +7,12 @@
 @using (Html.BeginForm())
 {
 
-<div class="container">
-    <div class="panel panel-green">
-        <div class="panel-heading">Submitted Loan Applications {@Model.Count()}</div>
-        <div class="panel-body">
+<div class="content">
+    <div class="box box-primary">
+        <div class="box-header">Submitted Loan Applications {@Model.Count()}</div>
+        <div class="box-body">
             <div class="row">
-                <div class="panel-body">
+                <div class="box-body">
                     <div class="row">
                         <div class="table table-bordered">
                             @Html.Grid(Model).Named("ga").Columns(col =>

@@ -36,278 +36,293 @@
     <div class="row">
         @Html.ValidationSummary(true)
     </div>
-    <body>
-        <div class="container">
+
+        <div class="content">
 
             <!-- SmartWizard html -->
-            <div id="smartwizard">
-                <ul>
-                    <li><a href="#step-1">Policy Information<br />
-                        <small>Policy Details</small></a></li>
-                    <li><a href="#step-2">Payment Information<br />
-                        <small>Payment and Renewal Details</small></a></li>
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab_1" data-toggle="tab" aria-expanded="false">
+                            Policy Information<br />
+                            <small>Policy Details</small>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#tab_2" data-toggle="tab" aria-expanded="true">
+
+                            Payment Information<br />
+                            <small>Payment and Renewal Details</small>
+
+                        </a>
+                    </li>
+
+
+                    <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
                 </ul>
-
-                <div>
-                    <div id="step-1" class="">
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
                         <br />
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.policy_no)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.TextBoxFor(model => model.policy_no, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.policy_no)
+                        <div class="col-md-6 col-centered">
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-3">
+                                        @Html.LabelFor(model => model.policy_no)
+                                    </label>
+                                    <div class="col-sm-9">
+                                        @Html.TextBoxFor(model => model.policy_no, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.policy_no)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.policy_type)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.DropDownListFor(model => model.policy_type, policyTypes, "--Policy Type--", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.policy_type)
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-3">
+                                        @Html.LabelFor(model => model.policy_type)
+                                    </label>
+                                    <div class="col-sm-9">
+                                        @Html.DropDownListFor(model => model.policy_type, policyTypes, "--Policy Type--", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.policy_type)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.amendment_no)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.TextBoxFor(model => model.amendment_no, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.amendment_no)
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-3">
+                                        @Html.LabelFor(model => model.amendment_no)
+                                    </label>
+                                    <div class="col-sm-9">
+                                        @Html.TextBoxFor(model => model.amendment_no, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.amendment_no)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.insurance_id)
-                                </label>
-                                <div class="col-sm-4">
-                                    @Html.DropDownListFor(model => model.insurance_id, insurers, "--Insurance Company--", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.insurance_id)
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-3">
+                                        @Html.LabelFor(model => model.insurance_id)
+                                    </label>
+                                    <div class="col-sm-9">
+                                        @Html.DropDownListFor(model => model.insurance_id, insurers, "--Insurance Company--", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.insurance_id)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.insurer_branch)
-                                </label>
-                                <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.insurer_branch, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.insurer_branch)
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-3">
+                                        @Html.LabelFor(model => model.insurer_branch)
+                                    </label>
+                                    <div class="col-sm-9">
+                                        @Html.TextBoxFor(model => model.insurer_branch, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.insurer_branch)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.product_id)
-                                </label>
-                                <div class="col-sm-4">
-                                    @Html.DropDownListFor(model => model.product_id, products, "--Insurance Product--", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.product_id)
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-3">
+                                        @Html.LabelFor(model => model.product_id)
+                                    </label>
+                                    <div class="col-sm-9">
+                                        @Html.DropDownListFor(model => model.product_id, products, "--Insurance Product--", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.product_id)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.client_id)
-                                </label>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-3">
+                                        @Html.LabelFor(model => model.client_id)
+                                    </label>
 
-                                <div class="col-sm-4">
-                                    @Html.DropDownListFor(model => model.client_id, clients, "--Select Client--", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.client_id)
+                                    <div class="col-sm-9">
+                                        @Html.DropDownListFor(model => model.client_id, clients, "--Select Client--", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.client_id)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.client_code)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.TextBoxFor(model => model.client_code, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.client_code)
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-3">
+                                        @Html.LabelFor(model => model.client_code)
+                                    </label>
+                                    <div class="col-sm-9">
+                                        @Html.TextBoxFor(model => model.client_code, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.client_code)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                                                <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.relationship_manager)
-                                </label>
-                                <div class="col-sm-4">
-                                    @Html.DropDownListFor(model => model.relationship_manager, Recruiters, "--Relationship Manager--", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.relationship_manager)
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-3">
+                                        @Html.LabelFor(model => model.relationship_manager)
+                                    </label>
+                                    <div class="col-sm-9">
+                                        @Html.DropDownListFor(model => model.relationship_manager, Recruiters, "--Relationship Manager--", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.relationship_manager)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.effective_dt)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.TextBoxFor(model => model.effective_dt, "{0:yyyy-MM-dd}", new { @id = "txtEffectiveDate", @class = "form-control" })                                    @Html.ValidationMessageFor(model => model.payment_date)
-                                    @Html.ValidationMessageFor(model => model.effective_dt)
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-3">
+                                        @Html.LabelFor(model => model.effective_dt)
+                                    </label>
+                                    <div class="col-sm-9">
+                                        @Html.TextBoxFor(model => model.effective_dt, "{0:yyyy-MM-dd}", new { @id = "txtEffectiveDate", @class = "form-control" })                                    @Html.ValidationMessageFor(model => model.payment_date)
+                                        @Html.ValidationMessageFor(model => model.effective_dt)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.expiry_dt)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.TextBoxFor(model => model.expiry_dt, "{0:yyyy-MM-dd}", new { @id = "txtExpiryDate", @class = "form-control" })                                    @Html.ValidationMessageFor(model => model.payment_date)
-                                    @Html.ValidationMessageFor(model => model.expiry_dt)
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-3">
+                                        @Html.LabelFor(model => model.expiry_dt)
+                                    </label>
+                                    <div class="col-sm-9">
+                                        @Html.TextBoxFor(model => model.expiry_dt, "{0:yyyy-MM-dd}", new { @id = "txtExpiryDate", @class = "form-control" })                                    @Html.ValidationMessageFor(model => model.payment_date)
+                                        @Html.ValidationMessageFor(model => model.expiry_dt)
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                            <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListPolicy")</span>
+                            </div>
+                        </div>
+                        <div id="tab_2" class="tab-pane active">
+                            <br />
+                            <div class="col-md-6 col-centered">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3">
+                                            @Html.LabelFor(model => model.net_premium)
+                                        </label>
+                                        <div class="col-sm-9">
+                                            @Html.TextBoxFor(model => model.net_premium, new { @id = "txtNetPremium", @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.net_premium)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3">
+                                            @Html.LabelFor(model => model.total_paid)
+                                        </label>
+                                        <div class="col-sm-9">
+                                            @Html.TextBoxFor(model => model.total_paid, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.total_paid)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3">
+                                            @Html.LabelFor(model => model.payment_mode)
+                                        </label>
+                                        <div class="col-sm-9">
+                                            @Html.DropDownListFor(model => model.payment_mode, paymentTypes, "--Payment Mode--", new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.payment_mode)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3">
+                                            @Html.LabelFor(model => model.payment_date)
+                                        </label>
+                                        <div class="col-sm-9">
+                                            @Html.TextBoxFor(model => model.payment_date, "{0:yyyy-MM-dd}", new { @id = "txtPaymentDate", @class = "form-control" })                                    @Html.ValidationMessageFor(model => model.payment_date)
+                                            @Html.ValidationMessageFor(model => model.payment_date)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3">
+                                            @Html.LabelFor(model => model.receipt_no)
+                                        </label>
+                                        <div class="col-sm-9">
+                                            @Html.TextBoxFor(model => model.receipt_no, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.receipt_no)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3">
+                                            @Html.LabelFor(model => model.invoiceable)
+                                        </label>
+                                        <div class="col-sm-9">
+                                            @Html.CheckBoxFor(model => model.invoiceable, new { @id = "invoiceable", @class = "" })
+                                            @Html.ValidationMessageFor(model => model.invoiceable)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3">
+                                            @Html.LabelFor(model => model.renewable)
+                                        </label>
+                                        <div class="col-sm-9">
+                                            @Html.CheckBoxFor(model => model.renewable, new { @id = "renewable", @class = "" })
+                                            @Html.ValidationMessageFor(model => model.renewable)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3">
+                                            @Html.LabelFor(model => model.renewal_basis)
+                                        </label>
+                                        <div class="col-sm-9">
+                                            @Html.DropDownListFor(model => model.renewal_basis, renewalTypes, "--Renewal Type--", new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.renewal_basis)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3">
+                                            @Html.LabelFor(model => model.interest_transfer)
+                                        </label>
+                                        <div class="col-sm-9">
+                                            @Html.CheckBoxFor(model => model.interest_transfer, new { @id = "interest_transfer" })
+                                            @Html.ValidationMessageFor(model => model.interest_transfer)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3">
+                                            @Html.LabelFor(model => model.interest_bank_id)
+                                        </label>
+                                        <div class="col-sm-9">
+                                            @Html.DropDownListFor(model => model.interest_bank_id, banks, "--Bank--", new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.interest_bank_id)
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <hr />
-                        <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListPolicy")</span>
                     </div>
-                    <div id="step-2" class="">
-                        <br />
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.net_premium)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.TextBoxFor(model => model.net_premium, new {@id="txtNetPremium", @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.net_premium)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.total_paid)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.TextBoxFor(model => model.total_paid, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.total_paid)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.payment_mode)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.DropDownListFor(model => model.payment_mode, paymentTypes, "--Payment Mode--", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.payment_mode)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.payment_date)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.TextBoxFor(model => model.payment_date, "{0:yyyy-MM-dd}", new { @id = "txtPaymentDate", @class = "form-control" })                                    @Html.ValidationMessageFor(model => model.payment_date)
-                                    @Html.ValidationMessageFor(model => model.payment_date)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.receipt_no)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.TextBoxFor(model => model.receipt_no, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.receipt_no)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.invoiceable)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.CheckBoxFor(model => model.invoiceable, new { @id = "invoiceable", @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.invoiceable)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.renewable)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.CheckBoxFor(model => model.renewable, new { @id = "renewable", @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.renewable)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.renewal_basis)
-                                </label>
-                                <div class="col-sm-4">
-                                    @Html.DropDownListFor(model => model.renewal_basis, renewalTypes, "--Renewal Type--", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.renewal_basis)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.interest_transfer)
-                                </label>
-                                <div class="col-sm-2">
-                                    @Html.CheckBoxFor(model => model.interest_transfer, new { @id = "interest_transfer", @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.interest_transfer)
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <label class="col-sm-2">
-                                    @Html.LabelFor(model => model.interest_bank_id)
-                                </label>
-                                <div class="col-sm-4">
-                                    @Html.DropDownListFor(model => model.interest_bank_id, banks, "--Bank--", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.interest_bank_id)
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
                 <script>
                     $('#txtEffectiveDate').datepicker({
                         dateFormat: "dd-M-yy",
@@ -329,7 +344,7 @@
                         changeYear: true,
                         yearRange: "-1:+1"
                     });
-                        </script>
+                </script>
             </div>
 
         </div>
@@ -390,6 +405,5 @@
             </script>
         }
 
-    </body>
 }
 

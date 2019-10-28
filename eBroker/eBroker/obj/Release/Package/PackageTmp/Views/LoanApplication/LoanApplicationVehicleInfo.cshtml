@@ -10,7 +10,7 @@
     var OccupantCategory = ViewBag.OccupantCategory as List<SelectListItem>;
 
 }
-<div class="container">
+<div class="content">
     <div class="col-sm-12">
         @using (Html.BeginForm("CreateLoanApplicationVehicle", "LoanApplication"))
         {
@@ -23,11 +23,11 @@
             @Html.HiddenFor(m => m.PremiumDate)
             @Html.HiddenFor(m => m.Insurer_Id)
             
-            <div class="panel panel-green">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Vehicle Details</h4>
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h4 class="box-title">Vehicle Details</h4>
                 </div>
-                <div class="panel-body">
+                <div class="box-body">
                     <div class="row">
                         @Html.ValidationSummary(true)
                     </div>

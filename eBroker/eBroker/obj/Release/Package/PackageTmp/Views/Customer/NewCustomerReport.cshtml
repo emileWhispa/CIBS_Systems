@@ -1,0 +1,38 @@
+﻿@model IEnumerable<eBroker.Client>
+
+    @{
+        Page.Title = "Title goes here";
+        //Layout = "Your Layout Page goes here";
+    }
+
+    <div class="content">
+        <div class="box box-primary">
+            <div class="box-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Client names</th>
+                            <th>Client phone</th>
+                            <th>Client email</th>
+                            <th>Client ID,TIN</th>
+                            <th>Client Address</th>
+                            <th>Registration Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var i in Model)
+                        {
+                            <tr>
+                                <td>@i.client_name</td>
+                                <td>@i.mobile</td>
+                                <td>@i.email</td>
+                                <td>@i.client_national_id</td>
+                                <td>@i.physical_address</td>
+                                <td>@i.create_dt</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

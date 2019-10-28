@@ -1,0 +1,82 @@
+﻿@model eBroker.Commission_Tariff
+
+@{
+    ViewBag.Title = "Invoice Info";
+    var insurers = ViewBag.Insurers as List<SelectListItem>;
+    var products = ViewBag.Products as List<SelectListItem>;
+}
+@using (Html.BeginForm("CreateTariff", "Invoicing", FormMethod.Post, new { id = "submitForm" }))
+{
+    @Html.HiddenFor(m => m.Id)
+
+
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Tariff</h4>
+    </div>
+    <div class="modal-body modal-data">
+        <div class="box-body">
+            <div class="row">
+                @Html.ValidationSummary(true)
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @Html.LabelFor(model => model.insurer_id)
+                        @Html.DropDownListFor(model => model.insurer_id, insurers, "-- Insurance Company --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.insurer_id)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @Html.LabelFor(model => model.product_id)
+                        @Html.DropDownListFor(model => model.product_id, products, "-- Insurance products --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.product_id)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @Html.LabelFor(model => model.commission_percentage)
+                        @Html.TextBoxFor(model => model.commission_percentage, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.commission_percentage)
+                    </div>
+                </div>
+            </div>
+
+            <span class="didHide">@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
+    </div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+
+        <script>
+            $('#invoice_due_dt').datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-20:+0"
+            });
+            $('#invoice_until_dt').datepicker({
+                dateFormat: "dd-M-yy",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-20:+0"
+            });
+
+        </script>
+    }
+
+}

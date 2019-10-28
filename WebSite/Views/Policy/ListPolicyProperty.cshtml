@@ -4,47 +4,60 @@
     ViewBag.Title = "Policy Property List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container">
-    <div class="panel panel-green">
-        <div class="panel-heading">Policy Property List</div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="panel-body">
-                    <div class="row">
-                        @if (ViewBag.DisableAddNew == 0 || ViewBag.DisableAddNew == null)//
-                        {
-                        <div class="col-sm-2">
-                            <span><i class="fa fa-briefcase"></i>@Html.ActionLink(" Add Property", "PolicyPropertyInfo", new {CId=ViewBag.PolicyId, Id=0})</span>
-                        </div>
-                        }
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="table table-bordered">
-                            @Html.Grid(Model).Named("ga").Columns(col =>
-                           {
-                               col.Add(m => m.Id, true);
-                               col.Add().Titled("Edit").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Edit", "PolicyPropertyInfo").RouteValues(new { Id = m.Id, CId = m.contract_id }).PrependIcon("fa fa-pencil-square-o"));
-                               col.Add(m => m.InsurancePolicies.policy_no).Titled("Policy No.");
-                               col.Add(m => m.InsurancePolicies.InsuranceProducts.product_name).Titled("Product");
-                               col.Add(m => m.property_description).Titled("Description");
-                               col.Add(m => m.plot_number).Titled("Plot Number");
-                               col.Add(m => m.property_use).Titled("Use");
-                               col.Add(m => m.wall_material).Titled("Wall Type");
-                               col.Add(m => m.roof_material).Titled("Roof Type");
-                               col.Add(m => m.window_material).Titled("Windows Type");
-                               col.Add(m => m.insured_value).Titled("Value").Format("{0:#,##}");
-                           }).WithPaging(10).Sortable(true)
+                      <div class="content">
+                          <div class="modal fade f-modal" id="modal-default">
+                              <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+                                          @Html.Partial("PolicyPropertyInfo", new eBroker.Policy_Property { contract_id = ViewBag.PolicyId})
+                                      
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                          </div>
+                                              @if (ViewBag.DisableAddNew == 0 || ViewBag.DisableAddNew == null)//
+                                              {
+                                                  <div class="clearfix">
+                                                      <button class="btn btn-primary edit-button pull-right"><i class="fa fa-pencil-square"></i> Add Property</button>
+                                                  </div>
+                                              }
+                          <div class="box box-primary">
+                              <div class="box-header">
+                                  <h3 class="box-title"><i class="fa fa-info-circle"></i> Policy Property List</h3>
+                              </div>
+                              <div class="box-body">
+                                  <div class="row">
+                                      <div class="box-body">
+                                          <div class="row">
+                                          </div>
+                                          <br />
+                                          <div class="table-responsive">
+                                              <div class="table table-bordered">
+                                                  @Html.Grid(Model).Named("ga").Columns(col =>
+                                             {
+                                                 col.Add(m => m.Id, true);
+                                                 col.Add(m => m.InsurancePolicies.policy_no).Titled("Policy No.");
+                                                 col.Add(m => m.InsurancePolicies.InsuranceProducts.product_name).Titled("Product");
+                                                 col.Add(m => m.property_description).Titled("Description");
+                                                 col.Add(m => m.plot_number).Titled("Plot Number");
+                                                 col.Add(m => m.property_use).Titled("Use");
+                                                 col.Add(m => m.wall_material).Titled("Wall Type");
+                                                 col.Add(m => m.roof_material).Titled("Roof Type");
+                                                 col.Add(m => m.window_material).Titled("Windows Type");
+                                                 col.Add(m => m.insured_value).Titled("Value").Format("{0:#,##}");
+                                                 col.Add().Titled("Edit").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "PolicyPropertyInfo","Policy",new { Id = m.Id, CId = m.contract_id },new { @class="edit-button btn btn-sm btn-primary btn-flat"}));
+                                                 col.Add().Titled("Delete").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLinkButton("", "DeleteProperty","Policy").RouteValues(new { Id = m.Id, CId = m.contract_id }).HtmlAttributes(new { @class="btn btn-sm btn-danger",onclick="return confirm('are you sure to delete ?');"}).PrependIcon("fa fa-trash text-white"));
+                                             }).WithPaging(10).Sortable(true)
 
-                        </div>
-                    </div>
-                </div>
+                                              </div>
+                                          </div>
+                                      </div>
 
-            </div>
-        </div>
-                <div class="panel-footer">
-                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListPolicy")</span>
-                </div>
-    </div>
+                                  </div>
+                              </div>
+                              <div class="panel-footer">
+                                  <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListPolicy")</span>
+                              </div>
+                          </div>
 
-</div>
+                      </div>

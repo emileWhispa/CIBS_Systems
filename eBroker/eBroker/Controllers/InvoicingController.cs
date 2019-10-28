@@ -100,7 +100,21 @@ namespace eBroker.Controllers
             this.InvoiceInfo(inv.Id);
             return (ActionResult)this.PartialView("InvoiceInfo", (object)inv);
         }
-
+        public ActionResult InvoiceToExcel()
+        {
+            try
+            {
+                string fileName = "Invoices_" + DateTime.Today.ToShortDateString().Replace("/", "") + ".xls";
+                string cmd = @"select p.company_name as [Company name],i.invoice_dt as [Invoice date.],i.invoice_until_dt as [Invoice until date] from Invoice i INNER JOIN Partner p ON p.company_code=i.insurer_id";
+                Toolkit.ExportListUsingEPPlus(cmd, fileName);
+                return RedirectToAction("ListInvoice");
+            }
+            catch (Exception ex)
+            {
+                Danger(ex.Message, true);
+            }
+            return RedirectToAction("ListInvoice");
+        }
 
         public ActionResult TariffInfo(int Id = 0)
         {
@@ -265,7 +279,19 @@ namespace eBroker.Controllers
         {
             try
             {
-                string cmd = @"SELECT [invoice_id] as [Invoice No.]
+                string cmd = @"SELECT ic.invoice_id as [Invoice No.]
+                              ,[invoice_dt] as [Invoice Date]
+                              ,[company_short_name] as [Insurer]
+                              ,[client_name] as [Client Name]
+                              ,[product_name] as [Product]
+                              ,[policy_no] as [Policy No.]
+                                ,[effective_dt] as [Effective Date]
+                                ,[expiry_dt] as [Expiry Date]
+                              ,[net_premium] as [Net Premium]
+                              ,[commission_percentage] as [Commission %]
+                              ,[commission_amt] as [Commission Amount]
+                          FROM Invoice_Detail inv INNER JOIN Invoice ic ON ic.invoice_id=inv.invoice_id INNER JOIN Partner p ON p.company_code=ic.insurer_id INNER JOIN insurance_policy i ON i.contract_id=inv.contract_id INNER JOIN Client c ON c.client_id=i.client_id INNER JOIN Insurance_Product ip ON ip.product_id=i.product_id WHERE ic.invoice_id=" + Id + " order by [effective_dt]";
+           string cmd2 = @"SELECT [invoice_id] as [Invoice No.]
                               ,[invoice_dt] as [Invoice Date]
                               ,[company_short_name] as [Insurer]
                               ,[client_name] as [Client Name]
@@ -278,13 +304,13 @@ namespace eBroker.Controllers
                               ,[commission_amt] as [Commission Amount]
                           FROM [eBrokerage].[dbo].[Vw_Invoice_Broker] where invoice_id=" + Id + " order by [effective_dt]";
                 Toolkit.ExportListUsingEPPlus(cmd, "Invoice Details");
-                return View();
+                return RedirectToAction("InvoicePolicyList", new { Id = Id });
             }
             catch (Exception ex)
             {
                 Danger(ex.Message, true);
             }
-            return View();
+            return RedirectToAction("InvoicePolicyList", new { Id = Id });
         }
     }
 }

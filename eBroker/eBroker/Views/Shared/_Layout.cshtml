@@ -2,7 +2,8 @@
 @using eBroker.Models
 @{
     UserModel currentUser = (UserModel)this.ViewData["UserData"];
-    string policyCounter = this.ViewData["expiredPolicies"].ToString();
+    var exp = this.ViewData["expiredPolicies"];
+    string policyCounter = exp == null ? "" : exp.ToString();
 }
 <!DOCTYPE html>
 <html lang="en">

@@ -4,7 +4,41 @@
     ViewBag.Title = "Error";
 }
 
-<hgroup class="title">
-    <h1 class="error">Error.</h1>
-    <h2 class="error">An error occurred while processing your request.</h2>
-</hgroup>
+@*<h1 class="text-danger">Error.</h1>
+    <h2 class="text-danger">An error occurred while processing your request.</h2>*@
+
+
+<section class="content">
+    <br />
+    <br />
+    <br />
+    <div class="error-page">
+        <h2 class="headline text-red">500</h2>
+
+        <div class="error-content">
+            <h2>
+                <i class="fa fa-warning text-red"></i> Oops! Something went wrong.
+            </h2>
+            <p class="text-danger h5 bg-warning " style="padding: 10px">
+                @if (Model.Exception.InnerException != null)
+                {
+                    <text>@Model.Exception.InnerException.Message</text>
+                }
+                else
+                {
+                    <text>@Model.Exception.Message</text>
+                }
+            </p>
+            <p class="h5">
+                We will work on fixing that right away.
+                Meanwhile, you may <a href="@Url.Action("Index", "Home")">return to dashboard</a>.
+            </p>
+
+            <br />
+
+
+        </div>
+    </div>
+    <!-- /.error-page -->
+
+</section>

@@ -13,7 +13,7 @@
     string startDate = ViewBag.StartDate;
     string endDate = ViewBag.EndDate; 
 }
-<div class="container">
+<div class="content">
     <div class="col-sm-12">
         @using (Html.BeginForm("CreateLoanApplication", "LoanApplication", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
@@ -25,11 +25,11 @@
             @Html.Hidden("StartDate", startDate)
             @Html.Hidden("EndDate", endDate)
 
-            <div class="panel panel-green">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Loan Application Details</h4>
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h4 class="box-title">Loan Application Details</h4>
                 </div>
-                <div class="panel-body">
+                <div class="box-body">
                     <div class="row">
                         @Html.ValidationSummary(true)
                     </div>

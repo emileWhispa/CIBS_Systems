@@ -8,11 +8,11 @@
 @using (Html.BeginForm("ExportToExcel", "Reporting", FormMethod.Post))
 {
     @Html.HiddenFor(model => model.Id)
-    <div class="panel panel-green">
-        <div class="panel-heading">
-            <h4 class="panel-title">Report Extraction Tool</h4>
+    <div class="box box-primary">
+        <div class="box-header">
+            <h4 class="box-title">Report Extraction Tool</h4>
         </div>
-        <div class="panel-body">
+        <div class="box-body">
             <div class="row">
                 @Html.ValidationSummary(true)
             </div>

@@ -5,45 +5,25 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link href="~/Content/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
+    <link href="~/Content/_all-skins.min.css" rel="stylesheet" />
+    <link href="~/Content/index.css?id_aced=125a1&d=123" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 </head>
-<body>
-    <div class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header" >
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="#" class="navbar-brand"><span>CIBS Smart Broker</span></a>
-
-            </div>
-
-            <ul class="nav navbar-nav navbar-right pull-right">
-
-                <li class="hidden-xs">
-                    <a href="#" class="waves-effect waves-light"><i class="glyphicon glyphicon-question-sign"></i></a>
-                </li>
-
-            </ul>
-        </div>
-    </div>
-    <div class="container body-content">
+<body class="hold-transition login-page">
+    <div class="login-box">
         @RenderBody()
-        <hr />
-        @*<footer  style="color:#171d52;">*@
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4 text-center"><span style="color:#171d52;font-weight:bold">Orion Systems & Design Ltd &copy; @DateTime.Now.Year - All Rights Reserved.</span></div>
-            <div class="col-sm-4"></div>
-          
+        </div>
         @*</footer>*@
-    </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+        <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>
+        <script src="~/Scripts/adminlte.min.js"></script>
+        @RenderSection("scripts", required: false)
+
+       
 </body>
 </html>
 

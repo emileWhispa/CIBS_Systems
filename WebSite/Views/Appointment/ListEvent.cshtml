@@ -7,98 +7,110 @@
     Appointment AppointmentInfo = ViewBag.AppointmentInfo;
 }
 
-<div class="container">
-    <div class="panel panel-green">
-        <div class="panel-heading">Appointment Events ** Count: @Model.Count()</div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-2">
-                            @if(AppointmentInfo.Status!="Closed")
-                            {
-                            <span><i class="fa fa-handshake-o"></i>@Html.ActionLink(" New Event", "EventInfo", new {AppId = AppointmentInfo.Id })</span>
-                            }
-                                </div>
-                    </div>
-                    <hr />
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.Label("Appointment Date")
-                            </label>
-                            <div class="col-sm-2">
-                                @Html.TextBox("txtAppointmentDate", AppointmentInfo.AppointmentDate, "{0:yyyy-MM-dd}", new { @disabled = "disabled", @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.Label("Time")
-                            </label>
-                            <div class="col-sm-1">
-                                @Html.TextBox("txtTime", AppointmentInfo.AppointmentTime, new { @disabled = "disabled", @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
+                      <div class="content">
+                          <div class="modal fade f-modal" id="modal-default">
+                              <div class="modal-dialog">
+                                  <div class="modal-content">
+                                      @Html.Partial("EventInfo", new eBroker.AppointmentDetail { AppointmentID = AppointmentInfo.Id}))
 
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.Label("Type")
-                            </label>
-                            <div class="col-sm-2">
-                                @Html.TextBox("txtType", AppointmentInfo.appointmentType_.AppointmentTypeName, new { @disabled = "disabled", @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                          </div>
+                          <div class="clearfix">
+                              @if (AppointmentInfo.Status != "Closed")
+                              {
+                                  <button class="btn btn-primary edit-button pull-right"><i class="fa fa-handshake-o"></i> New Event</button>
+                              }
+                          </div>
+                          <div class="box box-primary">
+                              <div class="box-header">
+                                  <h3 class="box-title"><i class="fa fa-info-circle"></i> Appointment Events ** Count: @Model.Count()</h3>
+                              </div>
+                              <div class="box-body">
+                                  <div class="row">
+                                      <div class="box-body">
+                                          <div class="row">
+                                          </div>
+                                          <hr />
+                                          <div class="form-group">
+                                              <div class="row">
+                                                  <label class="col-sm-2">
+                                                      @Html.Label("Appointment Date")
+                                                  </label>
+                                                  <div class="col-sm-2">
+                                                      @Html.TextBox("txtAppointmentDate", AppointmentInfo.AppointmentDate, "{0:yyyy-MM-dd}", new { @disabled = "disabled", @class = "form-control" })
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="form-group">
+                                              <div class="row">
+                                                  <label class="col-sm-2">
+                                                      @Html.Label("Time")
+                                                  </label>
+                                                  <div class="col-sm-1">
+                                                      @Html.TextBox("txtTime", AppointmentInfo.AppointmentTime, new { @disabled = "disabled", @class = "form-control" })
+                                                  </div>
+                                              </div>
+                                          </div>
 
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.Label("Venue")
-                            </label>
-                            <div class="col-sm-4">
-                                @Html.TextBox("txtVenue", AppointmentInfo.AppointmentVenue, new { @disabled = "disabled", @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
+                                          <div class="form-group">
+                                              <div class="row">
+                                                  <label class="col-sm-2">
+                                                      @Html.Label("Type")
+                                                  </label>
+                                                  <div class="col-sm-2">
+                                                      @Html.TextBox("txtType", AppointmentInfo.appointmentType_.AppointmentTypeName, new { @disabled = "disabled", @class = "form-control" })
+                                                  </div>
+                                              </div>
+                                          </div>
 
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.Label("Client Name")
-                            </label>
-                            <div class="col-sm-3">
-                                @Html.TextBox("txtClient", AppointmentInfo.ClientName, new { @disabled = "disabled", @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="table table-bordered">
-                            @Html.Grid(Model).Named("ga").Columns(col =>
-                           {
-                               col.Add(m => m.Id, true);
-                               col.Add().Sanitized(false).Encoded(false).RenderValueAs(xc => Html.Bootstrap().ActionLink("Edit", "EventInfo").RouteValues(new {AppId = AppointmentInfo.Id, Id = xc.Id }).PrependIcon("fa fa-pencil-square-o"));
-                               col.Add(m => m.AppointmentEventTypes.AppointmentEventTypeName).Titled("Type");
-                               col.Add(m => m.Comments).Titled("Comments");
-                               col.Add(m => m.EventDate).Titled("Event Date").Format("{0:yyyy-MM-dd}");
-                               col.Add(m => m.AssignedTo).Titled("Assigned To");
-                               //col.Add(m => m.DoneBy).Titled("Done By");
-                               col.Add(m => m.AppointmentStatus).Titled("Status");
-                           }).WithPaging(10).Sortable(true)
+                                          <div class="form-group">
+                                              <div class="row">
+                                                  <label class="col-sm-2">
+                                                      @Html.Label("Venue")
+                                                  </label>
+                                                  <div class="col-sm-4">
+                                                      @Html.TextBox("txtVenue", AppointmentInfo.AppointmentVenue, new { @disabled = "disabled", @class = "form-control" })
+                                                  </div>
+                                              </div>
+                                          </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                          <div class="form-group">
+                                              <div class="row">
+                                                  <label class="col-sm-2">
+                                                      @Html.Label("Client Name")
+                                                  </label>
+                                                  <div class="col-sm-3">
+                                                      @Html.TextBox("txtClient", AppointmentInfo.ClientName, new { @disabled = "disabled", @class = "form-control" })
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="table-responsive">
+                                              <div class="table table-bordered">
+                                                  @Html.Grid(Model).Named("ga").Columns(col =>
+                                             {
+                                                 col.Add(m => m.Id, true);
+                                                 col.Add(m => m.AppointmentEventTypes.AppointmentEventTypeName).Titled("Type");
+                                                 col.Add(m => m.Comments).Titled("Comments");
+                                                 col.Add(m => m.EventDate).Titled("Event Date").Format("{0:yyyy-MM-dd}");
+                                                 col.Add(m => m.AssignedTo).Titled("Assigned To");
+                                                 //col.Add(m => m.DoneBy).Titled("Done By");
+                                                 col.Add(m => m.AppointmentStatus).Titled("Status");
+                                                 col.Add().Sanitized(false).Encoded(false).RenderValueAs(xc => Html.ActionLink("Edit", "EventInfo", "Appointment", new { AppId = AppointmentInfo.Id, Id = xc.Id }, new { @class = "edit-button btn btn-sm btn-primary btn-flat" }));
+                                             }).WithPaging(10).Sortable(true)
 
-        </div>
-                                        <div class="panel-footer">
-                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to Appointment List", "ListAppointment")</span>
-                </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
 
-    </div>
+                              </div>
+                              <div class="panel-footer">
+                                  <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to Appointment List", "ListAppointment")</span>
+                              </div>
 
-</div>
+                          </div>
+
+                      </div>

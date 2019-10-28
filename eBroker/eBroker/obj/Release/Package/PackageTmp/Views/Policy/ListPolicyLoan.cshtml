@@ -4,42 +4,55 @@
     ViewBag.Title = "Policy Loan Accounts";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container">
-    <div class="panel panel-green">
-        <div class="panel-heading">Policy Loan Accounts</div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <span><i class="fa fa-briefcase"></i>@Html.ActionLink(" Attach New Loan", "PolicyLoanInfo", new {CId=ViewBag.PolicyId, Id=0})</span>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="table table-bordered">
-                            @Html.Grid(Model).Named("ga").Columns(col =>
-                           {
-                               col.Add(m => m.Id, true);
-                               col.Add().Titled("Edit").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Edit", "PolicyLoanInfo").RouteValues(new { Id = m.Id, CId=m.contract_id }).PrependIcon("fa fa-pencil-square-o"));
-                               col.Add(m => m.InsurancePolicies.policy_no).Titled("Policy No.");
-                               col.Add(m => m.InsurancePolicies.InsuranceProducts.product_name).Titled("Product");
-                               col.Add(m => m.InsurancePolicies.Banks.BankName).Titled("Bank");
-                               col.Add(m => m.loan_account).Titled("Loan Account");
-                               col.Add(m => m.LoanTypes.loan_type).Titled("Loan Type");
-                               col.Add(m => m.loan_disbursement_date).Titled("Disbursement Date").Format("{0:yyyy-MM-dd}");
-                               col.Add(m => m.loan_expiry_date).Titled("Expiry Date").Format("{0:yyyy-MM-dd}");
-                           }).WithPaging(10).Sortable(true)
+                      <div class="content">
+                          <div class="modal fade f-modal" id="modal-default">
+                              <div class="modal-dialog">
+                                  <div class="modal-content">
+                                          @Html.Partial("PolicyLoanInfo", new eBroker.Policy_Loan_Account { contract_id = ViewBag.PolicyId,loan_disbursement_date=DateTime.Now,loan_expiry_date=DateTime.Now})
+                                 
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                          </div>
+                          <div class="clearfix">
 
-                        </div>
-                    </div>
-                </div>
+                              <button class="btn btn-primary edit-button pull-right"><i class="fa fa-briefcase"></i> Attach New Loan</button>
+                          </div>
+                          <div class="box box-primary">
+                              <div class="box-header">
+                                  <h3 class="box-title"><i class="fa fa-info-circle"></i> Policy Loan Accounts</h3>
+                              </div>
+                              <div class="box-body">
+                                  <div class="row">
+                                      <div class="box-body">
+                                          <div class="row">
+                                          </div>
+                                          <br />
+                                          <div class="table-responsive">
+                                              <div class="table table-bordered">
+                                                  @Html.Grid(Model).Named("ga").Columns(col =>
+                                             {
+                                                 col.Add(m => m.Id, true);
+                                                 col.Add(m => m.InsurancePolicies.policy_no).Titled("Policy No.");
+                                                 col.Add(m => m.InsurancePolicies.InsuranceProducts.product_name).Titled("Product");
+                                                 col.Add(m => m.InsurancePolicies.BankOptionalName).Titled("Bank");
+                                                 col.Add(m => m.loan_account).Titled("Loan Account");
+                                                 col.Add(m => m.LoanTypes.loan_type).Titled("Loan Type");
+                                                 col.Add(m => m.loan_disbursement_date).Titled("Disbursement Date").Format("{0:yyyy-MM-dd}");
+                                                 col.Add(m => m.loan_expiry_date).Titled("Expiry Date").Format("{0:yyyy-MM-dd}");
+                                                 col.Add().Titled("Edit").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "PolicyLoanInfo", "Policy", new { Id = m.Id, CId = m.contract_id }, new { @class = "edit-button btn btn-sm btn-primary btn-flat" }));
+                                             }).WithPaging(10).Sortable(true)
 
-            </div>
-        </div>
-                <div class="panel-footer">
-                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListPolicy")</span>
-                </div>
-    </div>
+                                              </div>
+                                          </div>
+                                      </div>
 
-</div>
+                                  </div>
+                              </div>
+                              <div class="panel-footer">
+                                  <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListPolicy")</span>
+                              </div>
+                          </div>
+
+                      </div>

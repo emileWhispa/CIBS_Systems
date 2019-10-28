@@ -2,140 +2,126 @@
 
 @{
     ViewBag.Title = "Invoice Info";
-    Layout = "~/Views/Shared/_Layout.cshtml";
     var insurers = ViewBag.Insurers as List<SelectListItem>;
+
+    var due_dt = Model.Id == 0 ? "" : Model.invoice_due_dt.ToString();
+    var until_dt = Model.Id == 0 ? "" : Model.invoice_until_dt.ToString();
 }
-<div class="container">
-    <div class="col-sm-12">
-        @using (Html.BeginForm("CreateInvoice", "Invoicing"))
-        {
-            @Html.HiddenFor(m => m.Id)
-            @Html.HiddenFor(m => m.invoice_dt)
-            @Html.HiddenFor(m => m.user_id)
-            @Html.HiddenFor(m => m.Status)
-            
-            
-            <div class="panel panel-green">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Invoice Header</h4>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        @Html.ValidationSummary(true)
-                    </div>
+@using (Html.BeginForm("CreateInvoice", "Invoicing", FormMethod.Post, new { id = "submitForm" }))
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.invoice_dt)
+    @Html.HiddenFor(m => m.user_id)
+    @Html.HiddenFor(m => m.Status)
 
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.insurer_id)</label>
-                            <div class="col-sm-3">
-                                @Html.DropDownListFor(model => model.insurer_id, insurers, "-- Insurance Company --", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.insurer_id)
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.invoice_due_dt)
-                            </label>
-                            <div class="col-sm-2">
-                                @Html.TextBoxFor(model => model.invoice_due_dt, "{0:yyyy-MM-dd}", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.invoice_due_dt)
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.invoice_until_dt)
-                            </label>
-                            <div class="col-sm-2">
-                                @Html.TextBoxFor(model => model.invoice_until_dt, "{0:yyyy-MM-dd}", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.invoice_until_dt)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.PreparedBy)
-                            </label>
-                            <div class="col-sm-4">
-                                @Html.TextBoxFor(model => model.PreparedBy, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.PreparedBy)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.CheckedBy)
-                            </label>
-                            <div class="col-sm-4">
-                                @Html.TextBoxFor(model => model.CheckedBy, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.CheckedBy)
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <label class="col-sm-2">
-                                @Html.LabelFor(model => model.vatable)</label>
-                            <div class="col-sm-3">
-                                @Html.CheckBoxFor(model => model.vatable, new { @id = "vatable", @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.vatable)
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-
-                        <div class="row">
-                            <hr />
-                            <label class="col-sm-2 control-label"></label>
-                            <div class="col-sm-6">
-                                @*<button type="submit" class="btn btn-default" style="background-color: green">Save</button>*@
-                                @if(Model.Status=="Pending")
-                                {
-                                @Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")
-                                }
-                                @Html.Bootstrap().ActionLinkButton("Cancel", "ListInvoice").PrependIcon("fa fa-times")
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <span><i class="fa fa-backward"></i>@Html.ActionLink("Back to List", "ListInvoice")</span>
-                </div>
-                <script>
-                    $('#invoice_due_dt').datepicker({
-                        dateFormat: "dd-M-yy",
-                        changeMonth: true,
-                        changeYear: true,
-                        yearRange: "-20:+0"
-                    });
-                    $('#invoice_until_dt').datepicker({
-                        dateFormat: "dd-M-yy",
-                        changeMonth: true,
-                        changeYear: true,
-                        yearRange: "-20:+0"
-                    });
-
-                </script>
-            </div>
-            <script type="text/javascript">
-                $(function () {
-                    $('#vatable').bootstrapToggle({
-                        on: 'Yes',
-                        off: 'No'
-                    });
-                    $('#vatable').bootstrapToggle('on');
-                })
-            </script>
-        }
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Invoice</h4>
     </div>
-</div>
+    <div class="modal-body modal-data">
+        <div class="box-body">
+            <div class="row">
+                @Html.ValidationSummary(true)
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.insurer_id)
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(model => model.insurer_id, insurers, "-- Insurance Company --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.insurer_id)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.invoice_due_dt)
+                    </label>
+                    <div class="col-sm-9">
+                        <input class="form-control" data-val="true" data-val-date="The field Invoice Due Date must be a date." data-val-required="The Invoice Due Date field is required." id="invoice_due_dt" name="invoice_due_dt" type="text" value="@due_dt">
+
+                        @Html.ValidationMessageFor(model => model.invoice_due_dt)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.invoice_until_dt)
+                    </label>
+                    <div class="col-sm-9">
+                        <input class="form-control" data-val="true" data-val-date="The field Invoice Until must be a date." data-val-required="The Invoice Until field is required." id="invoice_until_dt" name="invoice_until_dt" type="text" value="@until_dt">
+                        @Html.ValidationMessageFor(model => model.invoice_until_dt)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.PreparedBy)
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.PreparedBy, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PreparedBy)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.CheckedBy)
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.CheckedBy, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CheckedBy)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.vatable)
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.CheckBoxFor(model => model.vatable, new { @id = "vatable" })
+                        @Html.ValidationMessageFor(model => model.vatable)
+                    </div>
+                </div>
+            </div>
+
+
+            <span class="didHide">@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
+
+    </div>
+
+        <script>
+            $('#invoice_due_dt').datepicker({
+                format: "yyyy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-20:+0"
+            });
+            $('#invoice_until_dt').datepicker({
+                format: "yyyy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-20:+0"
+            });
+
+        </script>
+
+}

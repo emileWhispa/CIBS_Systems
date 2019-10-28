@@ -9,7 +9,7 @@
     var propertyUse = ViewBag.PropertyUse as List<SelectListItem>;
 
 }
-<div class="container">
+<div class="content">
     <div class="col-sm-12">
         @using (Html.BeginForm("CreateLoanApplicationProperty", "LoanApplication"))
         {
@@ -22,11 +22,11 @@
             @Html.HiddenFor(m => m.PremiumDate)
 
             
-            <div class="panel panel-green">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Property Details</h4>
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h4 class="box-title">Property Details</h4>
                 </div>
-                <div class="panel-body">
+                <div class="box-body">
                     <div class="row">
                         @Html.ValidationSummary(true)
                     </div>

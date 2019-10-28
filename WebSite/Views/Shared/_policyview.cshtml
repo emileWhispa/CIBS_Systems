@@ -14,6 +14,6 @@
     col.Add(m => m.effective_dt ).Titled("Start Date").Format("{0:yyyy-MM-dd}");
     col.Add(m => m.expiry_dt).Titled("Expiry Date").Format("{0:yyyy-MM-dd}");
     col.Add(m => m.net_premium).Titled("Premium").Format("{0:#,##0}");
-    col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("View", "PolicyInfoView", "Policy").RouteValues(new { Id = m.Id }).PrependIcon("fa fa-search-plus"));
+    //col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("View", "PolicyInfoView", "Policy").RouteValues(new { Id = m.Id }).PrependIcon("fa fa-search-plus"));
 }).WithPaging(5).Sortable(true).Filterable(true)
 }
