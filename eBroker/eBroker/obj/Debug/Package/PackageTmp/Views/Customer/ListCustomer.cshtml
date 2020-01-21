@@ -1,0 +1,115 @@
+﻿@model IEnumerable<eBroker.Client>
+@using GridMvc.Html
+@{
+        ViewBag.Title = "Customers";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+                      <div class="content">
+                          <div class="modal fade f-modal" id="modal-default">
+                              <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+
+                                      @Html.Partial("CustomerInfo", new eBroker.Client())
+
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                          </div>
+                          <div class="modal fade f-modal-2" id="modal-2">
+                              <div class="modal-dialog">
+                                  <div class="modal-content">
+                                      <form action="/Customer/NewCustomerReport" method="get">
+                                          <div class="modal-header">
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                              </button>
+                                              <h4 class="modal-title">Customer report</h4>
+                                          </div>
+                                          <div class="modal-body">
+
+                                              <div class="form-group">
+                                                  <label>Enter start date</label>
+                                                  <input name="start" class="datepicker form-control" />
+                                              </div>
+
+                                              <div class="form-group">
+                                                  <label>Enter end date</label>
+                                                  <input name="end" class="datepicker form-control" />
+                                              </div>
+
+                                              <script>
+                                                  $(".datepicker").datepicker({ format: "yyyy-mm-dd" });
+                                              </script>
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> View report</button>
+                                          </div>
+                                      </form>
+                                  </div>
+                                      <!-- /.modal-content -->
+                                  </div>
+                              <!-- /.modal-dialog -->
+                          </div>
+                          <div class="clearfix">
+                              <div class="pull-right">
+                                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-2"><i class="fa fa-users"></i> New Customers report</button>
+                                  <button type="button" class="btn btn-primary edit-button"><i class="fa fa-users"></i> New Customer</button>
+                              </div>
+                          </div>
+                          <div class="box box-primary">
+                              <div class="box-header">
+                                  <div class="col-sm-6 pull-right">
+                                      @using (Html.BeginForm("ListCustomer", "Customer", FormMethod.Get))
+                                      {
+
+                                          <div id="">
+                                              <div class="input-group  text-center">
+                                                  <input type="text" name="query" id="query" class="form-control input-sm" placeholder="Search Customer by Name, Contact Person, Mobile....." />
+                                                  <span class="input-group-btn">
+                                                      <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                                  </span>
+                                              </div>
+                                          </div>
+
+                                      }
+                                  </div>
+                                  <h3 class="box-title"><i class="fa fa-info-circle"></i> Customer List {@Model.Count()}</h3>
+                              </div>
+                              <div class="box-body">
+                                  <div class="row">
+                                      <div class="box-body">
+                                              <div class="table-responsive">
+                                                  <div class="table table-bordered">
+                                                      @Html.Grid(Model).Named("ga").Columns(col =>
+                                                 {
+                                                     col.Add(m => m.Id, true);
+                                                     col.Add(m => m.client_name).Titled("Client Name");
+                                                     col.Add(m => m.client_type).Titled("Type");
+                                                     col.Add(m => m.mobile).Titled("Mobile Phone");
+                                                     col.Add(m => m.client_national_id).Titled("National ID,TIN");
+                                                     col.Add(m => m.email).Titled("E-mail");
+                                                     col.Add(m => m.language).Titled("Language");
+                                                     col.Add(m => m.recruited_by).Titled("Recruiter");
+                                                     //col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Insurance Policy(ies)", "InsurancePolicy"));
+                                                     col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Insurance Policy(ies)", "CustomerPolicy", "Policy").RouteValues(new { ccode = m.Id }));
+                                                     col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "CustomerInfo", "Customer", new { Id = m.Id }, new { @class = "edit-button btn-sm btn-flat btn-primary" }));
+                                                     col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Delete", "DeleteCustomer", "Customer", new { Id = m.Id }, new { @class = " btn-sm btn-flat btn-danger",onclick="return confirm('are you sure to delete?')" }));
+                                                 }).WithPaging(10).Sortable(true)
+
+                                                  </div>
+                                                  @Html.Bootstrap().ActionLinkButton("Excel", "ExportToExcel", "Customer").PrependIcon("fa fa-file-excel-o")
+                                              </div>
+                                          </div>
+
+                                  </div>
+                              </div>
+
+                          </div>
+
+                      </div>
+
+    @Scripts.Render("~/bundles/jqueryval")

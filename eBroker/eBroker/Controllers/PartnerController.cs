@@ -11,7 +11,7 @@ namespace eBroker.Controllers
 
     public class PartnerController : BaseController
     {
-        eBroker.BrokerDataContext dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
+        eBroker.BrokerDataContext _dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
 
         public ActionResult ListPartner(string query)
         {
@@ -19,9 +19,9 @@ namespace eBroker.Controllers
             try
             {
             if (string.IsNullOrEmpty(query))
-                partner = dc.Partner.OrderByDescending(x => x.Id).ToList();
+                partner = _dc.Partner.OrderByDescending(x => x.Id).ToList();
             else
-                partner = dc.Partner.Where(x => x.company_name.Contains(query) || x.company_short_name.Contains(query) || x.mobile1.Contains(query) || x.mobile2.Contains(query) || x.contact_person.Contains(query)).ToList();
+                partner = _dc.Partner.Where(x => x.company_name.Contains(query) || x.company_short_name.Contains(query) || x.mobile1.Contains(query) || x.mobile2.Contains(query) || x.contact_person.Contains(query)).ToList();
 
             return View(partner);
             }
@@ -35,10 +35,10 @@ namespace eBroker.Controllers
 
         public ActionResult DeletePartner(int id)
         {
-            Partner partner = dc.Partner.Find(id);
+            Partner partner = _dc.Partner.Find(id);
             if (partner != null) {
-                dc.Partner.Remove(partner);
-                dc.SaveChanges();
+                _dc.Partner.Remove(partner);
+                _dc.SaveChanges();
             }
             return RedirectToAction("ListPartner");
         }
@@ -50,20 +50,20 @@ namespace eBroker.Controllers
             {
                 try
                 {
-                    string Resp = "";
-                    dc.Partner.Add(p);
+                    string resp = "";
+                    _dc.Partner.Add(p);
                     if (p.Id == 0)
                     {
-                        int res = dc.SaveChanges();
+                        int res = _dc.SaveChanges();
                         if (res > 0)
                             Success("Record Saved Successfully", true);
                         else
-                            throw new Exception(Resp);
+                            throw new Exception(resp);
                     }
                     else//Update
                     {
-                        dc.Entry(p).State = EntityState.Modified;
-                        dc.SaveChanges();
+                        _dc.Entry(p).State = EntityState.Modified;
+                        _dc.SaveChanges();
                     }
 
                     return Content("1");
@@ -77,20 +77,20 @@ namespace eBroker.Controllers
         }
 
         [HttpGet]
-        public ActionResult PartnerInfo(int Id = 0)
+        public ActionResult PartnerInfo(int id = 0)
         {
             try
             {
-                var Model = dc.Partner.Where(x => x.Id == Id).FirstOrDefault();
-                if (Model == null)
+                var model = _dc.Partner.Where(x => x.Id == id).FirstOrDefault();
+                if (model == null)
                 {
-                    Model = new Partner();
-                    Model.Id = 0;
-                    Model.create_dt = DateTime.Now;
-                    Model.user_id = AppUserData.Login;
+                    model = new Partner();
+                    model.Id = 0;
+                    model.create_dt = DateTime.Now;
+                    model.user_id = AppUserData.Login;
                     //Model.recruited_by = AppUserData.Login;
                 }
-                return PartialView(Model);
+                return PartialView(model);
             }
             catch (Exception ex)
             {
@@ -105,13 +105,13 @@ namespace eBroker.Controllers
             try
             {
                 Toolkit.ExportListUsingEPPlus("select * from Partner order by company_name", "Partner Listing");
-                return View();
+                return Content("1");
             }
             catch (Exception ex)
             {
                 Danger(ex.Message, true);
             }
-            return View();
+            return Content("1");
         }
 
     }

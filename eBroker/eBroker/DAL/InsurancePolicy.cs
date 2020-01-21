@@ -95,7 +95,7 @@ namespace eBroker
         public string receipt_no { get; set; }
         [Column("payment_date"), Display(Name = "Payment Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime payment_date { get; set; }
+        public DateTime? payment_date { get; set; }
         [Column("client_code"), Display(Name = "Insurance Client Code")]
         [StringLength(20)]
         public string client_code { get; set; }
@@ -109,6 +109,14 @@ namespace eBroker
         [Display(Name = "Renewal Policy ID")]
         public int? renewal_policy_id { get; set; }
 
-        public string BankOptionalName { get { return Banks != null ? Banks.BankName : "--"; } }
+        public string BankOptionalName => Banks != null ? Banks.BankName : "--";
+
+        public string PartnerOptionalName => Partners != null ? Partners.company_short_name : "--";
+
+        public string ProductOptionalName => InsuranceProducts != null ? InsuranceProducts.product_name : "--";
+
+        public string ClientOptionalName => Clients != null ? Clients.client_name : "--";
+
+        public string ClientOptionalMobile => Clients != null ? Clients.mobile : "";
     }
 }

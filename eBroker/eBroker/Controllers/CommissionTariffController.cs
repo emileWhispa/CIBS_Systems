@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,20 +10,20 @@ namespace eBroker.Controllers
 {
     public class CommissionTariffController : BaseController
     {
-        eBroker.BrokerDataContext dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
+        eBroker.BrokerDataContext _dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
 
         public ActionResult ListCommissionTariff(string query)
         {
             try
             {
-                var Model = new List<Commission_Tariff>();
+                var model = new List<Commission_Tariff>();
                 try
                 {
                     if (string.IsNullOrEmpty(query))
-                        Model = dc.Commission_Tariff.OrderByDescending(x => x.Id).ToList();
+                        model = _dc.Commission_Tariff.OrderByDescending(x => x.Id).ToList();
                     else
-                        Model = dc.Commission_Tariff.Where(x => x.Insurers.company_short_name.Contains(query) || x.Insurers.company_name.Contains(query) || x.InsuranceProducts.product_name.Contains(query)).ToList();
-                    return View(Model);
+                        model = _dc.Commission_Tariff.Where(x => x.Insurers.company_short_name.Contains(query) || x.Insurers.company_name.Contains(query) || x.InsuranceProducts.product_name.Contains(query)).ToList();
+                    return View(model);
                 }
                 catch (Exception ex)
                 {
@@ -38,26 +39,26 @@ namespace eBroker.Controllers
         }
 
         [HttpGet]
-        public ActionResult CommissionTariffInfo(int Id = 0)
+        public ActionResult CommissionTariffInfo(int id = 0)
         {
             try
             {
-                var Model = dc.Commission_Tariff.Where(x => x.Id == Id).FirstOrDefault();
-                if (Model == null)
+                var model = _dc.Commission_Tariff.Where(x => x.Id == id).FirstOrDefault();
+                if (model == null)
                 {
-                    Model = new Commission_Tariff();
-                    Model.Id = 0;
-                    Model.user_id = AppUserData.Login;
-                    Model.invoice_dt = DateTime.Now;
-                    Model.invoice_due_dt = DateTime.Today.AddDays(5);//5 Days by default
-                    Model.invoice_until_dt = DateTime.Today;
-                    Model.Status = "Pending";
+                    model = new Commission_Tariff();
+                    model.Id = 0;
+                    //Model.user_id = AppUserData.Login;
+                    //Model.invoice_dt = DateTime.Now;
+                    //Model.invoice_due_dt = DateTime.Today.AddDays(5);//5 Days by default
+                    //Model.invoice_until_dt = DateTime.Today;
+                    //Model.Status = "Pending";
                     //Model.recruited_by = AppUserData.Login;
                 }
                 //Reading Customer Recruiter
-                var insurers = (from r in dc.Partner.Where(x => x.partnership_type == "Insurance").ToList() select new SelectListItem { Text = r.company_short_name, Value = r.Id.ToString() }).ToList();
+                var insurers = (from r in _dc.Partner.Where(x => x.partnership_type == "Insurance").ToList() select new SelectListItem { Text = r.company_short_name, Value = r.Id.ToString() }).ToList();
                 ViewBag.Insurers = insurers;
-                return View(Model);
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -73,20 +74,20 @@ namespace eBroker.Controllers
             {
                 try
                 {
-                    string Resp = "";
-                    dc.Invoice.Add(inv);
+                    string resp = "";
+                    _dc.Invoice.Add(inv);
                     if (inv.Id == 0)
                     {
-                        int res = dc.SaveChanges();
+                        int res = _dc.SaveChanges();
                         if (res > 0)
                             Success("Invoice Header Created Successfully", true);
                         else
-                            throw new Exception(Resp);
+                            throw new Exception(resp);
                     }
                     else//Update
                     {
-                        dc.Entry(inv).State = EntityState.Modified;
-                        dc.SaveChanges();
+                        _dc.Entry(inv).State = EntityState.Modified;
+                        _dc.SaveChanges();
                     }
 
                     return RedirectToAction("ListInvoice");

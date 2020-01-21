@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity;
+using eBroker.DAL;
 
 namespace eBroker
 {
@@ -24,8 +21,10 @@ namespace eBroker
         public DbSet<AppointmentStatu> AppointmentStatus { get; set; }
         public DbSet<AppointmentType> AppointmentType { get; set; }
         public DbSet<Bank> Bank { get; set; }
+        public DbSet<AcBank> AcBanks { get; set; }
         public DbSet<BankCollateral> BankCollateral { get; set; }
         public DbSet<BankLoan> BankLoans { get; set; }
+        public DbSet<Vw_Expense_Voucher> Vw_Expense_Voucher { get; set; }
         public DbSet<Brokerage_Company> Brokerage_Company { get; set; }
         public DbSet<claim> claim { get; set; }
         public DbSet<Commission_Tariff> Commission_Tariff { get; set; }
@@ -56,11 +55,26 @@ namespace eBroker
         public DbSet<Sector> Sector { get; set; }
         public DbSet<SMS_Log> SMS_Log { get; set; }
         public DbSet<Vehicle> Vehicle { get; set; }
+        public DbSet<BankAccount> BankAccount { get; set; }
+        public DbSet<CashMovement> CashMovement { get; set; }
+        public DbSet<ManualEntry> ManualEntry { get; set; }
+        public DbSet<Currency> Currency { get; set; }
+        public DbSet<CurrencyList> CurrencyList { get; set; }
+        public DbSet<GL_History> GlHistories { get; set; }
+        public DbSet<GlBalance> GlBalances { get; set; }
+        public DbSet<Vw_CashMovement> Vw_CashMovement { get; set; }
+        public DbSet<BankReconciliation> BankReconciliation { get; set; }
+        public DbSet<Expense> Expense { get; set; }
+        public DbSet<GL_Account> GL_Account { get; set; }
+        
+        public DbSet<VwLedgerBalance> VwLedgerBalance { get; set; }
+        public DbSet<Vw_GeneralLedger> Vw_GeneralLedger { get; set; }
         public DbSet<Vehicle_Age_Range> Vehicle_Age_Range { get; set; }
         public DbSet<Vehicle_Clas> Vehicle_Class { get; set; }
         public DbSet<Vehicle_Guarantee> Vehicle_Guarantee { get; set; }
         public DbSet<Vehicle_Insurance_Duration> Vehicle_Insurance_Duration { get; set; }
         public DbSet<Vehicle_Occupant> Vehicle_Occupant { get; set; }
+        public DbSet<Vw_ManualEntry> Vw_ManualEntry { get; set; }
         public DbSet<Vehicle_Tariff_Base> Vehicle_Tariff_Base { get; set; }
         public DbSet<Vehicle_Territorial_Limit> Vehicle_Territorial_Limit { get; set; }
         public DbSet<Vehicle_Usage> Vehicle_Usage { get; set; }

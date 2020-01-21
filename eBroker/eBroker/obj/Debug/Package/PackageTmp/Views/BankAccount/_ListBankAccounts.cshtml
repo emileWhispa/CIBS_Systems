@@ -1,0 +1,64 @@
+﻿@using GridMvc.Html
+@model IEnumerable<eBroker.BankAccount>
+
+@if (Model != null && Model.Any())
+{
+    <div>
+        <div class="box box-primary flat">
+            <div class="box-header with-border">
+                <h4 class="box-title">Bank Accounts {@Model.Count()}</h4>
+            </div>
+            <div class="box-body">
+                <div class="table table-hover">
+                    @Html.Grid(Model).Named("ga").Columns(col =>
+                    {
+                        col.Add(p => p.Id, true);
+                        col.Add(p => p.Banks.BankName).Titled("Bank").Sortable(true).Filterable(true);
+                        col.Add(p => p.AccountNo).Titled("Account No").Sortable(true).Filterable(true);
+                        col.Add(p => p.AccountDescription).Titled("Account Description").Sortable(true).Filterable(true);
+                        col.Add(p => p.Currencies.IsoCode).Titled("Currency").Sortable(true).Filterable(true);
+                        col.Add(p => p.LedgerNo).Titled("Ledger No").Sortable(true).Filterable(true);
+
+                        col.Add()
+                            .Sanitized(false)
+                            .Encoded(false)
+                            .RenderValueAs(o => Html.ActionLink("Edit", "BankAccountEdit",
+                                new { Id = o.Id},
+                                new {@class = "btn btn-primary btn-sm BtnEditBankAccount" }));
+                    }).WithPaging(10).Sortable(true).Filterable(true).WithMultipleFilters()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        $(document).on('click',
+            '.BtnEditBankAccount',
+            function (e) {
+                e.preventDefault();
+                ViewBankAccount($(this));
+            });
+
+        function ViewBankAccount(cashmove)
+        {
+            $('.myModal').modal();
+            var url = cashmove.attr('href');
+            showLoader();
+            $.getJSON(url,
+                function (data) {
+                    hideLoader();
+                    $("#txtID").val(data.Id);
+                    $("#AccountNo").val(data.AccountNo);
+                    $("#AccountDescription").val(data.AccountDescription);
+                    if (data.Currencies) {
+                        $("#CurrencyID").val(data.Currencies.Id);  
+                    }
+                   
+                    $("#LedgerNo").val(data.LedgerNo);
+                    $("#Ledger").val(data.LedgerNo);
+                    $("#BankId").val(data.Banks.Id);
+                });
+        }
+    </script>
+}

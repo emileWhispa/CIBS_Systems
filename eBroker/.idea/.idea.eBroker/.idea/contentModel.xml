@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\kwize\.Rider2019.2\config\consoles\db" t="IncludeRecursive" />
+    <e p="C:\Users\kwize\.Rider2019.2\config\extensions" t="IncludeRecursive" />
+    <e p="C:\Users\kwize\.Rider2019.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\kwize\.Rider2019.2\system\resharper-host\local\Transient\ReSharperHost\v192\SolutionCaches\_eBroker.82671675.00" t="ExcludeRecursive" />
+    <e p="E:\source_codes\c_sharp\CIBS_Systems\eBroker" t="IncludeFlat">
+      <e p="eBroker" t="IncludeRecursive">
+        <e p="App_Data" t="Include" />
+        <e p="App_Start" t="Include">
+          <e p="BundleConfig.cs" t="Include" />
+          <e p="FilterConfig.cs" t="Include" />
+          <e p="IdentityConfig.cs.cs" t="Include" />
+          <e p="RouteConfig.cs" t="Include" />
+          <e p="Startup.Auth.cs" t="Include" />
+        </e>
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="BL" t="Include">
+          <e p="BL.cs" t="Include" />
+        </e>
+        <e p="Content" t="Include">
+          <e p="bootstrap" t="Include">
+            <e p="bootstrap-theme.css" t="Include" />
+            <e p="bootstrap-theme.css.map" t="Include" />
+            <e p="bootstrap-theme.min.css" t="Include" />
+            <e p="bootstrap-theme.min.css.map" t="Include" />
+            <e p="bootstrap.css" t="Include" />
+            <e p="bootstrap.css.map" t="Include" />
+            <e p="bootstrap.min.css" t="Include" />
+            <e p="bootstrap.min.css.map" t="Include" />
+          </e>
+          <e p="font-awesome" t="Include">
+            <e p="css" t="Include">
+              <e p="font-awesome.css" t="Include" />
+              <e p="font-awesome.css.map" t="Include" />
+              <e p="font-awesome.min.css" t="Include" />
+            </e>
+            <e p="fonts" t="Include">
+              <e p="fontawesome-webfont.eot" t="Include" />
+              <e p="fontawesome-webfont.svg" t="Include" />
+              <e p="fontawesome-webfont.ttf" t="Include" />
+              <e p="fontawesome-webfont.woff" t="Include" />
+              <e p="fontawesome-webfont.woff2" t="Include" />
+              <e p="FontAwesome.otf" t="Include" />
+            </e>
+          </e>
+          <e p="fonts" t="Include">
+            <e p="glyphicons-halflings-regular.eot" t="Include" />
+            <e p="glyphicons-halflings-regular.svg" t="Include" />
+            <e p="glyphicons-halflings-regular.ttf" t="Include" />
+            <e p="glyphicons-halflings-regular.woff" t="Include" />
+            <e p="glyphicons-halflings-regular.woff2" t="Include" />
+          </e>
+          <e p="Gridmvc.css" t="Include" />
+          <e p="gridmvc.datepicker.css" t="Include" />
+          <e p="gridmvc.datepicker.min.css" t="Include" />
+          <e p="lib" t="Include">
+            <e p="AdminLTE.min.css" t="Include" />
+            <e p="skin-blue.min.css" t="Include" />
+          </e>
+          <e p="Site.css" t="Include" />
+          <e p="Stylesheets" t="Include">
+            <e p="bootstrap" t="Include">
+              <e p="accordion.less" t="Include" />
+              <e p="alerts.less" t="Include" />
+              <e p="bootstrap.less" t="Include" />
+              <e p="breadcrumbs.less" t="Include" />
+              <e p="button-groups.less" t="Include" />
+              <e p="buttons.less" t="Include" />
+              <e p="carousel.less" t="Include" />
+              <e p="close.less" t="Include" />
+              <e p="code.less" t="Include" />
+              <e p="component-animations.less" t="Include" />
+              <e p="dropdowns.less" t="Include" />
+              <e p="forms.less" t="Include" />
+              <e p="grid.less" t="Include" />
+              <e p="hero-unit.less" t="Include" />
+              <e p="labels.less" t="Include" />
+              <e p="layouts.less" t="Include" />
+              <e p="mixins.less" t="Include" />
+              <e p="modals.less" t="Include" />
+              <e p="navbar.less" t="Include" />
+              <e p="navs.less" t="Include" />
+              <e p="pager.less" t="Include" />
+              <e p="pagination.less" t="Include" />
+              <e p="popovers.less" t="Include" />
+              <e p="progress-bars.less" t="Include" />
+              <e p="reset.less" t="Include" />
+              <e p="responsive.less" t="Include" />
+              <e p="scaffolding.less" t="Include" />
+              <e p="sprites.less" t="Include" />
+              <e p="tables.less" t="Include" />
+              <e p="thumbnails.less" t="Include" />
+              <e p="tooltip.less" t="Include" />
+              <e p="type.less" t="Include" />
+              <e p="utilities.less" t="Include" />
+              <e p="variables.less" t="Include" />
+              <e p="wells.less" t="Include" />
+            </e>
+          </e>
+          <e p="theme.css" t="Include" />
+        </e>
+        <e p="Controllers" t="Include">
+          <e p="AccountController.cs" t="Include" />
+          <e p="ActionFilters.cs" t="Include" />
+          <e p="AppointmentController.cs" t="Include" />
+          <e p="BankAccountController.cs" t="Include" />
+          <e p="BankPolicyController.cs" t="Include" />
+          <e p="BanksController.cs" t="Include" />
+          <e p="BaseController.cs" t="Include" />
+          <e p="CashMovementController.cs" t="Include" />
+          <e p="CommissionTariffController.cs" t="Include" />
+          <e p="CurrencyController.cs" t="Include" />
+          <e p="CustomerController.cs" t="Include" />
+          <e p="ErrorController.cs" t="Include" />
+          <e p="eUserCategoryController.cs" t="Include" />
+          <e p="ExpenseController.cs" t="Include" />
+          <e p="ExpenseGLController.cs" t="Include" />
+          <e p="ExpiryNoticeController.cs" t="Include" />
+          <e p="ExpiryPoliceController.cs" t="Include" />
+          <e p="GLAccountController.cs" t="Include" />
+          <e p="GlBalancesController.cs" t="Include" />
+          <e p="HomeController.cs" t="Include" />
+          <e p="InvoicingController.cs" t="Include" />
+          <e p="JsonDataController.cs" t="Include" />
+          <e p="LoanApplicationController.cs" t="Include" />
+          <e p="ManagementController.cs" t="Include" />
+          <e p="ManualEntryController.cs" t="Include" />
+          <e p="PartnerController.cs" t="Include" />
+          <e p="PolicyController.cs" t="Include" />
+          <e p="ReconciliationController.cs" t="Include" />
+          <e p="ReportingController.cs" t="Include" />
+          <e p="SecurityController.cs" t="Include" />
+          <e p="SharedController.cs" t="Include" />
+        </e>
+        <e p="DAL" t="Include">
+          <e p="AcBank.cs" t="Include" />
+          <e p="Appointment.cs" t="Include" />
+          <e p="AppointmentDetail.cs" t="Include" />
+          <e p="AppointmentEventType.cs" t="Include" />
+          <e p="AppointmentStatu.cs" t="Include" />
+          <e p="AppointmentType.cs" t="Include" />
+          <e p="Bank.cs" t="Include" />
+          <e p="BankAccount.cs" t="Include" />
+          <e p="BankCollateral.cs" t="Include" />
+          <e p="BankLoan.cs" t="Include" />
+          <e p="BankReconciliation.cs" t="Include" />
+          <e p="BankReports.cs" t="Include" />
+          <e p="Brokerage_Company.cs" t="Include" />
+          <e p="BrokerDataContext.cs" t="Include" />
+          <e p="CashMovement.cs" t="Include" />
+          <e p="claim.cs" t="Include" />
+          <e p="Client.cs" t="Include" />
+          <e p="Commission_Tariff.cs" t="Include" />
+          <e p="Currency.cs" t="Include" />
+          <e p="CurrencyList.cs" t="Include" />
+          <e p="DatePeriod.cs" t="Include" />
+          <e p="District.cs" t="Include" />
+          <e p="eCategoryMenu.cs" t="Include" />
+          <e p="eMenu.cs" t="Include" />
+          <e p="eUser.cs" t="Include" />
+          <e p="eUserCategory.cs" t="Include" />
+          <e p="ExcelFileUpload.cs" t="Include" />
+          <e p="Expense.cs" t="Include" />
+          <e p="Fire_allied_peril.cs" t="Include" />
+          <e p="GL_Account.cs" t="Include" />
+          <e p="GL_History.cs" t="Include" />
+          <e p="GlBalance.cs" t="Include" />
+          <e p="Insurance_Product.cs" t="Include" />
+          <e p="Insurance_Product_Category.cs" t="Include" />
+          <e p="InsurancePolicy.cs" t="Include" />
+          <e p="Invoice.cs" t="Include" />
+          <e p="Invoice_Detail.cs" t="Include" />
+          <e p="LoanApplication.cs" t="Include" />
+          <e p="LoanApplicationProperty.cs" t="Include" />
+          <e p="LoanApplicationVehicle.cs" t="Include" />
+          <e p="LoanType.cs" t="Include" />
+          <e p="ManualEntry.cs" t="Include" />
+          <e p="Menu.cs" t="Include" />
+          <e p="Partner.cs" t="Include" />
+          <e p="Personal_Accident.cs" t="Include" />
+          <e p="Policy_Loan_Account.cs" t="Include" />
+          <e p="Policy_Property.cs" t="Include" />
+          <e p="Policy_Vehicle.cs" t="Include" />
+          <e p="Profile.cs" t="Include" />
+          <e p="Property.cs" t="Include" />
+          <e p="Property_peril.cs" t="Include" />
+          <e p="Property_Roof_Material.cs" t="Include" />
+          <e p="Property_Use.cs" t="Include" />
+          <e p="Property_Wall_Material.cs" t="Include" />
+          <e p="Property_Window_Material.cs" t="Include" />
+          <e p="Proposer.cs" t="Include" />
+          <e p="Province.cs" t="Include" />
+          <e p="Quotation.cs" t="Include" />
+          <e p="Reconciliation.cs" t="Include" />
+          <e p="Right.cs" t="Include" />
+          <e p="Sector.cs" t="Include" />
+          <e p="SMS_Log.cs" t="Include" />
+          <e p="SystemReports.cs" t="Include" />
+          <e p="Temp_Client.cs" t="Include" />
+          <e p="Transaction.cs" t="Include" />
+          <e p="Vehicle.cs" t="Include" />
+          <e p="Vehicle_Age_Range.cs" t="Include" />
+          <e p="Vehicle_Clas.cs" t="Include" />
+          <e p="Vehicle_Guarantee.cs" t="Include" />
+          <e p="Vehicle_Insurance_Duration.cs" t="Include" />
+          <e p="Vehicle_Occupant.cs" t="Include" />
+          <e p="Vehicle_Tariff_Base.cs" t="Include" />
+          <e p="Vehicle_Territorial_Limit.cs" t="Include" />
+          <e p="Vehicle_Usage.cs" t="Include" />
+          <e p="Vw_Bank_Collateral.cs" t="Include" />
+          <e p="Vw_Brokerage_Summary.cs" t="Include" />
+          <e p="Vw_CashMovement.cs" t="Include" />
+          <e p="Vw_Expense_Voucher.cs" t="Include" />
+          <e p="Vw_GeneralLedger.cs" t="Include" />
+          <e p="Vw_ManualEntry.cs" t="Include" />
+          <e p="Vw_Policy_Report.cs" t="Include" />
+          <e p="Vw_Transaction.cs" t="Include" />
+          <e p="VwLedgerBalance.cs" t="Include" />
+        </e>
+        <e p="DataEncryption.cs" t="Include" />
+        <e p="dsReports.cs" t="Include" />
+        <e p="dsReports.xsc" t="Include" />
+        <e p="dsReports.xsd" t="Include" />
+        <e p="dsReports.xss" t="Include" />
+        <e p="eBroker.csproj" t="IncludeRecursive" />
+        <e p="favicon.ico" t="Include" />
+        <e p="Filters" t="Include" />
+        <e p="fonts" t="Include">
+          <e p="fontawesome-webfont.eot" t="Include" />
+          <e p="fontawesome-webfont.svg" t="Include" />
+          <e p="fontawesome-webfont.ttf" t="Include" />
+          <e p="fontawesome-webfont.woff" t="Include" />
+          <e p="fontawesome-webfont.woff2" t="Include" />
+          <e p="FontAwesome.otf" t="Include" />
+          <e p="glyphicons-halflings-regular.eot" t="Include" />
+          <e p="glyphicons-halflings-regular.svg" t="Include" />
+          <e p="glyphicons-halflings-regular.ttf" t="Include" />
+          <e p="glyphicons-halflings-regular.woff" t="Include" />
+          <e p="glyphicons-halflings-regular.woff2" t="Include" />
+        </e>
+        <e p="Global.asax" t="Include" />
+        <e p="Global.asax.cs" t="Include" />
+        <e p="Grid.mvc.readme" t="Include" />
+        <e p="HtmlHelpers" t="Include">
+          <e p="AntiForgeryTokenFilter.cs" t="Include" />
+          <e p="MenuHtmlHelper.cs" t="Include" />
+          <e p="SmartSessionManager.cs" t="Include" />
+        </e>
+        <e p="images" t="Include">
+          <e p="accent.png" t="Include" />
+          <e p="bullet.png" t="Include" />
+          <e p="heroAccent.png" t="Include" />
+          <e p="orderedList0.png" t="Include" />
+          <e p="orderedList1.png" t="Include" />
+          <e p="orderedList2.png" t="Include" />
+          <e p="orderedList3.png" t="Include" />
+          <e p="orderedList4.png" t="Include" />
+          <e p="orderedList5.png" t="Include" />
+          <e p="orderedList6.png" t="Include" />
+          <e p="orderedList7.png" t="Include" />
+          <e p="orderedList8.png" t="Include" />
+          <e p="orderedList9.png" t="Include" />
+          <e p="red-loader.gif" t="Include" />
+        </e>
+        <e p="Imgs" t="Include">
+          <e p="user.png" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="AccountModels.cs" t="Include" />
+          <e p="DateData.cs" t="Include" />
+          <e p="IdentityModel.cs" t="Include" />
+          <e p="TransactionFilter.cs" t="Include" />
+          <e p="UserModel.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="PublishProfiles" t="Include">
+            <e p="CIBS.pubxml" t="Include" />
+          </e>
+          <e p="Settings.Designer.cs" t="Include" />
+          <e p="Settings.settings" t="Include" />
+        </e>
+        <e p="Reports" t="Include">
+          <e p="IncomeStatement.cs" t="Include" />
+          <e p="IncomeStatement.rpt" t="Include" />
+          <e p="Invoice_Broker.cs" t="Include" />
+          <e p="Invoice_Broker.rpt" t="Include" />
+          <e p="Period_Cash_Book.cs" t="Include" />
+          <e p="Period_Cash_Book.rpt" t="Include" />
+          <e p="rptBonus.cs" t="Include" />
+          <e p="rptBonus.rpt" t="Include" />
+          <e p="rptCashBook.cs" t="Include" />
+          <e p="rptCashBook.rpt" t="Include" />
+          <e p="rptCashFlow.cs" t="Include" />
+          <e p="rptCashFlow.rpt" t="Include" />
+          <e p="rptCashMovement.cs" t="Include" />
+          <e p="rptCashMovement.rpt" t="Include" />
+          <e p="rptDrawerBalance.cs" t="Include" />
+          <e p="rptDrawerBalance.rpt" t="Include" />
+          <e p="rptDrawerTransaction.cs" t="Include" />
+          <e p="rptDrawerTransaction.rpt" t="Include" />
+          <e p="rptDuplicateTransactionDetails.cs" t="Include" />
+          <e p="rptDuplicateTransactionDetails.rpt" t="Include" />
+          <e p="rptExpenseVoucher.cs" t="Include" />
+          <e p="rptExpenseVoucher.rpt" t="Include" />
+          <e p="rptLedgerStatement.cs" t="Include" />
+          <e p="rptLedgerStatement.rpt" t="Include" />
+          <e p="rptManualVoucher.cs" t="Include" />
+          <e p="rptManualVoucher.rpt" t="Include" />
+          <e p="rptPeriodIncomeStatement.cs" t="Include" />
+          <e p="rptPeriodIncomeStatement.rpt" t="Include" />
+          <e p="rptPrintIDPhotocopy.cs" t="Include" />
+          <e p="rptPrintIDPhotocopy.rpt" t="Include" />
+          <e p="rptQuarterlyStatement.cs" t="Include" />
+          <e p="rptQuarterlyStatement.rpt" t="Include" />
+          <e p="rptRealTimeBalances.cs" t="Include" />
+          <e p="rptRealTimeBalances.rpt" t="Include" />
+          <e p="rptReceipt.cs" t="Include" />
+          <e p="rptReceipt.rpt" t="Include" />
+          <e p="rptReceiptA4.cs" t="Include" />
+          <e p="rptReceiptA4.rpt" t="Include" />
+          <e p="rptReceiptShahansha.cs" t="Include" />
+          <e p="rptReceiptShahansha.rpt" t="Include" />
+          <e p="rptTellerReport.cs" t="Include" />
+          <e p="rptTellerReport.rpt" t="Include" />
+          <e p="rptTransactionDetails.cs" t="Include" />
+          <e p="rptTransactionDetails.rpt" t="Include" />
+          <e p="rptTransactionSummary.cs" t="Include" />
+          <e p="rptTransactionSummary.rpt" t="Include" />
+          <e p="rptTrialBalance.cs" t="Include" />
+          <e p="rptTrialBalance.rpt" t="Include" />
+          <e p="Statement.cs" t="Include" />
+          <e p="Statement.rpt" t="Include" />
+        </e>
+        <e p="Scripts" t="Include">
+          <e p="app.js" t="Include" />
+          <e p="bootbox" t="Include">
+            <e p="bootbox.all.min.js" t="Include" />
+            <e p="bootbox.locales.min.js" t="Include" />
+            <e p="bootbox.min.js" t="Include" />
+          </e>
+          <e p="bootstrap-alert.js" t="Include" />
+          <e p="bootstrap-button.js" t="Include" />
+          <e p="bootstrap-carousel.js" t="Include" />
+          <e p="bootstrap-collapse.js" t="Include" />
+          <e p="bootstrap-dropdown.js" t="Include" />
+          <e p="bootstrap-modal.js" t="Include" />
+          <e p="bootstrap-popover.js" t="Include" />
+          <e p="bootstrap-scrollspy.js" t="Include" />
+          <e p="bootstrap-tab.js" t="Include" />
+          <e p="bootstrap-tooltip.js" t="Include" />
+          <e p="bootstrap-transition.js" t="Include" />
+          <e p="bootstrap-typeahead.js" t="Include" />
+          <e p="bootstrap.js" t="Include" />
+          <e p="bootstrap.min.js" t="Include" />
+          <e p="fastclick" t="Include">
+            <e p="fastclick.js" t="Include" />
+          </e>
+          <e p="gridmvc.customwidgets.js" t="Include" />
+          <e p="gridmvc.js" t="Include" />
+          <e p="gridmvc.lang.fr.js" t="Include" />
+          <e p="gridmvc.lang.ru.js" t="Include" />
+          <e p="gridmvc.min.js" t="Include" />
+          <e p="gridmvc.min.js.map" t="Include" />
+          <e p="jquery-3.3.1.intellisense.js" t="Include" />
+          <e p="jquery-3.3.1.js" t="Include" />
+          <e p="jquery-3.3.1.min.js" t="Include" />
+          <e p="jquery-3.3.1.min.map" t="Include" />
+          <e p="jquery-3.3.1.slim.js" t="Include" />
+          <e p="jquery-3.3.1.slim.min.js" t="Include" />
+          <e p="jquery-3.3.1.slim.min.map" t="Include" />
+          <e p="jquery-slimscroll" t="Include">
+            <e p="jquery.slimscroll.js" t="Include" />
+            <e p="jquery.slimscroll.min.js" t="Include" />
+          </e>
+          <e p="jquery.unobtrusive-ajax.js" t="Include" />
+          <e p="jquery.unobtrusive-ajax.min.js" t="Include" />
+          <e p="jquery.validate-vsdoc.js" t="Include" />
+          <e p="jquery.validate.js" t="Include" />
+          <e p="jquery.validate.min.js" t="Include" />
+          <e p="jquery.validate.unobtrusive.js" t="Include" />
+          <e p="jquery.validate.unobtrusive.min.js" t="Include" />
+          <e p="lib" t="Include">
+            <e p="adminlte.min.js" t="Include" />
+          </e>
+          <e p="modernizr-2.8.3.js" t="Include" />
+        </e>
+        <e p="Services" t="Include">
+          <e p="EmailSenderService.cs" t="Include" />
+          <e p="ExpensesService.cs" t="Include" />
+          <e p="TransactionService.cs" t="Include" />
+        </e>
+        <e p="Startup.cs" t="Include" />
+        <e p="Toolkit.cs" t="Include" />
+        <e p="Utils" t="Include">
+          <e p="Utils.cs" t="Include" />
+        </e>
+        <e p="Vendor" t="Include">
+          <e p="bootstrap-datepicker" t="Include">
+            <e p="bootstrap-datepicker.css" t="Include" />
+            <e p="bootstrap-datepicker.js" t="Include" />
+            <e p="bootstrap-datepicker.min.css" t="Include" />
+            <e p="bootstrap-datepicker.min.js" t="Include" />
+          </e>
+          <e p="dt" t="Include">
+            <e p="dataTables.bootstrap.min.css" t="Include" />
+            <e p="dataTables.bootstrap.min.js" t="Include" />
+            <e p="jquery.dataTables.min.js" t="Include" />
+          </e>
+          <e p="easyAutoComplete" t="Include">
+            <e p="easy-autocomplete.min.css" t="Include" />
+            <e p="easy-autocomplete.themes.min.css" t="Include" />
+            <e p="jquery.easy-autocomplete.min.js" t="Include" />
+          </e>
+          <e p="Ionicons" t="Include">
+            <e p="css" t="Include">
+              <e p="ionicons.css" t="Include" />
+              <e p="ionicons.min.css" t="Include" />
+            </e>
+            <e p="fonts" t="Include">
+              <e p="ionicons.eot" t="Include" />
+              <e p="ionicons.svg" t="Include" />
+              <e p="ionicons.ttf" t="Include" />
+              <e p="ionicons.woff" t="Include" />
+            </e>
+          </e>
+          <e p="pace" t="Include">
+            <e p="pace.min.css" t="Include" />
+            <e p="pace.min.js" t="Include" />
+          </e>
+          <e p="select2" t="Include">
+            <e p="select2.full.min.js" t="Include" />
+            <e p="select2.min.css" t="Include" />
+          </e>
+        </e>
+        <e p="Views" t="Include">
+          <e p="_ViewStart.cshtml" t="Include" />
+          <e p="Account" t="Include">
+            <e p="_ChangePasswordPartial.cshtml" t="Include" />
+            <e p="_SetPasswordPartial.cshtml" t="Include" />
+            <e p="Login.cshtml" t="Include" />
+            <e p="Manage.cshtml" t="Include" />
+          </e>
+          <e p="Appointment" t="Include">
+            <e p="AppointmentInfo.cshtml" t="Include" />
+            <e p="EventInfo.cshtml" t="Include" />
+            <e p="ListAppointment.cshtml" t="Include" />
+            <e p="ListEvent.cshtml" t="Include" />
+          </e>
+          <e p="BankAccount" t="Include">
+            <e p="_ListBankAccounts.cshtml" t="Include" />
+            <e p="BankAccountInfo.cshtml" t="Include" />
+          </e>
+          <e p="BankPolicy" t="Include">
+            <e p="ListBankCollateral.cshtml" t="Include" />
+            <e p="ListBankCollateralView.cshtml" t="Include" />
+            <e p="ListBankLoans.cshtml" t="Include" />
+            <e p="ListBankLoansView.cshtml" t="Include" />
+            <e p="ListLoanPolicy.cshtml" t="Include" />
+            <e p="Reports.cshtml" t="Include" />
+          </e>
+          <e p="Banks" t="Include">
+            <e p="_ListBanks.cshtml" t="Include" />
+            <e p="BankInfo.cshtml" t="Include" />
+          </e>
+          <e p="CashMovement" t="Include">
+            <e p="_Create.cshtml" t="Include" />
+            <e p="_ListCashMovement.cshtml" t="Include" />
+            <e p="CashMovementInfo.cshtml" t="Include" />
+            <e p="ViewCashMovement.cshtml" t="Include" />
+          </e>
+          <e p="Currency" t="Include">
+            <e p="_ListCurrencies.cshtml" t="Include" />
+            <e p="CurrencyInfo.cshtml" t="Include" />
+          </e>
+          <e p="Customer" t="Include">
+            <e p="CustomerInfo.cshtml" t="Include" />
+            <e p="EditCustomer.cshtml" t="Include" />
+            <e p="ExcelFileUpload.cshtml" t="Include" />
+            <e p="ListCustomer.cshtml" t="Include" />
+            <e p="ListExcelLoadedData.cshtml" t="Include" />
+            <e p="NewCustomerReport.cshtml" t="Include" />
+          </e>
+          <e p="eUserCategory" t="Include">
+            <e p="ListUserCategory.cshtml" t="Include" />
+            <e p="UserCategoryInfo.cshtml" t="Include" />
+          </e>
+          <e p="Expense" t="Include">
+            <e p="_ListExpenses.cshtml" t="Include" />
+            <e p="ExpenseInfo.cshtml" t="Include" />
+            <e p="ViewExpense.cshtml" t="Include" />
+          </e>
+          <e p="ExpiryNotice" t="Include">
+            <e p="ExpiryNoticeView.cshtml" t="Include" />
+            <e p="SMSView.cshtml" t="Include" />
+          </e>
+          <e p="GLAccount" t="Include">
+            <e p="GeneralLedgerInfo.cshtml" t="Include" />
+            <e p="GLAccountInfo.cshtml" t="Include" />
+            <e p="ListGLAccount.cshtml" t="Include" />
+            <e p="ViewGeneralLedger.cshtml" t="Include" />
+          </e>
+          <e p="GlBalances" t="Include">
+            <e p="_date.cshtml" t="Include" />
+            <e p="GetGlBalances.cshtml" t="Include" />
+            <e p="GlBalances.cshtml" t="Include" />
+          </e>
+          <e p="Home" t="Include">
+            <e p="About.cshtml" t="Include" />
+            <e p="Contact.cshtml" t="Include" />
+            <e p="Index.cshtml" t="Include" />
+          </e>
+          <e p="Invoicing" t="Include">
+            <e p="InvoiceInfo.cshtml" t="Include" />
+            <e p="InvoicePolicyList.cshtml" t="Include" />
+            <e p="ListInvoice.cshtml" t="Include" />
+            <e p="Tariff.cshtml" t="Include" />
+            <e p="TariffInfo.cshtml" t="Include" />
+          </e>
+          <e p="LoanApplication" t="Include">
+            <e p="ListLoanApplicationProperties.cshtml" t="Include" />
+            <e p="ListLoanApplicationPropertiesView.cshtml" t="Include" />
+            <e p="ListLoanApplications.cshtml" t="Include" />
+            <e p="ListLoanApplicationVehicles.cshtml" t="Include" />
+            <e p="ListLoanApplicationVehiclesView.cshtml" t="Include" />
+            <e p="ListLoanApplicationView.cshtml" t="Include" />
+            <e p="ListSubmittedLoanApplication.cshtml" t="Include" />
+            <e p="LoanApplicationInfo.cshtml" t="Include" />
+            <e p="LoanApplicationPropertyInfo.cshtml" t="Include" />
+            <e p="LoanApplicationPropertyInfoView.cshtml" t="Include" />
+            <e p="LoanApplicationVehicleInfo.cshtml" t="Include" />
+            <e p="LoanApplicationVehicleInfoView.cshtml" t="Include" />
+          </e>
+          <e p="Management" t="Include">
+            <e p="ChangePass.cshtml" t="Include" />
+            <e p="ListUser.cshtml" t="Include" />
+            <e p="ResetPassword.cshtml" t="Include" />
+            <e p="UserInfo.cshtml" t="Include" />
+          </e>
+          <e p="ManualEntry" t="Include">
+            <e p="_ListManualEntries.cshtml" t="Include" />
+            <e p="ManualEntryInfo.cshtml" t="Include" />
+            <e p="ViewManulEntries.cshtml" t="Include" />
+          </e>
+          <e p="Partner" t="Include">
+            <e p="ListPartner.cshtml" t="Include" />
+            <e p="PartnerInfo.cshtml" t="Include" />
+          </e>
+          <e p="Policy" t="Include">
+            <e p="CustomerPolicy.cshtml" t="Include" />
+            <e p="ListPolicy.cshtml" t="Include" />
+            <e p="ListPolicyLoan.cshtml" t="Include" />
+            <e p="ListPolicyProperty.cshtml" t="Include" />
+            <e p="ListPolicyVehicle.cshtml" t="Include" />
+            <e p="LoanInfo.cshtml" t="Include" />
+            <e p="PolicyInfo.cshtml" t="Include" />
+            <e p="PolicyInfoView.cshtml" t="Include" />
+            <e p="PolicyLoanInfo.cshtml" t="Include" />
+            <e p="PolicyPropertyInfo.cshtml" t="Include" />
+            <e p="PolicyVehicleInfo.cshtml" t="Include" />
+          </e>
+          <e p="Reconciliation" t="Include">
+            <e p="_Create.cshtml" t="Include" />
+            <e p="_GlHistories.cshtml" t="Include" />
+            <e p="_NoDataFound.cshtml" t="Include" />
+            <e p="Index.cshtml" t="Include" />
+          </e>
+          <e p="Reporting" t="Include">
+            <e p="PDFReports.cshtml" t="Include" />
+            <e p="Reports.cshtml" t="Include" />
+          </e>
+          <e p="Security" t="Include">
+            <e p="eCategoryMenuInfo.cshtml" t="Include" />
+            <e p="ListMenu.cshtml" t="Include" />
+            <e p="ListProfileUsers.cshtml" t="Include" />
+          </e>
+          <e p="Shared" t="Include">
+            <e p="_Alerts.cshtml" t="Include" />
+            <e p="_BootstrapLayout.basic.cshtml" t="Include" />
+            <e p="_BootstrapLayout.empty.cshtml" t="Include" />
+            <e p="_BootstrapLayout.narrow.cshtml" t="Include" />
+            <e p="_CloseModal.cshtml" t="Include" />
+            <e p="_Filter.cshtml" t="Include" />
+            <e p="_Grid.cshtml" t="Include" />
+            <e p="_GridPager.cshtml" t="Include" />
+            <e p="_html5shiv.cshtml" t="Include" />
+            <e p="_Layout.cshtml" t="Include" />
+            <e p="_LayoutCopy.cshtml" t="Include" />
+            <e p="_LayoutUnAuth.cshtml" t="Include" />
+            <e p="_Loader.cshtml" t="Include" />
+            <e p="_LoginPartial.cshtml" t="Include" />
+            <e p="_Menus.cshtml" t="Include" />
+            <e p="_ModalFooterButtons.cshtml" t="Include" />
+            <e p="_policyview.cshtml" t="Include" />
+            <e p="_PrintView.cshtml" t="Include" />
+            <e p="_ToExcel.cshtml" t="Include" />
+            <e p="_validationSummary.cshtml" t="Include" />
+            <e p="Create.cshtml" t="Include" />
+            <e p="Details.cshtml" t="Include" />
+            <e p="Error.cshtml" t="Include" />
+            <e p="Index.cshtml" t="Include" />
+          </e>
+          <e p="Web.config" t="Include" />
+        </e>
+        <e p="Web References" t="Include">
+          <e p="SMSApi" t="Include">
+            <e p="item.wsdl" t="Include" />
+            <e p="Reference.cs" t="Include" />
+            <e p="Reference.map" t="Include" />
+          </e>
+        </e>
+        <e p="Web.config" t="Include" />
+        <e p="Web.Debug.config" t="Include" />
+        <e p="Web.Release.config" t="Include" />
+      </e>
+      <e p="eBroker.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>

@@ -1,0 +1,99 @@
+﻿@model IEnumerable<eBroker.Appointment>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Appointment List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string startDate = ViewBag.StartDate;
+    string endDate = ViewBag.EndDate;
+
+}
+
+                      <div class="content">
+
+                          <div class="modal fade f-modal" id="modal-default">
+                              <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+                                      @Html.Partial("AppointmentInfo", new eBroker.Appointment { AppointmentDate = DateTime.Now})
+
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                          </div>
+                          <div class="clearfix">
+                              <button class="btn btn-primary edit-button pull-right"> New appointment</button>
+                          </div>
+                          <div class="box box-primary">
+                              <div class="box-header">
+
+                                  <form action="ListAppointment" method="post" class="form-inline pull-right">
+                                      <div class="">
+                                          <div class="col-sm-7pull-right">
+                                              <div id="">
+
+                                                  <input type="text" name="startDate" id="startDate" class="form-control input-sm" placeholder="Start Date" />
+
+                                                  <div class="input-group">
+                                                      <input type="text" name="endDate" id="endDate" class="form-control input-sm" placeholder="End Date" />
+
+                                                      <span class="input-group-btn">
+                                                          <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                                      </span>
+
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </form>
+                                  <h3 class="box-title"><i class="fa fa-info-circle"></i> Appointment List{@ViewBag.StartDate - @ViewBag.EndDate} Count: @Model.Count()</h3>
+                              </div>
+                              <div class="box-body">
+                                  <div class="row">
+                                      <div class="box-body">
+                                          <div class="table-responsive">
+                                              <div class="table table-bordered">
+                                                  @Html.Grid(Model).Named("ga").Columns(col =>
+                                             {
+                                                 col.Add(m => m.Id, true);
+                                                 col.Add(m => m.AppointmentDate).Titled("Appointment Date").Format("{0:yyyy-MM-dd}");
+                                                 col.Add(m => m.AppointmentTime).Titled("Time");
+                                                 col.Add(m => m.appointmentType_.AppointmentTypeName).Titled("Appointment Type");
+                                                 col.Add(m => m.AppointmentVenue).Titled("Venue");
+                                                 col.Add(m => m.ClientName).Titled("Client Name");
+                                                 col.Add(m => m.ClientPhone).Titled("Client Phone");
+                                                 col.Add(m => m.Language).Titled("Language");
+                                                 col.Add(m => m.Status).Titled("Status");
+                                                 col.Add().Sanitized(false).Encoded(false).RenderValueAs(xc => Html.Bootstrap().ActionLink("Events", "ListEvent").RouteValues(new { Id = xc.Id }).PrependIcon("fa fa-pencil-square-o"));
+                                                 col.Add().Sanitized(false).Encoded(false).RenderValueAs(xc => Html.Bootstrap().ActionLink("Edit", "AppointmentInfo").RouteValues(new { Id = xc.Id }).HtmlAttributes(new { @class="edit-button btn btn-sm btn-primary btn-flat"}).PrependIcon("fa fa-pencil-square-o"));
+                                             }).WithPaging(10).Sortable(true)
+
+                                              </div>
+                                              @if (Model.Count() > 0)
+                                              {
+                                                  @Html.Bootstrap().ActionLinkButton("Excel", "AppointmentToExcel", "Appointment").RouteValues(new { startDate = startDate, endDate = endDate }).PrependIcon("fa fa-file-excel-o")
+                                              }
+
+                                          </div>
+                                      </div>
+
+                                  </div>
+                              </div>
+
+                          </div>
+                          <script>
+                              $('#startDate').datepicker({
+                                  dateFormat: "dd-M-yy",
+                                  changeMonth: true,
+                                  changeYear: true,
+                                  yearRange: "-20:+0"
+                              });
+
+                              $('#endDate').datepicker({
+                                  dateFormat: "dd-M-yy",
+                                  changeMonth: true,
+                                  changeYear: true,
+                                  yearRange: "-1:+20"
+                              });
+                          </script>
+
+                      </div>

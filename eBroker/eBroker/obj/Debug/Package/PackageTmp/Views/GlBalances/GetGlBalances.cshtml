@@ -1,0 +1,60 @@
+﻿﻿@using GridMvc.Html
+@using GridMvc.Html
+@model IEnumerable<eBroker.DAL.VwLedgerBalance>
+@{
+    ViewBag.Title = "Gl Balance";
+    var date = (DateTime) ViewBag.Date;
+}
+<section class="content">
+    <div>
+        <form action="@Url.Action("GetGlBalances")"
+              class="form-inline pull-right" autocomplete="off">
+
+            <div class="form-group form-group-sm">
+                <input type="text"placeholder="Choose date" value="@date.ToString("MM/dd/yyyy")" name="date" id="date"
+                       class="form-control datepicker flat">
+            </div>
+            <button class="btn btn-primary btn-sm">
+                <i class="fa fa-search"></i>
+                Get Gl Balance
+            </button>
+        </form>
+        <div class="clearfix"></div>
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <div class="col-sm-6">
+                    <h4 class="box-title">
+                        Gl Balance {@Model.Count()} at 
+                        <small>@date.ToString("yyyy/MM/dd")</small>
+                    </h4>
+                </div>
+                <div class="col-sm-6">
+                    @if (Model.Any())
+                    {
+                        <a href="@Url.Action("ExportGlBalanceToExcel", new {date})"
+                           class="btn btn-success pull-right btn-sm">
+                            <i class="fa fa-file-excel-o"></i>
+                            Export
+                        </a>
+                    }
+
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="table table-hover table-condensed">
+                    @Html.Grid(Model).Named("ga").Columns(col =>
+                    {
+                        col.Add(p => p.Guid, true);
+                        col.Add(p => p.LedgerNo).Titled("Ledger No").Sortable(true).Filterable(true);
+                        col.Add(p => p.LedgerDescription).Titled("Ledger Desc").Sortable(true).Filterable(true);
+
+                        col.Add(p => p.IsoCode).Titled("Currency").Sortable(true).Filterable(true);
+                        col.Add(p => p.Balance).Format("{0:#,0.#####}").Titled("Balance").Sortable(true).Filterable(true);
+                    }).WithPaging(10).Sortable(true).Filterable(true).WithMultipleFilters()
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+

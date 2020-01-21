@@ -1,0 +1,25 @@
+﻿﻿
+
+<form action="@Url.Action("GetGlBalances")"
+      class="form-horizontal" autocomplete="off">
+    
+    <div class="form-group">
+        <input type="text" placeholder="Choose date" value="" name="date" id="date"
+               class="form-control picker-x flat">
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary">
+            <i class="fa fa-search"></i>
+            Get Gl Balance
+        </button>
+    </div>
+</form>
+<div class="clearfix"></div>
+
+<script>
+$(function() {
+  $(".picker-x").datepicker({
+  "format":"yyyy-mm-dd"
+  });
+})
+</script>

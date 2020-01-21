@@ -10,7 +10,7 @@ namespace eBroker.Controllers
 {
     public class AppointmentController : BaseController
     {
-        eBroker.BrokerDataContext dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
+        private readonly eBroker.BrokerDataContext _dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
 
         public ActionResult ListAppointment(string startDate, string endDate)
         {
@@ -19,12 +19,12 @@ namespace eBroker.Controllers
             {
                 var appointments = new List<Appointment>();
                 if (String.IsNullOrEmpty(startDate) || String.IsNullOrEmpty(endDate))
-                    appointments = dc.Appointment.Where(x=>x.Status!="Closed").OrderByDescending(x=>x.Id).Take(20).ToList();
+                    appointments = _dc.Appointment.Where(x=>x.Status!="Closed").OrderByDescending(x=>x.Id).Take(20).ToList();
                 else
                 {
                     DateTime start = DateTime.Parse(startDate);
                     DateTime end = DateTime.Parse(endDate);
-                    appointments = dc.Appointment.Where(x => x.AppointmentDate >= start && x.AppointmentDate <= end).ToList();
+                    appointments = _dc.Appointment.Where(x => x.AppointmentDate >= start && x.AppointmentDate <= end).ToList();
 
                 }
                 ViewBag.StartDate = startDate;
@@ -38,14 +38,14 @@ namespace eBroker.Controllers
             return View();
         }
 
-        public ActionResult ListEvent(int Id)
+        public ActionResult ListEvent(int id)
         {
-            this.EventInfo(Id, 0);
+            this.EventInfo(id, 0);
             try
             {
                 var appointmentEvents = new List<AppointmentDetail>();
-                appointmentEvents = dc.AppointmentDetails.Where(x => x.AppointmentID == Id).ToList();
-                var appointment = dc.Appointment.Where(x => x.Id == Id).FirstOrDefault();
+                appointmentEvents = _dc.AppointmentDetails.Where(x => x.AppointmentID == id).ToList();
+                var appointment = _dc.Appointment.Where(x => x.Id == id).FirstOrDefault();
                 ViewBag.AppointmentInfo = appointment;
                 return View(appointmentEvents);
             }
@@ -63,18 +63,18 @@ namespace eBroker.Controllers
                 try
                 {
                     string message = "";
-                    this.dc.Appointment.Add(app);
+                    this._dc.Appointment.Add(app);
                     if (app.Id == 0)
                     {
                         app.BookedOn = DateTime.Now;
-                        if (this.dc.SaveChanges() <= 0)
+                        if (this._dc.SaveChanges() <= 0)
                             throw new Exception(message);
                         this.Success("Appointment Saved Successfully", true);
                     }
                     else
                     {
-                        this.dc.Entry<Appointment>(app).State = EntityState.Modified;
-                        this.dc.SaveChanges();
+                        this._dc.Entry<Appointment>(app).State = EntityState.Modified;
+                        this._dc.SaveChanges();
                     }
                     return (ActionResult)this.Content("1");
                 }
@@ -96,25 +96,25 @@ namespace eBroker.Controllers
                 {
                     string message = "";
                     app.EventDate = DateTime.Now;
-                    this.dc.AppointmentDetails.Add(app);
+                    this._dc.AppointmentDetails.Add(app);
                     if (app.Id == 0)
                     {
-                        if (this.dc.SaveChanges() <= 0)
+                        if (this._dc.SaveChanges() <= 0)
                             throw new Exception(message);
                         this.Success("Event Created Successfully", true);
                     }
                     else
                     {
-                        this.dc.Entry<AppointmentDetail>(app).State = EntityState.Modified;
-                        this.dc.SaveChanges();
+                        this._dc.Entry<AppointmentDetail>(app).State = EntityState.Modified;
+                        this._dc.SaveChanges();
                     }
-                    Appointment entity = this.dc.Appointment.Where(x => x.Id == app.AppointmentID).FirstOrDefault();
+                    Appointment entity = this._dc.Appointment.Where(x => x.Id == app.AppointmentID).FirstOrDefault();
                     if (entity != null)
                     {
                         entity.Status = app.AppointmentStatus;
-                        this.dc.Appointment.Add(entity);
-                        this.dc.Entry(entity).State = EntityState.Modified;
-                        this.dc.SaveChanges();
+                        this._dc.Appointment.Add(entity);
+                        this._dc.Entry(entity).State = EntityState.Modified;
+                        this._dc.SaveChanges();
                     }
                     return this.Content("1");
                 }
@@ -127,25 +127,25 @@ namespace eBroker.Controllers
             return (ActionResult)this.PartialView("EventInfo", (object)app);
         }
         [HttpGet]
-        public ActionResult AppointmentInfo(int Id = 0)
+        public ActionResult AppointmentInfo(int id = 0)
         {
             try
             {
-                var Model = dc.Appointment.Where(x => x.Id == Id).FirstOrDefault();
-                if (Model == null)
+                var model = _dc.Appointment.Where(x => x.Id == id).FirstOrDefault();
+                if (model == null)
                 {
-                    Model = new Appointment();
-                    Model.Id = 0;
-                    Model.BookedBy = AppUserData.Login;
-                    Model.AppointmentDate = DateTime.Today.AddDays(1);
-                    Model.BookedOn = DateTime.Now;
-                    Model.Status = "Pending";
+                    model = new Appointment();
+                    model.Id = 0;
+                    model.BookedBy = AppUserData.Login;
+                    model.AppointmentDate = DateTime.Today.AddDays(1);
+                    model.BookedOn = DateTime.Now;
+                    model.Status = "Pending";
                     //Model.recruited_by = AppUserData.Login;
                 }
                 //Reading Customer Recruiter
-                var appointmentType = (from r in dc.AppointmentType.ToList() select new SelectListItem { Text = r.AppointmentTypeName, Value = r.Id.ToString() }).ToList();
+                var appointmentType = (from r in _dc.AppointmentType.ToList() select new SelectListItem { Text = r.AppointmentTypeName, Value = r.Id.ToString() }).ToList();
                 ViewBag.AppointmentTypes = appointmentType;
-                return PartialView(Model);
+                return PartialView(model);
             }
             catch (Exception ex)
             {
@@ -155,26 +155,26 @@ namespace eBroker.Controllers
         }
 
         [HttpGet]
-        public ActionResult EventInfo(int AppId,int Id = 0)
+        public ActionResult EventInfo(int appId,int id = 0)
         {
             try
             {
-                var Model = dc.AppointmentDetails.Where(x => x.Id == Id).FirstOrDefault();
-                if (Model == null)
+                var model = _dc.AppointmentDetails.Where(x => x.Id == id).FirstOrDefault();
+                if (model == null)
                 {
-                    Model = new AppointmentDetail();
-                    Model.Id = 0;
-                    Model.AppointmentID = AppId;
-                    Model.DoneBy = AppUserData.Login;
-                    Model.EventDate = DateTime.Today;
+                    model = new AppointmentDetail();
+                    model.Id = 0;
+                    model.AppointmentID = appId;
+                    model.DoneBy = AppUserData.Login;
+                    model.EventDate = DateTime.Today;
                 }
-                var eventTypes = (from r in dc.AppointmentEventType.ToList() select new SelectListItem { Text = r.AppointmentEventTypeName, Value = r.Id.ToString() }).ToList();
+                var eventTypes = (from r in _dc.AppointmentEventType.ToList() select new SelectListItem { Text = r.AppointmentEventTypeName, Value = r.Id.ToString() }).ToList();
                 ViewBag.EventTypes = eventTypes;
-                var eventStatus = (from r in dc.AppointmentStatus.ToList() select new SelectListItem { Text = r.Status, Value = r.Status }).ToList();
+                var eventStatus = (from r in _dc.AppointmentStatus.ToList() select new SelectListItem { Text = r.Status, Value = r.Status }).ToList();
                 ViewBag.EventStatus = eventStatus;
-                var employees = (from r in dc.eUser.Where(x=>x.eUserCategories.Category!="Bank" || x.eUserCategories.Category!="Insurer").ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();
+                var employees = (from r in _dc.eUser.Where(x=>x.eUserCategories.Category!="Bank" || x.eUserCategories.Category!="Insurer").ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();
                 ViewBag.Employees = employees;
-                return PartialView(Model);
+                return PartialView(model);
             }
             catch (Exception ex)
             {

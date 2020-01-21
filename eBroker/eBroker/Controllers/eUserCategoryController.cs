@@ -9,9 +9,9 @@ using System.Data.Entity;
 namespace eBroker.Controllers
 {
     [Authorize]
-    public class eUserCategoryController : BaseController
+    public class EUserCategoryController : BaseController
     {
-        eBroker.BrokerDataContext dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
+        eBroker.BrokerDataContext _dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
 
         public ActionResult ListUserCategory(string query)
         {
@@ -19,9 +19,9 @@ namespace eBroker.Controllers
             try
             {
                 if (string.IsNullOrEmpty(query))
-                    eUserCategory = dc.eUserCategory.OrderBy(b => b.Id).Take(50).ToList();
+                    eUserCategory = _dc.eUserCategory.OrderBy(b => b.Id).Take(50).ToList();
                 else
-                    eUserCategory = dc.eUserCategory.Where(b => b.Category.Contains(query) || b.Description.Contains(query)).ToList();
+                    eUserCategory = _dc.eUserCategory.Where(b => b.Category.Contains(query) || b.Description.Contains(query)).ToList();
                 return View(eUserCategory);
             }
             catch (Exception ex)
@@ -32,25 +32,25 @@ namespace eBroker.Controllers
         }
 
         [HttpGet]
-        public ActionResult UserCategoryInfo(int Id=0)
+        public ActionResult UserCategoryInfo(int id=0)
         {
-            eUserCategory Model = new eUserCategory();
+            eUserCategory model = new eUserCategory();
             try
             {
-                if (Id==0)
+                if (id==0)
                 {
-                      Model.insert = true;
-                      Model.Id = 0;
+                      model.insert = true;
+                      model.Id = 0;
                 }
                 else
-                    Model = dc.eUserCategory.Where(x => x.Id == Id).FirstOrDefault();
+                    model = _dc.eUserCategory.Where(x => x.Id == id).FirstOrDefault();
             }
 
             catch (Exception ex)
             {
                 Danger(ex.Message, true);
             }
-            return PartialView(Model);
+            return PartialView(model);
         }
 
         [HttpPost]
@@ -61,23 +61,23 @@ namespace eBroker.Controllers
                 
                 try
                 {
-                    string Resp = "";
-                    dc.eUserCategory.Add(uc);
+                    string resp = "";
+                    _dc.eUserCategory.Add(uc);
                     if (uc.insert)
                     {
-                        int res = dc.SaveChanges();
+                        int res = _dc.SaveChanges();
                         if (res > 0)
                             Success("Record Saved Successfully", true);
                         else
                         {
-                            Resp = "Unable to insert the User Category nfo";
-                            throw new Exception(Resp);
+                            resp = "Unable to insert the User Category nfo";
+                            throw new Exception(resp);
                         }
                     }
                     else//Update
                     {
-                        dc.Entry(uc).State = EntityState.Modified;
-                        dc.SaveChanges();
+                        _dc.Entry(uc).State = EntityState.Modified;
+                        _dc.SaveChanges();
                         
                     }
 

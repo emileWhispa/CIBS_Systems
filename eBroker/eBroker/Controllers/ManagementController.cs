@@ -82,18 +82,18 @@ namespace eBroker.Controllers
             {
                 Danger(ex.Message, true);
             }
-            return View();
+            return View("ChangePass");
         }
 
 
         [HttpGet]
-        public ActionResult ResetPassword(int Id)
+        public ActionResult ResetPassword(int id)
         {
             eBroker.BrokerDataContext dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
             var user = new eUser();
             try
             {
-                user = dc.eUser.Where(x => x.Id == Id).FirstOrDefault();
+                user = dc.eUser.Where(x => x.Id == id).FirstOrDefault();
                 return PartialView(user);
             }
             catch (Exception ex)
@@ -108,7 +108,7 @@ namespace eBroker.Controllers
         {
             try
             {
-                string Resp = "";
+                string resp = "";
                 eBroker.BrokerDataContext dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
                 var resetUser = dc.eUser.Where(y => y.Id == usr.Id).FirstOrDefault();
                 AutoGenPassword.PasswordGenerator x = new PasswordGenerator();
@@ -126,7 +126,7 @@ namespace eBroker.Controllers
                 if (res > 0)
                     Success("Password Reset Successfully", true);
                 else
-                    throw new Exception(Resp);
+                    throw new Exception(resp);
 
                 return Content("1");
             }
@@ -134,19 +134,19 @@ namespace eBroker.Controllers
             {
                 Danger(ex.Message, true);
             }
-            return PartialView();
+            return PartialView("UserInfo");
         }
 
         //
         // GET: /Management/Details/5
 
-        public ActionResult UserInfo(int Id = 0)
+        public ActionResult UserInfo(int id = 0)
         {
             try
             {
                 eBroker.BrokerDataContext dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
-                var Model = dc.eUser.Where(x => x.Id == Id).Take(20).FirstOrDefault();
-                if (Model == null)
+                var model = dc.eUser.Where(x => x.Id == id).Take(20).FirstOrDefault();
+                if (model == null)
                 {
                     PasswordGenerator x = new PasswordGenerator();
                     x.Minimum = 8;
@@ -154,17 +154,17 @@ namespace eBroker.Controllers
                     x.ExcludeSymbols = true;
                     x.ConsecutiveCharacters = false;
                     x.RepeatCharacters = false;
-                    Model = new eUser();
-                    Model.Id = 0;
-                    Model.CreatedOn = DateTime.Today;
-                    Model.CreatedBy = AppUserData.Login;
-                    Model.ChangePassword = true;
-                    Model.Attempts = 0;
-                    Model.Active = true;
-                    Model.Locked = false;
-                    Model.PwdChangeDate = DateTime.Today.AddMonths(3);
-                    Model.LastLogin = DateTime.Now;
-                    Model.Password = Cryptography.Encrypt(x.Generate());
+                    model = new eUser();
+                    model.Id = 0;
+                    model.CreatedOn = DateTime.Today;
+                    model.CreatedBy = AppUserData.Login;
+                    model.ChangePassword = true;
+                    model.Attempts = 0;
+                    model.Active = true;
+                    model.Locked = false;
+                    model.PwdChangeDate = DateTime.Today.AddMonths(3);
+                    model.LastLogin = DateTime.Now;
+                    model.Password = Cryptography.Encrypt(x.Generate());
                     //Model.recruited_by = AppUserData.Login;
                 }
                 //Reading Customer Recruiter
@@ -174,7 +174,7 @@ namespace eBroker.Controllers
                 ViewBag.company = company;
                 //TempData["recr"] = recruiter;
                 var tst = ViewBag.recruiter;
-                return PartialView(Model);
+                return PartialView(model);
             }
             catch (Exception ex)
             {

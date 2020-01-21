@@ -5,52 +5,57 @@ using System.Web;
 using System.Web.Mvc;
 using System.Configuration;
 using System.Data.Entity;
+using eBroker.Services;
 
 namespace eBroker.Controllers
 {
     public class PolicyController : BaseController
     {
-        eBroker.BrokerDataContext dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
+        BrokerDataContext _dc = new BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
 
-        public ActionResult ListPolicy(string query, string ExpStartDate, string ExpEndDate, string EffStartDate, string EffEndDate)
+        public ActionResult ListPolicy(string query, string expStartDate, string expEndDate, string effStartDate, string effEndDate)
         {
-            this.PolicyInfo(0);
+            PolicyInfo(0);
             ViewBag.renewed = true;
             var policy = new List<Vw_Policy_Report>();
             try
             {
-                DateTime _ExpStartDate = new DateTime();
-                DateTime _ExpEndDate = new DateTime();
-                DateTime _EffStartDate = new DateTime();
-                DateTime _EffEndDate = new DateTime();
+                DateTime expStartDate1 = new DateTime();
+                DateTime expEndDate1 = new DateTime();
+                DateTime effStartDate1 = new DateTime();
+                DateTime effEndDate1 = new DateTime();
 
-                DateTime.TryParse(ExpStartDate, out _ExpStartDate);
-                DateTime.TryParse(ExpEndDate, out _ExpEndDate);
-                DateTime.TryParse(EffStartDate, out _EffStartDate);
-                DateTime.TryParse(EffEndDate, out _EffEndDate);
-
+                DateTime.TryParse(expStartDate, out expStartDate1);
+                DateTime.TryParse(expEndDate, out expEndDate1);
+                DateTime.TryParse(effStartDate, out effStartDate1);
+                DateTime.TryParse(effEndDate, out effEndDate1);
+                ViewBag.query = query;
+                ViewBag.expStartDate = expStartDate;
+                ViewBag.expEndDate = expEndDate;
+                ViewBag.effStartDate = effStartDate;
+                ViewBag.effEndDate = effEndDate;
                 if (string.IsNullOrEmpty(query))
                 {
-                    policy = dc.Vw_Policy_Report.OrderByDescending(x => x.Id).ToList();
-                    if (policy == null || policy.Count == 0)
+                    policy = _dc.Vw_Policy_Report.OrderByDescending(x => x.Id).ToList();
+                    if ( policy.Count == 0)
                         return View(policy);
                 }
                 else
-                    policy = dc.Vw_Policy_Report.Where(x => x.client_name.Contains(query) || x.product_name.Contains(query) || x.insurer.Contains(query) || x.policy_no.Contains(query)).ToList();
-                if (!string.IsNullOrEmpty(ExpStartDate))
-                    policy = policy.Where(x => x.expiry_dt >= _ExpStartDate).ToList();
+                    policy = _dc.Vw_Policy_Report.Where(x => x.client_name.Contains(query) || x.product_name.Contains(query) || x.insurer.Contains(query) || x.policy_no.Contains(query)).ToList();
+                if (!string.IsNullOrEmpty(expStartDate))
+                    policy = policy.Where(x => x.expiry_dt >= expStartDate1).ToList();
                 //else if (!string.IsNullOrEmpty(ExpStartDate) && string.IsNullOrEmpty(query))
                 //    policy = dc.Vw_Policy_Report.Where(x => x.expiry_dt >= _ExpStartDate).ToList();
-                if (!string.IsNullOrEmpty(ExpEndDate))
-                    policy = policy.Where(x => x.expiry_dt <= _ExpEndDate).ToList();
+                if (!string.IsNullOrEmpty(expEndDate))
+                    policy = policy.Where(x => x.expiry_dt <= expEndDate1).ToList();
                 //else if (!string.IsNullOrEmpty(ExpEndDate) && string.IsNullOrEmpty(query))
                 //    policy = dc.Vw_Policy_Report.Where(x => x.expiry_dt <= _ExpEndDate).ToList();
-                if (!string.IsNullOrEmpty(EffStartDate))
-                    policy = policy.Where(x => x.expiry_dt >= _EffStartDate).ToList();
+                if (!string.IsNullOrEmpty(effStartDate))
+                    policy = policy.Where(x => x.effective_dt >= effStartDate1).ToList();
                 //else if (!string.IsNullOrEmpty(EffStartDate) && string.IsNullOrEmpty(query))
                 //    policy = dc.Vw_Policy_Report.Where(x => x.expiry_dt >= _EffStartDate).ToList();
-                if (!string.IsNullOrEmpty(EffEndDate))
-                    policy = policy.Where(x => x.expiry_dt <= _EffEndDate).ToList();
+                if (!string.IsNullOrEmpty(effEndDate))
+                    policy = policy.Where(x => x.effective_dt <= effEndDate1).ToList();
                 //else if (!string.IsNullOrEmpty(EffEndDate) && string.IsNullOrEmpty(query))
                 //    policy = dc.Vw_Policy_Report.Where(x => x.expiry_dt <= _EffEndDate).ToList();
                 return View(policy.OrderByDescending(x=>x.Id));
@@ -67,8 +72,8 @@ namespace eBroker.Controllers
             var policy = new List<InsurancePolicy>();
             try
             {
-                policy = dc.InsurancePolicy.Where(x => x.client_id == ccode).OrderByDescending(x => x.Id).ToList();
-                ViewBag.ClientInfo = dc.Client.Where(x => x.Id == ccode).FirstOrDefault();
+                policy = _dc.InsurancePolicy.Where(x => x.client_id == ccode).OrderByDescending(x => x.Id).ToList();
+                ViewBag.ClientInfo = _dc.Client.Where(x => x.Id == ccode).FirstOrDefault();
                 return View(policy);
             }
             catch (Exception ex)
@@ -79,19 +84,19 @@ namespace eBroker.Controllers
         }
 
 
-        public ActionResult PolicyItems(int CId, int Dis = 0)
+        public ActionResult PolicyItems(int cId, int dis = 0)
         {
             try
             {
-                var policy = dc.InsurancePolicy.Where(x => x.Id == CId).FirstOrDefault();
-                ViewBag.DisableAddNew = Dis;
+                var policy = _dc.InsurancePolicy.Where(x => x.Id == cId).FirstOrDefault();
+                ViewBag.DisableAddNew = dis;
                 if (policy.InsuranceProducts.category_id == 1)//Motor
                 {
-                    return RedirectToAction("ListPolicyVehicle", new { CId = CId });
+                    return RedirectToAction("ListPolicyVehicle", new { CId = cId });
                 }
                 else if (policy.InsuranceProducts.category_id == 2)//Fire
                 {
-                    return RedirectToAction("ListPolicyProperty", new { CId = CId });
+                    return RedirectToAction("ListPolicyProperty", new { CId = cId });
                 }
                 else
                 {
@@ -106,15 +111,15 @@ namespace eBroker.Controllers
             return RedirectToAction("ListPolicy");//No action required
         }
 
-        public ActionResult ListPolicyVehicle(int CId)
+        public ActionResult ListPolicyVehicle(int cId)
         {
 
-            this.PolicyVehicleInfo(CId, 0);
+            PolicyVehicleInfo(cId, 0);
             var policyVehicle = new List<Policy_Vehicle>();
             try
             {
-                policyVehicle = dc.Policy_Vehicle.Where(x => x.contract_id == CId).ToList();
-                ViewBag.PolicyId = CId;
+                policyVehicle = _dc.Policy_Vehicle.Where(x => x.contract_id == cId).ToList();
+                ViewBag.PolicyId = cId;
                 return View(policyVehicle);
             }
             catch (Exception ex)
@@ -123,14 +128,14 @@ namespace eBroker.Controllers
             }
             return View();
         }
-        public ActionResult ListPolicyProperty(int CId)
+        public ActionResult ListPolicyProperty(int cId)
         {
-            this.PolicyPropertyInfo(CId, 0);
+            PolicyPropertyInfo(cId, 0);
             var policyProperty = new List<Policy_Property>();
             try
             {
-                policyProperty = dc.Policy_Property.Where(x => x.contract_id == CId).ToList();
-                ViewBag.PolicyId = CId;
+                policyProperty = _dc.Policy_Property.Where(x => x.contract_id == cId).ToList();
+                ViewBag.PolicyId = cId;
                 return View(policyProperty);
             }
             catch (Exception ex)
@@ -141,30 +146,30 @@ namespace eBroker.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreatePolicy2(eBroker.InsurancePolicy ip)
+        public ActionResult CreatePolicy2(InsurancePolicy ip)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
 
-                    string Resp = "";
+                    string resp = "";
                     //Data Validation
                     if (ip.renewable && ip.renewal_basis == "")
                     {
                         Danger("Select Renewable Basis", true);
                         //Reading Customer Recruiter
-                        var recruiter = (from r in dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
-                        var rec = (from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
+                        var recruiter = (from r in _dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
+                        var rec = (from a in _dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
                         recruiter.AddRange(rec);
                         ViewBag.Recruiters = recruiter;
-                        var insurers = (from a in dc.Partner.Where(x => x.partnership_type == "Insurance").OrderBy(x => x.company_short_name).ToList() select new SelectListItem { Text = a.company_name, Value = a.Id.ToString() }).ToList();
+                        var insurers = (from a in _dc.Partner.Where(x => x.partnership_type == "Insurance").OrderBy(x => x.company_short_name).ToList() select new SelectListItem { Text = a.company_name, Value = a.Id.ToString() }).ToList();
                         ViewBag.Insurers = insurers;
-                        var products = (from a in dc.Insurance_Product.OrderBy(x => x.product_name).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
+                        var products = (from a in _dc.Insurance_Product.OrderBy(x => x.product_name).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
                         ViewBag.Products = products;
-                        var clients = (from a in dc.Client.OrderBy(x => x.client_name).ToList() select new SelectListItem { Text = a.client_name, Value = a.Id.ToString() }).ToList();
+                        var clients = (from a in _dc.Client.OrderBy(x => x.client_name).ToList() select new SelectListItem { Text = a.client_name, Value = a.Id.ToString() }).ToList();
                         ViewBag.Clients = clients;
-                        var banks = (from a in dc.Bank.OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
+                        var banks = (from a in _dc.Bank.OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
                         ViewBag.Banks = banks;
                         return View("PolicyInfo", ip);
                     }
@@ -172,17 +177,17 @@ namespace eBroker.Controllers
                     {
                         Danger("Select Interest Transfer Bank", true);
                         //Reading Customer Recruiter
-                        var recruiter = (from r in dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
-                        var rec = (from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
+                        var recruiter = (from r in _dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
+                        var rec = (from a in _dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
                         recruiter.AddRange(rec);
                         ViewBag.Recruiters = recruiter;
-                        var insurers = (from a in dc.Partner.Where(x => x.partnership_type == "Insurance").OrderBy(x => x.company_short_name).ToList() select new SelectListItem { Text = a.company_name, Value = a.Id.ToString() }).ToList();
+                        var insurers = (from a in _dc.Partner.Where(x => x.partnership_type == "Insurance").OrderBy(x => x.company_short_name).ToList() select new SelectListItem { Text = a.company_name, Value = a.Id.ToString() }).ToList();
                         ViewBag.Insurers = insurers;
-                        var products = (from a in dc.Insurance_Product.OrderBy(x => x.product_name).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
+                        var products = (from a in _dc.Insurance_Product.OrderBy(x => x.product_name).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
                         ViewBag.Products = products;
-                        var clients = (from a in dc.Client.OrderBy(x => x.client_name).ToList() select new SelectListItem { Text = a.client_name, Value = a.Id.ToString() }).ToList();
+                        var clients = (from a in _dc.Client.OrderBy(x => x.client_name).ToList() select new SelectListItem { Text = a.client_name, Value = a.Id.ToString() }).ToList();
                         ViewBag.Clients = clients;
-                        var banks = (from a in dc.Bank.OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
+                        var banks = (from a in _dc.Bank.OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
                         ViewBag.Banks = banks;
                         return View("PolicyInfo", ip);
                     }
@@ -190,15 +195,15 @@ namespace eBroker.Controllers
                         ip.interest_bank_id = null;
                     if (ip.renewable == false)
                         ip.renewal_basis = "";
-                    dc.InsurancePolicy.Add(ip);
+                    _dc.InsurancePolicy.Add(ip);
 
                     if (ip.Id == 0)
                     {
-                        int res = dc.SaveChanges();
+                        int res = _dc.SaveChanges();
                         if (res > 0)
                         {
                             Success("Record Saved Successfully", true);
-                            var policy = dc.InsurancePolicy.Where(x => x.guid == ip.guid).FirstOrDefault();
+                            var policy = _dc.InsurancePolicy.Where(x => x.guid == ip.guid).FirstOrDefault();
                             if (ip.product_id == 1 || ip.product_id == 2)//Motor
                             {
                                 return RedirectToAction("PolicyVehicleInfo", new { CId = policy.Id, Id = 0 });
@@ -210,12 +215,12 @@ namespace eBroker.Controllers
 
                         }
                         else
-                            throw new Exception(Resp);
+                            throw new Exception(resp);
                     }
                     else//Update
                     {
-                        dc.Entry(ip).State = EntityState.Modified;
-                        dc.SaveChanges();
+                        _dc.Entry(ip).State = EntityState.Modified;
+                        _dc.SaveChanges();
                     }
 
                     return RedirectToAction("ListPolicy");
@@ -225,17 +230,17 @@ namespace eBroker.Controllers
                 {
                     Danger("Input validation errors! Kindly check if all fields are populated properly", true);
                     //Reading Customer Recruiter
-                    var recruiter = (from r in dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
-                    var rec = (from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
+                    var recruiter = (from r in _dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
+                    var rec = (from a in _dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
                     recruiter.AddRange(rec);
                     ViewBag.Recruiters = recruiter;
-                    var insurers = (from a in dc.Partner.Where(x => x.partnership_type == "Insurance").OrderBy(x => x.company_short_name).ToList() select new SelectListItem { Text = a.company_name, Value = a.Id.ToString() }).ToList();
+                    var insurers = (from a in _dc.Partner.Where(x => x.partnership_type == "Insurance").OrderBy(x => x.company_short_name).ToList() select new SelectListItem { Text = a.company_name, Value = a.Id.ToString() }).ToList();
                     ViewBag.Insurers = insurers;
-                    var products = (from a in dc.Insurance_Product.OrderBy(x => x.product_name).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
+                    var products = (from a in _dc.Insurance_Product.OrderBy(x => x.product_name).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
                     ViewBag.Products = products;
-                    var clients = (from a in dc.Client.OrderBy(x => x.client_name).ToList() select new SelectListItem { Text = a.client_name, Value = a.Id.ToString() }).ToList();
+                    var clients = (from a in _dc.Client.OrderBy(x => x.client_name).ToList() select new SelectListItem { Text = a.client_name, Value = a.Id.ToString() }).ToList();
                     ViewBag.Clients = clients;
-                    var banks = (from a in dc.Bank.OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
+                    var banks = (from a in _dc.Bank.OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
                     ViewBag.Banks = banks;
                     return View("PolicyInfo",ip);
                 }
@@ -247,12 +252,12 @@ namespace eBroker.Controllers
             return View(ip);
         }
 
-        public ActionResult Renew(int Id = 0)
+        public ActionResult Renew(int id = 0)
         {
-            InsurancePolicy insurancePolicy = this.dc.InsurancePolicy.Where<InsurancePolicy>(x => x.Id == Id).FirstOrDefault<InsurancePolicy>();
+            InsurancePolicy insurancePolicy = _dc.InsurancePolicy.Where(x => x.Id == id).FirstOrDefault();
             if (insurancePolicy == null)
-                return (ActionResult)this.Content("1");
-            this.PolicyBag(0);
+                return (ActionResult)Content("1");
+            PolicyBag(0);
             insurancePolicy.renewed = false;
             insurancePolicy.Id = 0;
             insurancePolicy.interest_transfer = false;
@@ -267,11 +272,11 @@ namespace eBroker.Controllers
             insurancePolicy.payment_mode = (string)null;
             insurancePolicy.total_paid = new int?();
             insurancePolicy.net_premium = 0;
-            insurancePolicy.renewal_policy_id = new int?(Id);
+            insurancePolicy.renewal_policy_id = new int?(id);
             insurancePolicy.policy_type = "Renewal";
             // ISSUE: reference to a compiler-generated field
             ViewBag.renewed = true;
- return (ActionResult)this.PartialView("PolicyInfo", (object)insurancePolicy);
+ return (ActionResult)PartialView("PolicyInfo", (object)insurancePolicy);
         }
 
 
@@ -281,14 +286,14 @@ namespace eBroker.Controllers
             bool flag2 = ip.renewal_policy_id != null & flag1;
             try
             {
-                if (this.ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
-                    ip.entry_user = this.AppUserData.Login;
+                    ip.entry_user = AppUserData.Login;
                     if (ip.renewable && ip.renewal_basis == "")
                     {
-                        this.Danger("Select Renewable Basis", true);
-                        this.PolicyBag(ip.Id);
-                        return (ActionResult)this.PartialView("PolicyInfo", (object)ip);
+                        Danger("Select Renewable Basis", true);
+                        PolicyBag(ip.Id);
+                        return (ActionResult)PartialView("PolicyInfo", (object)ip);
                     }
                     if (ip.interest_transfer)
                     {
@@ -296,8 +301,8 @@ namespace eBroker.Controllers
                         int num = 0;
                         if (interestBankId.GetValueOrDefault() == num & interestBankId.HasValue)
                         {
-                            this.Danger("Select Interest Transfer Bank", true);
-                            this.PolicyBag(ip.Id);
+                            Danger("Select Interest Transfer Bank", true);
+                            PolicyBag(ip.Id);
                             return PartialView("PolicyInfo", ip);
                         }
                     }
@@ -305,48 +310,48 @@ namespace eBroker.Controllers
                         ip.interest_bank_id = new int?();
                     if (!ip.renewable)
                         ip.renewal_basis = "";
-                    this.dc.InsurancePolicy.Add(ip);
+                    _dc.InsurancePolicy.Add(ip);
                     if (flag1)
                     {
                         ip.entry_date = DateTime.Now;
-                        if (this.dc.SaveChanges() > 0)
+                        if (_dc.SaveChanges() > 0)
                         {
-                            this.Success("Record Saved Successfully", true);
+                            Success("Record Saved Successfully", true);
                             if (flag2)
                             {
-                                InsurancePolicy entity = this.dc.InsurancePolicy.Find((object)ip.renewal_policy_id);
+                                InsurancePolicy entity = _dc.InsurancePolicy.Find((object)ip.renewal_policy_id);
                                 if (entity != null)
                                 {
                                     entity.renewed = true;
-                                    this.dc.Entry<InsurancePolicy>(entity).State = EntityState.Modified;
-                                    this.dc.SaveChanges();
+                                    _dc.Entry(entity).State = EntityState.Modified;
+                                    _dc.SaveChanges();
                                 }
                             }
                             if (ip.product_id == 1 || ip.product_id == 2)
                             {
                                 if (flag2)
                                 {
-                                    this.dc.Policy_Vehicle.Where<Policy_Vehicle>(x => (int?)x.contract_id == ip.renewal_policy_id).ToList<Policy_Vehicle>().ForEach((Action<Policy_Vehicle>)(v =>
+                                    _dc.Policy_Vehicle.Where(x => (int?)x.contract_id == ip.renewal_policy_id).ToList().ForEach((Action<Policy_Vehicle>)(v =>
                                     {
                                         v.contract_id = ip.Id;
-                                        this.dc.Policy_Vehicle.Add(v);
+                                        _dc.Policy_Vehicle.Add(v);
                                     }));
-                                    this.dc.SaveChanges();
+                                    _dc.SaveChanges();
                                 }
-                                return this.RedirectToAction("ListPolicyVehicle", (object)new
+                                return RedirectToAction("ListPolicyVehicle", (object)new
                                 {
                                     CId = ip.Id
                                 });
                             }
                             if (ip.product_id == 3)
                             {
-                                this.dc.Policy_Property.Where<Policy_Property>(x => (int?)x.contract_id == ip.renewal_policy_id).ToList<Policy_Property>().ForEach((Action<Policy_Property>)(v =>
+                                _dc.Policy_Property.Where(x => (int?)x.contract_id == ip.renewal_policy_id).ToList().ForEach((Action<Policy_Property>)(v =>
                                 {
                                     v.contract_id = ip.Id;
-                                    this.dc.Policy_Property.Add(v);
+                                    _dc.Policy_Property.Add(v);
                                 }));
-                                this.dc.SaveChanges();
-                                return this.RedirectToAction("ListPolicyProperty", (object)new
+                                _dc.SaveChanges();
+                                return RedirectToAction("ListPolicyProperty", (object)new
                                 {
                                     CId = ip.Id
                                 });
@@ -355,82 +360,82 @@ namespace eBroker.Controllers
                     }
                     else
                     {
-                        this.dc.Entry<InsurancePolicy>(ip).State = EntityState.Modified;
-                        this.dc.SaveChanges();
+                        _dc.Entry(ip).State = EntityState.Modified;
+                        _dc.SaveChanges();
                     }
                     if (flag1)
-                        return (ActionResult)this.RedirectToAction("ListPolicy");
-                    return (ActionResult)this.Content("1");
+                        return (ActionResult)RedirectToAction("ListPolicy");
+                    return (ActionResult)Content("1");
                 }
-                this.Danger("Input validation errors! Kindly check if all fields are populated properly", true);
-                this.PolicyBag(ip.Id);
+                Danger("Input validation errors! Kindly check if all fields are populated properly", true);
+                PolicyBag(ip.Id);
             }
             catch (Exception ex)
             {
-                this.Danger(ex.Message, true);
+                Danger(ex.Message, true);
             }
-            this.PolicyBag(ip.Id);
+            PolicyBag(ip.Id);
             if (!flag1)
-                return this.PartialView("PolicyInfo", ip);
+                return PartialView("PolicyInfo", ip);
             // ISSUE: reference to a compiler-generated field
          
             // ISSUE: reference to a compiler-generated field
             // ISSUE: reference to a compiler-generated field
-            return this.View("PolicyInfo", ip);
+            return View("PolicyInfo", ip);
         }
-        private void PolicyBag(int Id)
+        private void PolicyBag(int id)
         {
             //Reading Customer Recruiter
-            var recruiter = (from r in dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
-            var rec = (from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
+            var recruiter = (from r in _dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
+            var rec = (from a in _dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
             recruiter.AddRange(rec);
             ViewBag.Recruiters = recruiter;
-            var insurers = (from a in dc.Partner.Where(x => x.partnership_type == "Insurance").OrderBy(x => x.company_short_name).ToList() select new SelectListItem { Text = a.company_name, Value = a.Id.ToString() }).ToList();
+            var insurers = (from a in _dc.Partner.Where(x => x.partnership_type == "Insurance").OrderBy(x => x.company_short_name).ToList() select new SelectListItem { Text = a.company_name, Value = a.Id.ToString() }).ToList();
             ViewBag.Insurers = insurers;
-            var products = (from a in dc.Insurance_Product.OrderBy(x => x.product_name).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
+            var products = (from a in _dc.Insurance_Product.OrderBy(x => x.product_name).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
             ViewBag.Products = products;
-            var clients = (from a in dc.Client.OrderBy(x => x.client_name).ToList() select new SelectListItem { Text = a.client_name, Value = a.Id.ToString() }).ToList();
+            var clients = (from a in _dc.Client.OrderBy(x => x.client_name).ToList() select new SelectListItem { Text = a.client_name, Value = a.Id.ToString() }).ToList();
             ViewBag.Clients = clients;
-            var banks = (from a in dc.Bank.OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
+            var banks = (from a in _dc.Bank.OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
             ViewBag.Banks = banks;
-            ViewBag.UserId = Id;
+            ViewBag.UserId = id;
         }
 
-        public ActionResult DeletePolicy(int Id)
+        public ActionResult DeletePolicy(int id)
         {
-            InsurancePolicy ins = dc.InsurancePolicy.Find(Id);
+            InsurancePolicy ins = _dc.InsurancePolicy.Find(id);
             if( ins != null)
             {
-                List<Invoice_Detail> _list = dc.Invoice_Detail.Where(e => e.contract_id == Id).ToList();
-                dc.Invoice_Detail.RemoveRange(_list);
-                dc.InsurancePolicy.Remove(ins);
-                dc.SaveChanges();
+                List<Invoice_Detail> list = _dc.Invoice_Detail.Where(e => e.contract_id == id).ToList();
+                _dc.Invoice_Detail.RemoveRange(list);
+                _dc.InsurancePolicy.Remove(ins);
+                _dc.SaveChanges();
             }
             return RedirectToAction("ListPolicy");
         }
 
         [HttpPost]
-        public ActionResult CreatePolicyProperty(eBroker.Policy_Property ip)
+        public ActionResult CreatePolicyProperty(Policy_Property ip)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    string Resp = "";
-                    dc.Policy_Property.Add(ip);
+                    string resp = "";
+                    _dc.Policy_Property.Add(ip);
                     if (ip.Id == 0)
                     {
                         ip.entry_date = DateTime.Now;
-                        int res = dc.SaveChanges();
+                        int res = _dc.SaveChanges();
                         if (res > 0)
                             Success("Property Details Saved Successfully", true);
                         else
-                            throw new Exception(Resp);
+                            throw new Exception(resp);
                     }
                     else//Update
                     {
-                        dc.Entry(ip).State = EntityState.Modified;
-                        dc.SaveChanges();
+                        _dc.Entry(ip).State = EntityState.Modified;
+                        _dc.SaveChanges();
                     }
                     return Content("1");
                 }
@@ -439,34 +444,34 @@ namespace eBroker.Controllers
                     Danger(ex.Message, true);
                 }
             }
-            this.PolicyPropertyInfo(ip.contract_id, ip.Id);
+            PolicyPropertyInfo(ip.contract_id, ip.Id);
             return PartialView("PolicyPropertyInfo", ip);
         }
 
         [HttpPost]
-        public ActionResult CreatePolicyVehicle(eBroker.Policy_Vehicle ip)
+        public ActionResult CreatePolicyVehicle(Policy_Vehicle ip)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    string Resp = "";
-                    dc.Policy_Vehicle.Add(ip);
+                    string resp = "";
+                    _dc.Policy_Vehicle.Add(ip);
                     if (ip.Id == 0)
                     {
                         ip.entry_date = DateTime.Now;
-                        int res = dc.SaveChanges();
+                        int res = _dc.SaveChanges();
                         if (res > 0)
                         {
                             Success("Vehicle Details Saved Successfully", true);
                         }
                         else
-                            throw new Exception(Resp);
+                            throw new Exception(resp);
                     }
                     else//Update
                     {
-                        dc.Entry(ip).State = EntityState.Modified;
-                        dc.SaveChanges();
+                        _dc.Entry(ip).State = EntityState.Modified;
+                        _dc.SaveChanges();
                     }
                     return Content("1");
                 }
@@ -475,22 +480,22 @@ namespace eBroker.Controllers
                     Danger(ex.Message, true);
                 }
             }
-            this.PolicyVehicleInfo(ip.contract_id, ip.Id);
+            PolicyVehicleInfo(ip.contract_id, ip.Id);
             return PartialView("PolicyVehicleInfo", ip);
         }
 
 
         [HttpGet]
-        public ActionResult PolicyInfo(int Id = 0)
+        public ActionResult PolicyInfo(int id = 0)
         {
             try
             {
-                InsurancePolicy insurancePolicy = this.dc.InsurancePolicy.Where<InsurancePolicy>(x => x.Id == Id).FirstOrDefault<InsurancePolicy>();
+                InsurancePolicy insurancePolicy = _dc.InsurancePolicy.Where(x => x.Id == id).FirstOrDefault();
                 if (insurancePolicy == null)
                 {
                     insurancePolicy = new InsurancePolicy();
                     insurancePolicy.entry_date = DateTime.Now;
-                    insurancePolicy.entry_user = this.AppUserData.Login;
+                    insurancePolicy.entry_user = AppUserData.Login;
                     insurancePolicy.amendment_no = "000";
                     insurancePolicy.Id = 0;
                     insurancePolicy.effective_dt = DateTime.Now;
@@ -501,38 +506,38 @@ namespace eBroker.Controllers
                     insurancePolicy.renewable = true;
                     insurancePolicy.invoiceable = true;
                 }
-                this.PolicyBag(Id);
-                return this.PartialView(insurancePolicy);
+                PolicyBag(id);
+                return PartialView(insurancePolicy);
             }
             catch (Exception ex)
             {
-                this.Danger(ex.Message, true);
+                Danger(ex.Message, true);
             }
-            return this.PartialView();
+            return PartialView();
         }
 
         [HttpGet]
-        public ActionResult PolicyInfoView(int Id)
+        public ActionResult PolicyInfoView(int id)
         {
             try
             {
-                var Model = dc.InsurancePolicy.Where(x => x.Id == Id).FirstOrDefault();
+                var model = _dc.InsurancePolicy.Where(x => x.Id == id).FirstOrDefault();
 
                 //Reading Customer Recruiter
-                var recruiter = (from r in dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
-                var rec = (from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
+                var recruiter = (from r in _dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
+                var rec = (from a in _dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
                 recruiter.AddRange(rec);
                 ViewBag.Recruiters = recruiter;
-                var insurers = (from a in dc.Partner.Where(x => x.partnership_type == "Insurance").OrderBy(x => x.company_short_name).ToList() select new SelectListItem { Text = a.company_name, Value = a.Id.ToString() }).ToList();
+                var insurers = (from a in _dc.Partner.Where(x => x.partnership_type == "Insurance").OrderBy(x => x.company_short_name).ToList() select new SelectListItem { Text = a.company_name, Value = a.Id.ToString() }).ToList();
                 ViewBag.Insurers = insurers;
-                var products = (from a in dc.Insurance_Product.OrderBy(x => x.product_name).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
+                var products = (from a in _dc.Insurance_Product.OrderBy(x => x.product_name).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
                 ViewBag.Products = products;
-                var clients = (from a in dc.Client.OrderBy(x => x.client_name).ToList() select new SelectListItem { Text = a.client_name, Value = a.Id.ToString() }).ToList();
+                var clients = (from a in _dc.Client.OrderBy(x => x.client_name).ToList() select new SelectListItem { Text = a.client_name, Value = a.Id.ToString() }).ToList();
                 ViewBag.Clients = clients;
-                var banks = (from a in dc.Bank.OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
+                var banks = (from a in _dc.Bank.OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
                 ViewBag.Banks = banks;
 
-                return View(Model);
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -542,30 +547,30 @@ namespace eBroker.Controllers
         }
 
         [HttpGet]
-        public ActionResult PolicyPropertyInfo(int CId, int Id = 0)
+        public ActionResult PolicyPropertyInfo(int cId, int id = 0)
         {
             try
             {
-                var Model = dc.Policy_Property.Where(x => x.Id == Id).FirstOrDefault();
-                if (Model == null)
+                var model = _dc.Policy_Property.Where(x => x.Id == id).FirstOrDefault();
+                if (model == null)
                 {
-                    Model = new Policy_Property();
-                    Model.contract_id = CId;
-                    Model.entry_date = DateTime.Now;
-                    Model.entry_user = AppUserData.Login;
-                    Model.Id = 0;
+                    model = new Policy_Property();
+                    model.contract_id = cId;
+                    model.entry_date = DateTime.Now;
+                    model.entry_user = AppUserData.Login;
+                    model.Id = 0;
                     //Model.recruited_by = AppUserData.Login;
                 }
                 //Reading Customer Recruiter
-                var wallMaterial = (from r in dc.Property_Wall_Material.ToList() select new SelectListItem { Text = r.WallMaterial, Value = r.WallMaterial }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
+                var wallMaterial = (from r in _dc.Property_Wall_Material.ToList() select new SelectListItem { Text = r.WallMaterial, Value = r.WallMaterial }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
                 ViewBag.WallMaterial = wallMaterial;
-                var roofMaterial = (from a in dc.Property_Roof_Material.ToList() select new SelectListItem { Text = a.RoofMaterial, Value = a.RoofMaterial }).ToList();
+                var roofMaterial = (from a in _dc.Property_Roof_Material.ToList() select new SelectListItem { Text = a.RoofMaterial, Value = a.RoofMaterial }).ToList();
                 ViewBag.RoofMaterial = roofMaterial;
-                var windowMaterial = (from a in dc.Property_Window_Material.ToList() select new SelectListItem { Text = a.WindowMaterial, Value = a.WindowMaterial }).ToList();
+                var windowMaterial = (from a in _dc.Property_Window_Material.ToList() select new SelectListItem { Text = a.WindowMaterial, Value = a.WindowMaterial }).ToList();
                 ViewBag.WindowMaterial = windowMaterial;
-                var propertyUse = (from a in dc.Property_Use.ToList() select new SelectListItem { Text = a.PropertyUse, Value = a.PropertyUse }).ToList();
+                var propertyUse = (from a in _dc.Property_Use.ToList() select new SelectListItem { Text = a.PropertyUse, Value = a.PropertyUse }).ToList();
                 ViewBag.PropertyUse = propertyUse;
-                return PartialView(Model);
+                return PartialView(model);
             }
             catch (Exception ex)
             {
@@ -575,32 +580,32 @@ namespace eBroker.Controllers
         }
 
         [HttpGet]
-        public ActionResult PolicyVehicleInfo(int CId, int Id = 0)
+        public ActionResult PolicyVehicleInfo(int cId, int id = 0)
         {
             try
             {
-                var Model = dc.Policy_Vehicle.Where(x => x.Id == Id).FirstOrDefault();
-                if (Model == null)
+                var model = _dc.Policy_Vehicle.Where(x => x.Id == id).FirstOrDefault();
+                if (model == null)
                 {
-                    Model = new Policy_Vehicle();
-                    Model.contract_id = CId;
-                    Model.entry_date = DateTime.Now;
-                    Model.entry_user = AppUserData.Login;
-                    Model.Id = 0;
+                    model = new Policy_Vehicle();
+                    model.contract_id = cId;
+                    model.entry_date = DateTime.Now;
+                    model.entry_user = AppUserData.Login;
+                    model.Id = 0;
                     //Model.recruited_by = AppUserData.Login;
                 }
                 //Reading Customer Recruiter
-                var vehicleUsage = (from r in dc.Vehicle_Usage.ToList() select new SelectListItem { Text = r.usage, Value = r.Id.ToString() }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
+                var vehicleUsage = (from r in _dc.Vehicle_Usage.ToList() select new SelectListItem { Text = r.usage, Value = r.Id.ToString() }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
                 ViewBag.VehicleUsage = vehicleUsage;
-                var insuranceProduct = (from a in dc.Insurance_Product.Where(x => x.category_id == 1).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
+                var insuranceProduct = (from a in _dc.Insurance_Product.Where(x => x.category_id == 1).ToList() select new SelectListItem { Text = a.product_name, Value = a.Id.ToString() }).ToList();
                 ViewBag.InsuranceProduct = insuranceProduct;
-                var vehicleClass = (from a in dc.Vehicle_Class.ToList() select new SelectListItem { Text = a.vehicle_class, Value = a.Id.ToString() }).ToList();
+                var vehicleClass = (from a in _dc.Vehicle_Class.ToList() select new SelectListItem { Text = a.vehicle_class, Value = a.Id.ToString() }).ToList();
                 ViewBag.VehicleClass = vehicleClass;
-                var territoryCover = (from a in dc.Vehicle_Territorial_Limit.ToList() select new SelectListItem { Text = a.territorial_limit, Value = a.Id.ToString() }).ToList();
+                var territoryCover = (from a in _dc.Vehicle_Territorial_Limit.ToList() select new SelectListItem { Text = a.territorial_limit, Value = a.Id.ToString() }).ToList();
                 ViewBag.TerritoryCover = territoryCover;
-                var occupantCategory = (from a in dc.Vehicle_Occupant.ToList() select new SelectListItem { Text = a.death_amount.ToString(), Value = a.Id.ToString() }).ToList();
+                var occupantCategory = (from a in _dc.Vehicle_Occupant.ToList() select new SelectListItem { Text = a.death_amount.ToString(), Value = a.Id.ToString() }).ToList();
                 ViewBag.OccupantCategory = occupantCategory;
-                return PartialView(Model);
+                return PartialView(model);
             }
             catch (Exception ex)
             {
@@ -610,14 +615,14 @@ namespace eBroker.Controllers
         }
 
         [HttpGet]
-        public ActionResult ListPolicyLoan(int CId)
+        public ActionResult ListPolicyLoan(int cId)
         {
-            this.PolicyLoanInfo(CId, 0);
+            PolicyLoanInfo(cId, 0);
             var policyLoans = new List<Policy_Loan_Account>();
             try
             {
-                policyLoans = dc.Policy_Loan_Account.Where(x => x.contract_id == CId).ToList();
-                ViewBag.PolicyId = CId;
+                policyLoans = _dc.Policy_Loan_Account.Where(x => x.contract_id == cId).ToList();
+                ViewBag.PolicyId = cId;
                 return View(policyLoans);
             }
             catch (Exception ex)
@@ -628,26 +633,26 @@ namespace eBroker.Controllers
         }
 
         [HttpGet]
-        public ActionResult PolicyLoanInfo(int CId, int Id = 0)
+        public ActionResult PolicyLoanInfo(int cId, int id = 0)
         {
             try
             {
-                var Model = dc.Policy_Loan_Account.Where(x => x.Id == Id).Take(20).FirstOrDefault();
-                if (Id == 0)
+                var model = _dc.Policy_Loan_Account.Where(x => x.Id == id).Take(20).FirstOrDefault();
+                if (id == 0)
                 {
-                    Model = new Policy_Loan_Account();
-                    Model.Id = 0;
-                    Model.contract_id = CId;
-                    Model.entered_by = AppUserData.Login;
-                    Model.entry_date = DateTime.Now;
-                    Model.loan_disbursement_date = DateTime.Now;
-                    Model.loan_expiry_date = DateTime.Now;
+                    model = new Policy_Loan_Account();
+                    model.Id = 0;
+                    model.contract_id = cId;
+                    model.entered_by = AppUserData.Login;
+                    model.entry_date = DateTime.Now;
+                    model.loan_disbursement_date = DateTime.Now;
+                    model.loan_expiry_date = DateTime.Now;
                     //Model.recruited_by = AppUserData.Login;
                 }
                 //Reading Loan Types
-                var loanTypes = (from r in dc.LoanType.ToList() select new SelectListItem { Text = r.loan_type, Value = r.Id.ToString() }).ToList();
+                var loanTypes = (from r in _dc.LoanType.ToList() select new SelectListItem { Text = r.loan_type, Value = r.Id.ToString() }).ToList();
                 ViewBag.LoanTypes = loanTypes;
-                return PartialView(Model);
+                return PartialView(model);
             }
             catch (Exception ex)
             {
@@ -657,28 +662,28 @@ namespace eBroker.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreatePolicyLoan(eBroker.Policy_Loan_Account ip)
+        public ActionResult CreatePolicyLoan(Policy_Loan_Account ip)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    string Resp = "";
-                    dc.Policy_Loan_Account.Add(ip);
+                    string resp = "";
+                    _dc.Policy_Loan_Account.Add(ip);
                     if (ip.Id == 0)
                     {
                         ip.entry_date = DateTime.Now;
-                        ip.entered_by = this.AppUserData.Login;
-                        int res = dc.SaveChanges();
+                        ip.entered_by = AppUserData.Login;
+                        int res = _dc.SaveChanges();
                         if (res > 0)
                             Success("Record Saved Successfully", true);
                         else
-                            throw new Exception(Resp);
+                            throw new Exception(resp);
                     }
                     else//Update
                     {
-                        dc.Entry(ip).State = EntityState.Modified;
-                        dc.SaveChanges();
+                        _dc.Entry(ip).State = EntityState.Modified;
+                        _dc.SaveChanges();
                     }
 
                     return Content("1");
@@ -692,54 +697,80 @@ namespace eBroker.Controllers
             return PartialView("PolicyLoanInfo", ip);
         }
 
-        public ActionResult ExportToExcel(int ccode = 0)
+        public ActionResult ExportToExcel(string query, string expStartDate, string expEndDate, string effStartDate, string effEndDate,int ccode = 0)
         {
             try
             {
-                if (ccode == 0)
-                    Toolkit.ExportListUsingEPPlus("select * from Vw_Policy_Report", "Policy Listing");
-                else
-                    Toolkit.ExportListUsingEPPlus("select a.* from Vw_Policy_Report a, insurance_policy b where a.contract_id=b.contract_id and b.client_id=" + ccode, "Policy Listing");
-                return View();
+                
+                DateTime expStartDate1 = new DateTime();
+                DateTime expEndDate1 = new DateTime();
+                DateTime effStartDate1 = new DateTime();
+                DateTime effEndDate1 = new DateTime();
+
+                DateTime.TryParse(expStartDate, out expStartDate1);
+                DateTime.TryParse(expEndDate, out expEndDate1);
+                DateTime.TryParse(effStartDate, out effStartDate1);
+                DateTime.TryParse(effEndDate, out effEndDate1);
+                var policy = _dc.InsurancePolicy.Where(x=>true);
+                policy = string.IsNullOrEmpty(query) ? _dc.InsurancePolicy.OrderByDescending(x => x.Id) : _dc.InsurancePolicy.Where(x => x.Clients.client_name.Contains(query) || x.InsuranceProducts.product_name.Contains(query) || x.Partners.company_name.Contains(query) || x.policy_no.Contains(query));
+                if (!string.IsNullOrEmpty(expStartDate))
+                    policy = policy.Where(x => x.expiry_dt >= expStartDate1);
+                //else if (!string.IsNullOrEmpty(ExpStartDate) && string.IsNullOrEmpty(query))
+                //    policy = dc.Vw_Policy_Report.Where(x => x.expiry_dt >= _ExpStartDate).ToList();
+                if (!string.IsNullOrEmpty(expEndDate))
+                    policy = policy.Where(x => x.expiry_dt <= expEndDate1);
+                //else if (!string.IsNullOrEmpty(ExpEndDate) && string.IsNullOrEmpty(query))
+                //    policy = dc.Vw_Policy_Report.Where(x => x.expiry_dt <= _ExpEndDate).ToList();
+                if (!string.IsNullOrEmpty(effStartDate))
+                    policy = policy.Where(x => x.effective_dt >= effStartDate1);
+                //else if (!string.IsNullOrEmpty(EffStartDate) && string.IsNullOrEmpty(query))
+                //    policy = dc.Vw_Policy_Report.Where(x => x.expiry_dt >= _EffStartDate).ToList();
+                if (!string.IsNullOrEmpty(effEndDate))
+                    policy = policy.Where(x => x.effective_dt <= effEndDate1);
+                if (ccode != 0)
+                    policy = policy.Where(x => x.Clients.Id == ccode);
+                return File(TransactionService.PolicyToExcel(policy.ToList()).ToArray(),
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "transactions_" + DateTime.Now + ".xlsx");
             }
             catch (Exception ex)
             {
                 Danger(ex.Message, true);
             }
-            return View();
+            return RedirectToAction("ListPolicy");
         }
 
-        public ActionResult ListBankPolicy(int BankId, string query, string ExpStartDate, string ExpEndDate, string EffStartDate, string EffEndDate)
+        public ActionResult ListBankPolicy(int bankId, string query, string expStartDate, string expEndDate, string effStartDate, string effEndDate)
         {
             var policy = new List<Vw_Policy_Report>();
             try
             {
-                DateTime _ExpStartDate = new DateTime();
-                DateTime _ExpEndDate = new DateTime();
-                DateTime _EffStartDate = new DateTime();
-                DateTime _EffEndDate = new DateTime();
+                DateTime expStartDate1 = new DateTime();
+                DateTime expEndDate1;
+                DateTime effStartDate1 = new DateTime();
+                DateTime effEndDate1 = new DateTime();
 
-                DateTime.TryParse(ExpStartDate, out _ExpStartDate);
-                DateTime.TryParse(ExpEndDate, out _ExpEndDate);
-                DateTime.TryParse(EffStartDate, out _EffStartDate);
-                DateTime.TryParse(EffEndDate, out _EffEndDate);
+                DateTime.TryParse(expStartDate, out expStartDate1);
+                DateTime.TryParse(expEndDate, out expEndDate1);
+                DateTime.TryParse(effStartDate, out effStartDate1);
+                DateTime.TryParse(effEndDate, out effEndDate1);
 
                 if (string.IsNullOrEmpty(query))
                 {
-                    policy = dc.Vw_Policy_Report.OrderByDescending(x => x.Id).ToList();
-                    if (policy == null || policy.Count == 0)
+                    policy = _dc.Vw_Policy_Report.OrderByDescending(x => x.Id).ToList();
+                    if (policy.Count == 0)
                         return View(policy);
                 }
                 else
-                    policy = dc.Vw_Policy_Report.Where(x => x.client_name.Contains(query) || x.product_name.Contains(query) || x.insurer.Contains(query) || x.policy_no.Contains(query)).ToList();
-                if (!string.IsNullOrEmpty(ExpStartDate))
-                    policy = policy.Where(x => x.expiry_dt >= _ExpStartDate).ToList();
-                if (!string.IsNullOrEmpty(ExpEndDate))
-                    policy = policy.Where(x => x.expiry_dt <= _ExpEndDate).ToList();
-                if (!string.IsNullOrEmpty(EffStartDate))
-                    policy = policy.Where(x => x.expiry_dt >= _EffStartDate).ToList();
-                if (!string.IsNullOrEmpty(EffEndDate))
-                    policy = policy.Where(x => x.expiry_dt <= _EffEndDate).ToList();
+                    policy = _dc.Vw_Policy_Report.Where(x => x.client_name.Contains(query) || x.product_name.Contains(query) || x.insurer.Contains(query) || x.policy_no.Contains(query)).ToList();
+                if (!string.IsNullOrEmpty(expStartDate))
+                    policy = policy.Where(x => x.expiry_dt >= expStartDate1).ToList();
+                if (!string.IsNullOrEmpty(expEndDate))
+                    policy = policy.Where(x => x.expiry_dt <= expEndDate1).ToList();
+                if (!string.IsNullOrEmpty(effStartDate))
+                    policy = policy.Where(x => x.expiry_dt >= effStartDate1).ToList();
+                if (!string.IsNullOrEmpty(effEndDate))
+                    policy = policy.Where(x => x.expiry_dt <= effEndDate1).ToList();
                 return View(policy);
             }
             catch (Exception ex)

@@ -9,7 +9,7 @@ namespace eBroker.Controllers
 {
     public class ExpiryNoticeController : BaseController
     {
-        eBroker.BrokerDataContext dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
+        eBroker.BrokerDataContext _dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
 
         public ActionResult ExpiryNoticeView(string startDate, string endDate)
         {
@@ -17,12 +17,12 @@ namespace eBroker.Controllers
             {
                 var policies = new List<InsurancePolicy>();
                 if (String.IsNullOrEmpty(startDate) || String.IsNullOrEmpty(endDate))
-                    policies = dc.InsurancePolicy.Where(x => x.expiry_dt == DateTime.Today && x.renewable == true).ToList();
+                    policies = _dc.InsurancePolicy.Where(x => x.expiry_dt == DateTime.Today && x.renewable == true && x.Clients != null).ToList();
                 else
                 {
                     DateTime start = DateTime.Parse(startDate);
                     DateTime end = DateTime.Parse(endDate);
-                    policies = dc.InsurancePolicy.Where(x => x.expiry_dt >= start && x.expiry_dt <= end && x.renewable == true).OrderBy(x=>x.expiry_dt).ToList();
+                    policies = _dc.InsurancePolicy.Where(x => x.expiry_dt >= start && x.expiry_dt <= end && x.renewable == true && x.Clients != null).OrderBy(x=>x.expiry_dt).ToList();
 
                 }
                 ViewBag.StartDate = startDate;
@@ -36,7 +36,7 @@ namespace eBroker.Controllers
             return View();
         }
 
-        public ActionResult SendSMSNotice(string startDate, string endDate)
+        public ActionResult SendSmsNotice(string startDate, string endDate)
         {
             try
             {
@@ -45,45 +45,62 @@ namespace eBroker.Controllers
                 {
                     DateTime start = DateTime.Parse(startDate);
                     DateTime end = DateTime.Parse(endDate);
-                    policies = dc.InsurancePolicy.Where(x => x.expiry_dt >= start && x.expiry_dt <= end && x.renewable == true).ToList();
+                    policies = _dc.InsurancePolicy.Where(x => x.expiry_dt >= start && x.expiry_dt <= end && x.renewable == true).ToList();
                     if (policies.Count > 0)
                     {
-                        string sms_account = ConfigurationManager.AppSettings["SMS_User"];
-                        string sms_pin = ConfigurationManager.AppSettings["SMS_Password"];
+                        string smsAccount = ConfigurationManager.AppSettings["SMS_User"];
+                        string smsPin = ConfigurationManager.AppSettings["SMS_Password"];
                         string language = "Kinyarwanda";
                         string balance = "";
                         string status = "";
                         string msg = "";
                         string msgId = "";
                         SMSApi.ksms smsSender = new SMSApi.ksms();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine(smsSender.kchk(smsAccount,smsPin,out balance,out status));
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
+                        Console.Out.WriteLine();
                         for (int i = 0; i < policies.Count; i++)
                         {
                             try
                             {
-                                string phone = policies[i].Clients.mobile;
+                                string phone = policies[i].ClientOptionalMobile;
                                 if (phone.Length == 10)
                                     phone = "25" + phone;
                                 else if (phone.StartsWith("+") && phone.Length == 13)
                                     phone = phone.Replace("+", "");
                                 else if (phone.Length != 12)
                                     continue;
-                                language = policies[i].Clients.language;
+                                language = policies[i].Clients != null ? policies[i].Clients.language : "Kinyarwanda";
                                 msgId = DateTime.Now.ToFileTime().ToString();
                                 if (language == "Kinyarwanda")
                                 {
-                                    msg = policies[i].Clients.client_name + ", CIBS irabamenyesha ko ubwishingizi No. " + policies[i].policy_no + " mufite muri " + policies[i].Partners.company_short_name + " buzarangira le " + policies[i].expiry_dt.ToString("yyyy-MM-dd") + ". Mwahamagara " + ConfigurationManager.AppSettings["Contact_Phone"];
+                                    msg = policies[i].ClientOptionalName + ", CIBS irabamenyesha ko ubwishingizi No. " + policies[i].policy_no + " mufite muri " + policies[i].Partners.company_short_name + " buzarangira le " + policies[i].expiry_dt.ToString("yyyy-MM-dd") + ". Mwahamagara " + ConfigurationManager.AppSettings["Contact_Phone"];
                                 }
                                 else if (language == "English")
                                 {
-                                    msg = "Dear " + policies[i].Clients.client_name + ", CIBS would like to inform you that Insurance Policy No. " + policies[i].policy_no + " held in " + policies[i].Partners.company_short_name + " will expire on " + policies[i].expiry_dt.ToString("yyyy-MM-dd") + ". Contact " + ConfigurationManager.AppSettings["Contact_Phone"];
+                                    msg = "Dear " + policies[i].ClientOptionalName + ", CIBS would like to inform you that Insurance Policy No. " + policies[i].policy_no + " held in " + policies[i].PartnerOptionalName + " will expire on " + policies[i].expiry_dt.ToString("yyyy-MM-dd") + ". Contact " + ConfigurationManager.AppSettings["Contact_Phone"];
                                 }
                                 else if (language == "French")
                                 {
-                                    msg = policies[i].Clients.client_name + ", CIBS voudrait vous informer que votre assurance No. " + policies[i].policy_no + " de " + policies[i].Partners.company_short_name + " expire le " + policies[i].expiry_dt.ToString("yyyy-MM-dd") + ". Contact " + ConfigurationManager.AppSettings["Contact_Phone"];
+                                    msg = policies[i].ClientOptionalName + ", CIBS voudrait vous informer que votre assurance No. " + policies[i].policy_no + " de " + policies[i].PartnerOptionalName + " expire le " + policies[i].expiry_dt.ToString("yyyy-MM-dd") + ". Contact " + ConfigurationManager.AppSettings["Contact_Phone"];
                                 }
-                                smsSender.ksend(sms_account, sms_pin, "CIBS", ref msg, phone, ref msgId, "", "", "", out balance, out status);
-                                Toolkit.RunSQLCommand("Insert into SMS_Log (client_name,phone, policy_no, insurer,expiry_date, status, balance,user_id) values ('" + policies[i].Clients.client_name.Replace("'", "''") + "','" + phone + "','" + policies[i].policy_no + "','" +
-                                  policies[i].Partners.company_short_name + "','" + policies[i].expiry_dt + "','" + balance + "','" + status + "','"+ AppUserData.Login+"')");
+                                smsSender.ksend(smsAccount, smsPin, "CIBS", ref msg, phone, ref msgId, "", "", "", out balance, out status);
+                                Toolkit.RunSQLCommand("Insert into SMS_Log (client_name,phone, policy_no, insurer,expiry_date, status, balance,user_id) values ('" + policies[i].ClientOptionalName.Replace("'", "''") + "','" + phone + "','" + policies[i].policy_no + "','" +
+                                  policies[i].PartnerOptionalName + "','" + policies[i].expiry_dt + "','" + balance + "','" + status + "','"+ AppUserData.Login+"')");
                             }
                             catch (Exception ex)
                             {
@@ -120,18 +137,18 @@ namespace eBroker.Controllers
             return RedirectToAction("ExpiryNoticeView", new { startDate = startDate, endDate = endDate });
         }
 
-        public ActionResult SMSView(string startDate, string endDate)
+        public ActionResult SmsView(string startDate, string endDate)
         {
             try
             {
                 var sms = new List<SMS_Log>();
                 if (String.IsNullOrEmpty(startDate) || String.IsNullOrEmpty(endDate))
-                    sms = dc.SMS_Log.Where(x => x.system_date== DateTime.Today).ToList();
+                    sms = _dc.SMS_Log.Where(x => x.system_date== DateTime.Today).ToList();
                 else
                 {
                     DateTime start = DateTime.Parse(startDate);
                     DateTime end = DateTime.Parse(endDate);
-                    sms = dc.SMS_Log.Where(x => x.system_date >= start && x.system_date <= end).ToList();
+                    sms = _dc.SMS_Log.Where(x => x.system_date >= start && x.system_date <= end).ToList();
 
                 }
                 ViewBag.StartDate = startDate;
@@ -145,7 +162,7 @@ namespace eBroker.Controllers
             return View();
         }
 
-        public ActionResult SMSToExcel(string startDate, string endDate)
+        public ActionResult SmsToExcel(string startDate, string endDate)
         {
             try
             {

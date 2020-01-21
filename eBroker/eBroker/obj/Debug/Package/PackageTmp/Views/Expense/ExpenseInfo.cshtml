@@ -1,0 +1,351 @@
+﻿@model eBroker.Expense
+
+@{
+    ViewBag.Title = "Expenses";
+    var expenseCategories = ViewBag.ExpenseCategory as List<SelectListItem>;
+    //var currencies = ViewBag.Currency as List<SelectListItem>;
+    var paymentLedgers = ViewBag.PaymentLedger as List<SelectListItem>;
+    string expCateg = ViewBag.ExpenseCat;
+}
+<section class="content">
+    <div class="alert alert-success expsuccess alert-dismissable" hidden>
+        Record Saved Successfully
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            &times;
+        </button>
+    </div>
+
+    <button type="button" class="btn btn-primary ExpenseModal pull-right flat btn-sm">
+        <i class="fa fa-plus"></i> New Entry
+    </button>
+
+    <div class="clearfix"></div>
+
+    <div class="modal myModal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("CreateExpense", "Expense", FormMethod.Post, new { id = "submitForm" }))
+                {
+                    @Html.HiddenFor(model => model.Id, new { @Id = "txtID" })
+                    @Html.HiddenFor(model => model.CreatedOn)
+                    @Html.HiddenFor(model => model.UserID)
+                    @Html.Hidden("txtExpenseCategory")
+                    <div class="modal-header">
+                        @Html.Partial("_CloseModal")
+                        <h4 class="modal-title">Expense</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            @Html.ValidationSummary(true)
+                        </div>
+                        @Html.Partial("_Loader")
+                        <div class="edit-result form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    @Html.LabelFor(model => model.ExpenseDate)
+                                </label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(model => model.ExpenseDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @Disabled = "Disabled" })
+                                    @Html.ValidationMessageFor(model => model.ExpenseDate)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    @Html.Label("Expense Category")
+                                </label>
+                                <div class="col-sm-9">
+                                    @Html.DropDownListFor(model => model.ExpenseCategory, expenseCategories, "--Expense Category--", new { @class = "form-control" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    @Html.LabelFor(model => model.ExpenseLedgerNo)
+                                </label>
+                                <div class="col-sm-9">
+                                    @Html.DropDownListFor(model => model.ExpenseLedgerNo, new List<SelectListItem>(), "--Expense Ledger--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ExpenseLedgerNo)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    @Html.LabelFor(model => model.PaymentLedgerNo)
+                                </label>
+                                <div class="col-sm-9">
+                                    @Html.DropDownListFor(model => model.PaymentLedgerNo, paymentLedgers, "--Payment Ledger--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.PaymentLedgerNo)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    @Html.LabelFor(model => model.CurrencyID)
+                                </label>
+                                <div class="col-sm-9">
+                                    @Html.DropDownListFor(model => model.CurrencyID, new List<SelectListItem>(), "--Currency--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CurrencyID)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    @Html.LabelFor(model => model.Amount)
+                                </label>
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(model => model.Amount, new { @class = "form-control clear_text" })
+                                    @Html.ValidationMessageFor(model => model.Amount)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    @Html.LabelFor(model => model.Description)
+                                </label>
+                                <div class="col-sm-9">
+                                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Description)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer editFooter">
+                        <span class="badge label-info pull-left div-hide" id="closingBalanceBadge">
+                            Balance
+                            <span id="closingBalance"></span>
+                            <input type='hidden' id='closingBalanceHidden' />
+                        </span>
+                        <span class="text-danger pull-left">
+                            <strong>
+                                &nbsp; <span id="insufficientBalance">
+                                </span>
+                            </strong>
+                        </span>
+                        @Html.Partial("_ModalFooterButtons")
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <div id="ViewExpenseResult">
+        @{
+            IEnumerable<eBroker.Vw_Expense_Voucher> expenseList = ViewBag.lstTrans;
+            Html.RenderPartial("_ListExpenses", expenseList);
+        }
+    </div>
+</section>
+@section Scripts{
+
+    <script type="text/javascript">
+
+        $('.myModal').on('shown.bs.modal',
+            function(e) {
+                $('#closingBalance').text('');
+                $('#insufficientBalance').text('');
+                document.getElementById('createBtn').disabled = false;
+                $('#closingBalanceBadge').addClass('div-hide');
+            });
+        $(document).ready(function() {
+
+            setTimeout(function() {
+                $('.alert.alert-dismissable').remove();
+            },5000 );
+
+            $(document).on('click',
+                '.BtnEditExpense',
+                function(e) {
+                    e.preventDefault();
+                    viewExpense($(this));
+                });
+
+
+
+            function viewExpense(expeview) {
+                $('.myModal').modal();
+                showLoader();
+                var url = expeview.attr('href');
+                $.getJSON(url,
+                    function(data) {
+                        hideLoader();
+                        $("#txtID").val(data.Id);
+                        $("#ExpenseDate").val(new Date(parseInt(data.ExpenseDate.substr(6))).toDateString());
+                        $("#ExpenseCategory").val(data.ExpenseCategory);
+                        $("#ExpenseCategory").change(); //To reload the expenses according to the selected category
+                        loadExpenseGl(data.ExpenseCategory, data.ExpenseLedgerNo);
+                        //$("#ExpenseLedgerNo").val(data.ExpenseLedgerNo);
+                        $("#PaymentLedgerNo").val(data.PaymentLedgerNo);
+                        loadCurrency(data.PaymentLedgerNo, data.CurrencyID);
+                        $("#Amount").val(data.Amount);
+                        $("#Description").val(data.Description);
+                        $("#CreatedOn").val(new Date(parseInt(data.CreatedOn.substr(6))).toDateString());
+                        $("#UserID").val(data.UserID);
+
+                        loadCurrency(data.PaymentLedgerNo, data.CurrencyID);
+                    });
+
+                function loadExpenseGl(id, selectedValue) {
+                    $.getJSON("@Url.Action("GetExpenseGLs", "ExpenseGL")",
+                        { Id: id },
+                        function(gls) {
+                            $("#ExpenseLedgerNo").empty();
+                            $('#ExpenseLedgerNo').append('<option value="">' + "--Expense Category--" + '</option');
+                            for (var i = 0; i < gls.length; i++) {
+                                $('#ExpenseLedgerNo').append('<option value="' +
+                                    gls[i].Value +
+                                    '">' +
+                                    gls[i].Text +
+                                    '</option');
+                            }
+                            var expCatList = document.getElementById('ExpenseLedgerNo');
+                            expCatList.value = selectedValue;@* '@Model.ExpenseLedgerNo';*@
+
+                        });
+                }
+            }
+
+            $("#ExpenseCategory").change(function() {
+                $("#ExpenseLedgerNo").empty();
+                var id = $(this).val();
+                loadExpenseGLs(id);
+
+            });
+
+            $('#PaymentLedgerNo').on('change',
+                function() {
+                    $('#CurrencyID').trigger('change');
+                    loadCurrency($(this).val(), 0);
+                });
+
+
+//                $("#ExpenseCategory").change();
+            $(function() {
+
+                $(document).on('change',
+                    '#CurrencyID',
+                    function() {
+                        var currencyId = $('#CurrencyID').val();
+                        var creditLedger = $('#PaymentLedgerNo').val();
+//                    console.log('Credit ledger=' + creditLedger);
+                        if (creditLedger.substring(0, 3) === '101') //Cash Ledger and bank Ledger
+                        {
+//                            console.log(currencyId);
+                            if (currencyId)
+                                loadBalance(currencyId);
+                        } else {
+                            $('#closingBalanceBadge').addClass('div-hide');
+                            $('#closingBalance').text("");
+                            $('#insufficientBalance').text("");
+                            $('#closingBalanceHidden').val("");
+                            document.getElementById('createBtn').disabled = false;
+                        }
+
+                    });
+
+            });
+
+            $('#Amount').on('mouseout',
+                function() {
+                    $('#CurrencyID').trigger('change');
+                });
+
+            $(document).on("input",
+                "#Amount",
+                function() {
+                    var amt = $(this).val();
+                    var creditLedger = $('#PaymentLedgerNo').val();
+
+                    if (amt !== 0 && creditLedger.substring(0, 3) === '101') {
+
+                       /* var balance = $('#closingBalanceHidden').val();
+//                        console.log('Bal:'+balance);
+                        var balanceAfterTran = balance - amt;
+//                        console.log('balanceAfterTran:' + balanceAfterTran);
+                        if (balanceAfterTran < 0) {
+                            $('#insufficientBalance').text('Insufficient Funds');
+                            document.getElementById('createBtn').disabled = true;
+                        } else {
+                            $('#insufficientBalance').text('');
+                            document.getElementById('createBtn').disabled = false;
+                        }*/
+
+                    } else {
+                        $('#insufficientBalance').text('');
+                    }
+                });
+
+        });
+
+
+        var loadCurrency = function(ledgerNo, selectedValue) {
+            $.getJSON("@Url.Action("GetLedgerCurrency", "JsonData")",
+                { ledgerNo: ledgerNo },
+                function(data) {
+                    var currency = $('#CurrencyID');
+                    currency.empty();
+                    currency.append('<option value="">' + "--Currency--" + '</option');
+                    for (var i = 0; i < data.length; i++) {
+                        $('#CurrencyID').append('<option value="' +
+                            data[i].Value +
+                            '">' +
+                            data[i].Text +
+                            '</option');
+                    }
+                    currency.val(selectedValue);
+
+                });
+        };
+
+        //---- Load Expense Categories
+        loadExpenseGLs = function(id) {
+            $.getJSON("@Url.Action("GetExpenseGLs", "ExpenseGL")",
+                { Id: id },
+                function(data) {
+                    $('#ajaxBusy').show();
+                    $('#ExpenseLedgerNo').append('<option value="">' + "--Expense Category--" + '</option');
+                    for (var i = 0; i < data.length; i++) {
+                        $('#ExpenseLedgerNo').append('<option value="' +
+                            data[i].Value +
+                            '">' +
+                            data[i].Text +
+                            '</option');
+                    }
+                    //var expCatList = document.getElementById('ExpenseLedgerNo');
+                    //expCatList.value = '@expCateg';@* '@Model.ExpenseLedgerNo';*@
+                    $('#ajaxBusy').hide();
+                });
+        };
+
+        function formatNumber(num) {
+            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        }
+
+        var loadBalance = function(currencyId) {
+            $.getJSON("@Url.Action("GetClosingBalance", "JsonData")",
+                { currencyId: currencyId, transactionType: $("#PaymentLedgerNo").val() },
+                function(data) {
+                    $('#closingBalanceBadge').removeClass('div-hide');
+                    $('#closingBalance').text(":" + formatNumber(data));
+                    $('#closingBalanceHidden').val(data);
+                    $('#Amount').trigger('input');
+                });
+        };
+
+
+
+        $('.ExpenseModal').click(function(e) {
+            e.preventDefault();
+            $('.myModal').modal({
+                show: true,
+                backdrop: 'static',
+                keyboard: false
+            });
+            $('#BtnSaveExpense').removeAttr('disabled');
+            $("#ClearExpenseForm input[type=text]:not(#ExpenseDate),select").val('');
+            $('#txtID').val('0');
+            $('.clear_text').val('');
+        });
+
+
+    </script>
+}

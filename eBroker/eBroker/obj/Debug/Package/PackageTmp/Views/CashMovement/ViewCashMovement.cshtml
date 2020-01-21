@@ -1,0 +1,53 @@
+﻿@using eBroker
+@using GridMvc.Html
+@model IEnumerable<eBroker.Vw_CashMovement>
+
+@{
+    ViewBag.Title = "ViewCashMovement";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<h2>
+    Cash Movements
+
+    <span class="small">
+        From: <small>@ViewBag.StartDate</small>
+        To: <small>@ViewBag.EndDate</small>
+    </span>
+
+
+    @{
+        ViewBag.url = Url.Action("ToExcel", "CashMovement");
+    }
+    @Html.Partial("_ToExcel")
+</h2>
+
+<div class="table table-hover table-responsive">
+    @Html.Grid(Model).Named("ga").Columns(col =>
+    {
+        col.Add(p => p.Id, true);
+        col.Add(p => p.TransactionDate).Titled("Date").Format("{0:yyyy-MM-dd}").Sortable(true).Filterable(true);
+        col.Add(p => p.IsoCode).Titled("Currency").Sortable(true).Filterable(true);
+        col.Add(p => p.Amount).Titled("Amount").Format("{0:#,##0}").Sortable(true).Filterable(true);
+        col.Add(p => p.TransactionType).Titled("Transaction Type").Sortable(true).Filterable(true);
+        col.Add(p => p.BankName).Titled("Bank Name").Sortable(true).Filterable(true);
+        col.Add(p => p.SourceLedger).Titled("Source ledger").Sortable(true).Filterable(true);
+        col.Add(p => p.DestinationLedger).Titled("Dest. ledger").Sortable(true).Filterable(true);
+        col.Add(p => p.AccountNo).Titled("Account No.").Sortable(true).Filterable(true);
+        col.Add(p => p.Inputer).Titled("Created By").Sortable(true).Filterable(true);
+        col.Add(e => e.Reversal).Titled("Reversed?")
+            .Sortable(true).Filterable(true)
+            .Sanitized(false)
+            .Encoded(false)
+            .RenderValueAs(e => Html.Label(e.Reversal.ToString(),
+                new {@class = e.Reversal ? "text-warning" : "text-info"}));
+
+        col.Add()
+            .Sanitized(false)
+            .Encoded(false)
+            .RenderValueAs(o => Html.ActionLink("Print", "CashMovementReceipt",
+                new {cId = DataEncryption.Encrypt(o.Id)},
+                new {@class = "btn btn-primary btn-sm "}));
+    }).WithPaging(10).Sortable(true).WithMultipleFilters()
+</div>
+

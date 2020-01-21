@@ -1,0 +1,52 @@
+﻿@using GridMvc.Html
+@model IEnumerable<eBroker.DAL.AcBank>
+
+
+    <div>
+        <div class="box box-primary flat">
+            <div class="box-header with-border">
+                <h4>Banks {@Model.Count()}</h4>
+            </div>
+            <div class="box-body">
+                <div class="table table-hover">
+                    @Html.Grid(Model).Named("ga").Columns(col =>
+                    {
+                        col.Add(p => p.Id, true);
+                        col.Add(p => p.BankName).Titled("Bank Name").Sortable(true).Filterable(true);
+
+                        col.Add()
+                            .Sanitized(false)
+                            .Encoded(false)
+                            .RenderValueAs(o => Html.ActionLink("Edit", "BankEdit",
+                                new { Id = o.Id},
+                                new {@class = "btn btn-primary btn-sm EditBtn" }));
+
+                    }).WithPaging(10).Sortable(true).Filterable(true).WithMultipleFilters()
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+
+        $(document).on('click',
+            '.EditBtn',
+            function (e) {
+                e.preventDefault();
+                ViewBank($(this));
+            });
+        function ViewBank(cashmove)
+        {
+            $('.myModal').modal();
+            var url = cashmove.attr('href');
+            showLoader();
+            $.getJSON(url,
+                function (data) {
+                    hideLoader();
+                    $("#txtID").val(data.Id);
+                    $("#BankName").val(data.BankName);
+                });
+        }
+    </script>
+

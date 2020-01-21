@@ -191,3 +191,11 @@ E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\nl\Hangfire.Core.resour
 E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\pt-BR\Hangfire.Core.resources.dll
 E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\zh\Hangfire.Core.resources.dll
 E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\zh-TW\Hangfire.Core.resources.dll
+E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\ClosedXML.dll
+E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\DocumentFormat.OpenXml.dll
+E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\ExcelNumberFormat.dll
+E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\FastMember.dll
+E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\ClosedXML.pdb
+E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\ClosedXML.xml
+E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\DocumentFormat.OpenXml.xml
+E:\source_codes\c_sharp\CIBS_Systems\eBroker\eBroker\bin\ExcelNumberFormat.xml

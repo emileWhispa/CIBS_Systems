@@ -11,7 +11,7 @@ namespace eBroker.Controllers
 {
     public class InvoicingController : BaseController
     {
-        eBroker.BrokerDataContext dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
+        eBroker.BrokerDataContext _dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
 
         public ActionResult ListInvoice(string startDate, string endDate)
         {
@@ -20,12 +20,12 @@ namespace eBroker.Controllers
             {
                 var invoices = new List<Invoice>();
                 if (String.IsNullOrEmpty(startDate) || String.IsNullOrEmpty(endDate))
-                    invoices = dc.Invoice.OrderByDescending(x => x.Id).Take(30).ToList();
+                    invoices = _dc.Invoice.OrderByDescending(x => x.Id).Take(30).ToList();
                 else
                 {
                     DateTime start = DateTime.Parse(startDate);
                     DateTime end = DateTime.Parse(endDate);
-                    invoices = dc.Invoice.Where(x => x.invoice_dt >= start && x.invoice_dt <= end).ToList();
+                    invoices = _dc.Invoice.Where(x => x.invoice_dt >= start && x.invoice_dt <= end).ToList();
 
                 }
                 ViewBag.StartDate = startDate;
@@ -40,26 +40,26 @@ namespace eBroker.Controllers
         }
 
         [HttpGet]
-        public ActionResult InvoiceInfo(int Id = 0)
+        public ActionResult InvoiceInfo(int id = 0)
         {
             try
             {
-                var Model = dc.Invoice.Where(x => x.Id == Id).FirstOrDefault();
-                if (Model == null)
+                var model = _dc.Invoice.Where(x => x.Id == id).FirstOrDefault();
+                if (model == null)
                 {
-                    Model = new Invoice();
-                    Model.Id = 0;
-                    Model.user_id = AppUserData.Login;
-                    Model.invoice_dt = DateTime.Now;
-                    Model.invoice_due_dt = DateTime.Today.AddDays(5);//5 Days by default
-                    Model.invoice_until_dt = DateTime.Today;
-                    Model.Status = "Pending";
+                    model = new Invoice();
+                    model.Id = 0;
+                    model.user_id = AppUserData.Login;
+                    model.invoice_dt = DateTime.Now;
+                    model.invoice_due_dt = DateTime.Today.AddDays(5);//5 Days by default
+                    model.invoice_until_dt = DateTime.Today;
+                    model.Status = "Pending";
                     //Model.recruited_by = AppUserData.Login;
                 }
                 //Reading Customer Recruiter
-                var insurers = (from r in dc.Partner.Where(x=>x.partnership_type=="Insurance").ToList() select new SelectListItem { Text = r.company_short_name, Value = r.Id.ToString() }).ToList();
+                var insurers = (from r in _dc.Partner.Where(x=>x.partnership_type=="Insurance").ToList() select new SelectListItem { Text = r.company_short_name, Value = r.Id.ToString() }).ToList();
                 ViewBag.Insurers = insurers;
-                return PartialView(Model);
+                return PartialView(model);
             }
             catch (Exception ex)
             {
@@ -76,19 +76,19 @@ namespace eBroker.Controllers
                 try
                 {
                     string message = "";
-                    this.dc.Invoice.Add(inv);
+                    this._dc.Invoice.Add(inv);
                     if (inv.Id == 0)
                     {
                         inv.Status = "Pending";
                         inv.invoice_dt = DateTime.Now;
-                        if (this.dc.SaveChanges() <= 0)
+                        if (this._dc.SaveChanges() <= 0)
                             throw new Exception(message);
                         this.Success("Invoice Header Created Successfully", true);
                     }
                     else
                     {
-                        this.dc.Entry<Invoice>(inv).State = EntityState.Modified;
-                        this.dc.SaveChanges();
+                        this._dc.Entry<Invoice>(inv).State = EntityState.Modified;
+                        this._dc.SaveChanges();
                     }
                     return (ActionResult)this.Content("1");
                 }
@@ -116,13 +116,13 @@ namespace eBroker.Controllers
             return RedirectToAction("ListInvoice");
         }
 
-        public ActionResult TariffInfo(int Id = 0)
+        public ActionResult TariffInfo(int id = 0)
         {
-            var insurers = (from r in dc.Partner.Where(x => x.partnership_type == "Insurance").ToList() select new SelectListItem { Text = r.company_short_name, Value = r.Id.ToString() }).ToList();
+            var insurers = (from r in _dc.Partner.Where(x => x.partnership_type == "Insurance").ToList() select new SelectListItem { Text = r.company_short_name, Value = r.Id.ToString() }).ToList();
             ViewBag.Insurers = insurers;
-            var products = (from r in dc.Insurance_Product.ToList() select new SelectListItem { Text = r.product_name, Value = r.Id.ToString() }).ToList();
+            var products = (from r in _dc.Insurance_Product.ToList() select new SelectListItem { Text = r.product_name, Value = r.Id.ToString() }).ToList();
             ViewBag.Products = products;
-            var el = dc.Commission_Tariff.Where(e => e.Id == Id).FirstOrDefault();
+            var el = _dc.Commission_Tariff.Where(e => e.Id == id).FirstOrDefault();
 
             if (el != null) return PartialView(el);
 
@@ -133,16 +133,16 @@ namespace eBroker.Controllers
         {
             this.TariffInfo(0);
             List<Commission_Tariff> commissionTariffList = new List<Commission_Tariff>();
-            var list = dc.Commission_Tariff.OrderByDescending<Commission_Tariff, int>(x => x.Id).ToList();
+            var list = _dc.Commission_Tariff.OrderByDescending<Commission_Tariff, int>(x => x.Id).ToList();
             return this.View(list);
         }
-        public ActionResult InvoicePolicyList(int Id)
+        public ActionResult InvoicePolicyList(int id)
         {
             try
             {
-                var inv = dc.Invoice.Where(x => x.Id == Id).FirstOrDefault();
+                var inv = _dc.Invoice.Where(x => x.Id == id).FirstOrDefault();
                 ViewBag.InvoiceInfo = inv;
-                var policyList = dc.Invoice_Detail.Where(x => x.invoice_id == Id).OrderBy(x => x.contract_id).ToList();
+                var policyList = _dc.Invoice_Detail.Where(x => x.invoice_id == id).OrderBy(x => x.contract_id).ToList();
                 if (inv.Status == "Paid")//
                 {
                     return View(policyList);//To avoid attaching new policies to the existing invoice
@@ -153,11 +153,11 @@ namespace eBroker.Controllers
                     {
                         dbConnection.Open();
                         //Deleting existing records for the batch
-                        SqlCommand cmd = new SqlCommand("exec sp_create_InvoicePolicyList " + Id, dbConnection);
+                        SqlCommand cmd = new SqlCommand("exec sp_create_InvoicePolicyList " + id, dbConnection);
                         cmd.ExecuteNonQuery();
                         //return RedirectToAction("MSAPaymentList", "MSA", new { BId = BId });
                     }
-                    policyList = dc.Invoice_Detail.Where(x => x.invoice_id == Id).OrderBy(x => x.contract_id).ToList();
+                    policyList = _dc.Invoice_Detail.Where(x => x.invoice_id == id).OrderBy(x => x.contract_id).ToList();
                 }
                 return View(policyList);
 
@@ -176,17 +176,17 @@ namespace eBroker.Controllers
                 try
                 {
                     string message = "";
-                    this.dc.Commission_Tariff.Add(inv);
+                    this._dc.Commission_Tariff.Add(inv);
                     if (inv.Id == 0)
                     {
-                        if (this.dc.SaveChanges() <= 0)
+                        if (this._dc.SaveChanges() <= 0)
                             throw new Exception(message);
                         this.Success("Tariff Header Created Successfully", true);
                     }
                     else
                     {
-                        this.dc.Entry<Commission_Tariff>(inv).State = EntityState.Modified;
-                        this.dc.SaveChanges();
+                        this._dc.Entry<Commission_Tariff>(inv).State = EntityState.Modified;
+                        this._dc.SaveChanges();
                     }
                     return (ActionResult)this.Content("1");
                 }
@@ -198,7 +198,7 @@ namespace eBroker.Controllers
             this.TariffInfo(inv.Id);
             return (ActionResult)this.PartialView("TariffInfo", (object)inv);
         }
-        public ActionResult ConfirmInvoice(int Id)
+        public ActionResult ConfirmInvoice(int id)
         {
             try
             {
@@ -206,7 +206,7 @@ namespace eBroker.Controllers
                 {
                     dbConnection.Open();
                     //Deleting existing records for the batch
-                    SqlCommand cmd = new SqlCommand("UPDATE Invoice set status='Paid' where invoice_id=" + Id, dbConnection);
+                    SqlCommand cmd = new SqlCommand($"UPDATE Invoice set status='Paid' where invoice_id={id}", dbConnection);
                     cmd.ExecuteNonQuery();
                     return RedirectToAction("ListInvoice", "Invoicing");
                 }
@@ -215,14 +215,14 @@ namespace eBroker.Controllers
             {
                 Danger(ex.Message, true);
             }
-            return View();
+            return Content("1");
         }
 
-        public ActionResult DeleteInvoiceDetails(int Id)
+        public ActionResult DeleteInvoiceDetails(int id)
         {
             try
             {
-                int res = Toolkit.RunSQLCommand("Delete from invoice_detail where invoice_id=" + Id);//Deleting the batch details
+                int res = Toolkit.RunSQLCommand($"Delete from invoice_detail where invoice_id={id}");//Deleting the batch details
                 if (res > 0)
                 {
                     Success("Invoice Details deleted successfully", true);
@@ -233,37 +233,35 @@ namespace eBroker.Controllers
             {
                 Danger(ex.Message, true);
             }
-            return View();
+            return RedirectToAction("ListInvoice", "Invoicing");
         }
 
-        public ActionResult PolicyExclusion(int CId, int Id)
+        public ActionResult PolicyExclusion(int cId, int id)
         {
             try
             {
-                int res = Toolkit.RunSQLCommand("Delete from invoice_detail where detail_invoice_id=" + CId);//Deleting the batch details
+                int res = Toolkit.RunSQLCommand($"Delete from invoice_detail where detail_invoice_id={cId}");//Deleting the batch details
                 if (res > 0)
                 {
                     Success("Policy excluded successfully", true);
-                    return RedirectToAction("InvoicePolicyList", "Invoicing", new { Id = Id });
                 }
             }
             catch (Exception ex)
             {
                 Danger(ex.Message, true);
             }
-            return View();
+            return RedirectToAction("InvoicePolicyList", "Invoicing", new { Id = id });
         }
 
-        public ActionResult DeleteInvoice(int Id)
+        public ActionResult DeleteInvoice(int id)
         {
             try
             {
-                int res = Toolkit.RunSQLCommand("Delete from invoice_detail where invoice_id=" + Id);//Deleting the batch details
+                int res = Toolkit.RunSQLCommand($"Delete from invoice_detail where invoice_id={id}");//Deleting the batch details
                 //if (res > 0)
                 //{
-                    int res1 = Toolkit.RunSQLCommand("Delete from invoice where invoice_id=" + Id);//Deleting the batch
-                    if (res1 > 0)
-                        return RedirectToAction("ListInvoice", "Invoicing");
+                    int res1 = Toolkit.RunSQLCommand($"Delete from invoice where invoice_id={id}");//Deleting the batch
+                    //if (res1 > 0)
                 //}
                 //else
                 //    return View();
@@ -272,14 +270,15 @@ namespace eBroker.Controllers
             {
                 Danger(ex.Message, true);
             }
-            return View();
+            
+            return RedirectToAction("ListInvoice", "Invoicing");
         }
 
-        public ActionResult ExportToExcel(int Id)
+        public ActionResult ExportToExcel(int id)
         {
             try
             {
-                string cmd = @"SELECT ic.invoice_id as [Invoice No.]
+                string cmd = $@"SELECT ic.invoice_id as [Invoice No.]
                               ,[invoice_dt] as [Invoice Date]
                               ,[company_short_name] as [Insurer]
                               ,[client_name] as [Client Name]
@@ -290,8 +289,8 @@ namespace eBroker.Controllers
                               ,[net_premium] as [Net Premium]
                               ,[commission_percentage] as [Commission %]
                               ,[commission_amt] as [Commission Amount]
-                          FROM Invoice_Detail inv INNER JOIN Invoice ic ON ic.invoice_id=inv.invoice_id INNER JOIN Partner p ON p.company_code=ic.insurer_id INNER JOIN insurance_policy i ON i.contract_id=inv.contract_id INNER JOIN Client c ON c.client_id=i.client_id INNER JOIN Insurance_Product ip ON ip.product_id=i.product_id WHERE ic.invoice_id=" + Id + " order by [effective_dt]";
-           string cmd2 = @"SELECT [invoice_id] as [Invoice No.]
+                          FROM Invoice_Detail inv INNER JOIN Invoice ic ON ic.invoice_id=inv.invoice_id INNER JOIN Partner p ON p.company_code=ic.insurer_id INNER JOIN insurance_policy i ON i.contract_id=inv.contract_id INNER JOIN Client c ON c.client_id=i.client_id INNER JOIN Insurance_Product ip ON ip.product_id=i.product_id WHERE ic.invoice_id={id} order by [effective_dt]";
+           string cmd2 = $@"SELECT [invoice_id] as [Invoice No.]
                               ,[invoice_dt] as [Invoice Date]
                               ,[company_short_name] as [Insurer]
                               ,[client_name] as [Client Name]
@@ -302,15 +301,15 @@ namespace eBroker.Controllers
                               ,[net_premium] as [Net Premium]
                               ,[commission_percentage] as [Commission %]
                               ,[commission_amt] as [Commission Amount]
-                          FROM [eBrokerage].[dbo].[Vw_Invoice_Broker] where invoice_id=" + Id + " order by [effective_dt]";
+                          FROM [Vw_Invoice_Broker] where invoice_id={id} order by [effective_dt]";
                 Toolkit.ExportListUsingEPPlus(cmd, "Invoice Details");
-                return RedirectToAction("InvoicePolicyList", new { Id = Id });
+                return RedirectToAction("InvoicePolicyList", new { Id = id });
             }
             catch (Exception ex)
             {
                 Danger(ex.Message, true);
             }
-            return RedirectToAction("InvoicePolicyList", new { Id = Id });
+            return RedirectToAction("InvoicePolicyList", new { Id = id });
         }
     }
 }

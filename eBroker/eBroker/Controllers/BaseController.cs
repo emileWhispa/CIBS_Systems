@@ -14,11 +14,18 @@ namespace eBroker.Controllers
     public class BaseController : Controller
     {
         protected UserModel AppUserData = new UserModel();
+        public Exception GetInnerException(Exception ex)
+        {
+            while (ex.InnerException != null) ex = ex.InnerException;
+            return ex;
+        }
 
+
+       
         protected override void Initialize(RequestContext requestContext)
         {
             base.Initialize(requestContext);
-            UserModel UserModel = null;
+            UserModel userModel = null;
             if (base.User is ClaimsPrincipal)
             {
                 ClaimsIdentity claimsIdentity = base.User.Identity as ClaimsIdentity;
@@ -28,7 +35,7 @@ namespace eBroker.Controllers
                     string claim = c.Value;
                     if (!string.IsNullOrEmpty(claim))
                     {
-                        UserModel = JsonConvert.DeserializeObject<UserModel>(claim);
+                        userModel = JsonConvert.DeserializeObject<UserModel>(claim);
                     }
                 }
                 base.ViewData["UserData"] = (this.AppUserData ?? new UserModel());
@@ -43,11 +50,11 @@ namespace eBroker.Controllers
                 }
                 //base.ViewData["expiredPolicies"] = BaseController.GetClaim((base.User as ClaimsPrincipal).Claims.ToList<Claim>(), "expiredPolicies");
             }
-            this.AppUserData = UserModel;
+            this.AppUserData = userModel;
             base.ViewData["UserData"] = (this.AppUserData ?? new UserModel());
             //Reading the expired Insurances
 
-            if (UserModel == null)
+            if (userModel == null)
             {
                 //string url = base.Url.Action("Login", "Account");
                 //requestContext.HttpContext.Response.Redirect(url);

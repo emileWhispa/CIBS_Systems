@@ -1,0 +1,123 @@
+﻿@{
+    ViewBag.Title = "Bank Reconciliation";
+}
+<style>
+    @@media (min-width: 768px) {
+        .form-inline .form-group {
+            display: inline-block;
+            margin-bottom: 0;
+            vertical-align: middle;
+            margin-top: 10px;
+        }  
+        .center-form {
+            display: flex; justify-content: center;align-items: center
+        }
+    }
+    .flex-center {
+        display: flex; justify-content: center;align-items: center
+    }
+    .form-control {
+        border-radius: 0;
+    }
+                           
+</style>
+<div class="content" id="app">
+    <h4>
+        Bank Reconciliation
+    </h4>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+
+            <div class="center-form">
+                @using (Html.BeginForm("GetGlHistory", "Reconciliation", FormMethod.Get, new {id = "form", @class = "form-inline",autocomplete="off"}))
+                {
+                    @Html.Partial("_Create")
+                }
+
+            </div>
+
+        </div>
+        <div class="box-body">
+            <div class="flex-center div-hide" id="loader">
+                <img src="~/Imgs/loader_rose.svg" style="height: 70px" />
+            </div>
+            
+            <div id="results">
+                <h5 class="text-red text-center">
+                    There are no items to display
+                </h5>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+
+    <script>
+        $(function() {
+            $(document).on('change',
+                "#BankId",
+                function(e) {
+                    var bankId = $(this).val();
+                    $.getJSON('@Url.Action("AccountNumberByBank")/?bankId=' + bankId)
+                        .done(function(data) {
+                            var option = "<option value=''>--Account Number--</option>";
+                            data.forEach(function(item) {
+                                option += "<option value='" + item.LedgerNo + "'>" + item.AccountNo + "</option>";
+                            });
+                            $('#AccountNumber').html(option);
+                        });
+                });
+
+            $('#AccountNumber').on('change',
+                function () {
+                    var last = $('#LastReconDate');
+                    last.val("");
+                    $.getJSON('@Url.Action("GetLastReconciliationDate")/?ledgerNo=' + $(this).val())
+                        .done(function (data) {
+                            last.val(data.FormattedLastReconciliationDate);
+                        });
+                });
+
+            $('#form').submit(function(e) {
+                e.preventDefault();
+                var form = $(this);
+                if (!form.valid()) return false;
+                var btn = $('#createBtn');
+                btn.button('loading');
+                $('#loader').removeClass('div-hide');
+                $('#results').addClass('div-hide');
+                $.post(form.attr('action'), form.serialize())
+                    .done(function (data) {
+                        $('#loader').addClass('div-hide');
+                        $('#results').removeClass('div-hide');
+                        btn.button('reset');
+                        $('#results').html(data);
+                    }).fail(function() {
+                        btn.button('reset');
+                        $('#loader').addClass('div-hide');
+                        $('#results').removeClass('div-hide');
+                    });
+                return false;
+            });
+
+          
+        });
+
+        function reconcile() {
+            var form = $('#form');
+            if (!form.valid()) return false;
+            var btn = $(document).find('#btnReconcile');
+            btn.button('loading');
+            $.post('@Url.Action("Reconcile","Reconciliation")', form.serialize())
+                .done(function (data) {
+                    location.reload();
+                }).fail(function() {
+                    btn.button('reset');
+                });
+            return false;
+        }
+
+    </script>
+}

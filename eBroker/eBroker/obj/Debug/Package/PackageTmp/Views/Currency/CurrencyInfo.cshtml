@@ -1,0 +1,109 @@
+﻿﻿@using eBroker.DAL
+@using eBroker
+@model eBroker.Currency
+@{
+    ViewBag.Title = "Currencies";
+    var currencylist = ViewBag.CurrenciesList as List<SelectListItem>;
+
+    var isActive = new List<SelectListItem>
+    {
+        new SelectListItem()
+        {
+            Text = "", Value = "", 
+        },
+        new SelectListItem()
+        {
+            Text = "Yes", Value = "true" 
+        },
+        new SelectListItem() {Text = "No", Value ="false"}
+    };
+}
+
+<style>
+    .select2-container--default .select2-selection--single {
+        border: 2px solid #d2d6de!important;
+    }
+</style>
+
+<section class="content">
+    <div class="alert alert-success currencysuccess alert-dismissable" hidden>
+        Record Successfully
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            &times;
+        </button>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-sm CurrencyModal pull-right" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> New Entry</button>
+    <div class="clearfix"></div>
+
+    <div class="modal myModal fade bs-example-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("CreateCurrency", "Currency", FormMethod.Post, new { id = "submitForm" }))
+                {
+                    @Html.HiddenFor(model => model.Id, new { @Id = "txtID" })
+                    @Html.HiddenFor(model => model.CreatedBy)
+                    @Html.HiddenFor(model => model.CreatedOn)
+                    <div class="modal-header">
+                        <h4 class="box-title">Currency</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            @Html.ValidationSummary(true)
+                        </div>
+                        @Html.Partial("_Loader")
+                        <div class="edit-result form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    @Html.LabelFor(model => model.IsoCode)
+                                </label>
+                                <div class="col-sm-9">
+                                    @Html.DropDownListFor(model => model.IsoCode, currencylist, "--Select Currency--", new { @class = "form-control select2",@style="width:100%" })
+                                    @Html.ValidationMessageFor(model => model.IsoCode)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    @Html.LabelFor(model => model.Active)
+                                </label>
+                                <div class="col-sm-9">
+                                    @Html.DropDownListFor(model => model.Active, isActive, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Active)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer editFooter">
+                        @Html.Partial("_ModalFooterButtons")
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script type="text/javascript">
+            $('.CurrencyModal').click(function(e) {
+                e.preventDefault();
+                $('.myModal').modal({
+                    show: true,
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $('#BtnSaveCurrency').removeAttr('disabled');
+                $("#ClearCurrencyForm input[type=text]:not(#txtTranDate),select").val('');
+                $('#txtID').val('0');
+                $("#IsoCode").val("");
+                $("#IsoCode").trigger('change');
+            });
+
+        </script>
+    }
+    <div id="ViewCurrencyResult">
+        @{
+            IEnumerable<Currency> currencyList = ViewBag.CurrencyListData;
+            Html.RenderPartial("_ListCurrencies", currencyList);
+        }
+    </div>
+</section>

@@ -44,6 +44,9 @@
     <Reference Include="AutoGenPassword">
       <HintPath>..\DLLs\AutoGenPassword.dll</HintPath>
     </Reference>
+    <Reference Include="ClosedXML, Version=0.94.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.94.2\lib\net40\ClosedXML.dll</HintPath>
+    </Reference>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
       <HintPath>..\packages\Crystal.Reports.Essentials.13.0.20.2399\lib\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
     </Reference>
@@ -79,6 +82,9 @@
     <Reference Include="DataEncryption">
       <HintPath>..\DLLs\DataEncryption.dll</HintPath>
     </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -101,6 +107,12 @@
     <Reference Include="ExcelDataReader.DataSet, Version=3.1.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelDataReader.DataSet.3.1.0\lib\net45\ExcelDataReader.DataSet.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="FastMember, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.3.0\lib\net45\FastMember.dll</HintPath>
     </Reference>
     <Reference Include="GridMvc, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Grid.Mvc.3.0.0\lib\net40\GridMvc.dll</HintPath>
@@ -284,6 +296,7 @@
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.1.0\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -295,36 +308,54 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActionFilters.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
+    <Compile Include="Controllers\BankAccountController.cs" />
     <Compile Include="Controllers\BankPolicyController.cs" />
+    <Compile Include="Controllers\BanksController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CashMovementController.cs" />
+    <Compile Include="Controllers\CommissionTariffController.cs" />
+    <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\eUserCategoryController.cs" />
+    <Compile Include="Controllers\ExpenseController.cs" />
+    <Compile Include="Controllers\ExpenseGLController.cs" />
     <Compile Include="Controllers\ExpiryNoticeController.cs" />
     <Compile Include="Controllers\ExpiryPoliceController.cs" />
+    <Compile Include="Controllers\GLAccountController.cs" />
+    <Compile Include="Controllers\GlBalancesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvoicingController.cs" />
+    <Compile Include="Controllers\JsonDataController.cs" />
     <Compile Include="Controllers\LoanApplicationController.cs" />
     <Compile Include="Controllers\ManagementController.cs" />
+    <Compile Include="Controllers\ManualEntryController.cs" />
     <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="Controllers\PolicyController.cs" />
+    <Compile Include="Controllers\ReconciliationController.cs" />
     <Compile Include="Controllers\ReportingController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
+    <Compile Include="DAL\AcBank.cs" />
     <Compile Include="DAL\Appointment.cs" />
     <Compile Include="DAL\AppointmentDetail.cs" />
     <Compile Include="DAL\AppointmentEventType.cs" />
     <Compile Include="DAL\AppointmentStatu.cs" />
     <Compile Include="DAL\AppointmentType.cs" />
     <Compile Include="DAL\Bank.cs" />
+    <Compile Include="DAL\BankAccount.cs" />
     <Compile Include="DAL\BankCollateral.cs" />
     <Compile Include="DAL\BankLoan.cs" />
+    <Compile Include="DAL\BankReconciliation.cs" />
     <Compile Include="DAL\BankReports.cs" />
     <Compile Include="DAL\Brokerage_Company.cs" />
     <Compile Include="DAL\BrokerDataContext.cs" />
+    <Compile Include="DAL\CashMovement.cs" />
     <Compile Include="DAL\claim.cs" />
     <Compile Include="DAL\Client.cs" />
     <Compile Include="DAL\Commission_Tariff.cs" />
+    <Compile Include="DAL\Currency.cs" />
+    <Compile Include="DAL\CurrencyList.cs" />
     <Compile Include="DAL\DatePeriod.cs" />
     <Compile Include="DAL\District.cs" />
     <Compile Include="DAL\eCategoryMenu.cs" />
@@ -332,7 +363,11 @@
     <Compile Include="DAL\eUser.cs" />
     <Compile Include="DAL\eUserCategory.cs" />
     <Compile Include="DAL\ExcelFileUpload.cs" />
+    <Compile Include="DAL\Expense.cs" />
     <Compile Include="DAL\Fire_allied_peril.cs" />
+    <Compile Include="DAL\GlBalance.cs" />
+    <Compile Include="DAL\GL_Account.cs" />
+    <Compile Include="DAL\GL_History.cs" />
     <Compile Include="DAL\InsurancePolicy.cs" />
     <Compile Include="DAL\Insurance_Product.cs" />
     <Compile Include="DAL\Insurance_Product_Category.cs" />
@@ -342,6 +377,7 @@
     <Compile Include="DAL\LoanApplicationProperty.cs" />
     <Compile Include="DAL\LoanApplicationVehicle.cs" />
     <Compile Include="DAL\LoanType.cs" />
+    <Compile Include="DAL\ManualEntry.cs" />
     <Compile Include="DAL\Menu.cs" />
     <Compile Include="DAL\Partner.cs" />
     <Compile Include="DAL\Personal_Accident.cs" />
@@ -358,11 +394,13 @@
     <Compile Include="DAL\Proposer.cs" />
     <Compile Include="DAL\Province.cs" />
     <Compile Include="DAL\Quotation.cs" />
+    <Compile Include="DAL\Reconciliation.cs" />
     <Compile Include="DAL\Right.cs" />
     <Compile Include="DAL\Sector.cs" />
     <Compile Include="DAL\SMS_Log.cs" />
     <Compile Include="DAL\SystemReports.cs" />
     <Compile Include="DAL\Temp_Client.cs" />
+    <Compile Include="DAL\Transaction.cs" />
     <Compile Include="DAL\Vehicle.cs" />
     <Compile Include="DAL\Vehicle_Age_Range.cs" />
     <Compile Include="DAL\Vehicle_Clas.cs" />
@@ -372,9 +410,16 @@
     <Compile Include="DAL\Vehicle_Tariff_Base.cs" />
     <Compile Include="DAL\Vehicle_Territorial_Limit.cs" />
     <Compile Include="DAL\Vehicle_Usage.cs" />
+    <Compile Include="DAL\VwLedgerBalance.cs" />
     <Compile Include="DAL\Vw_Bank_Collateral.cs" />
     <Compile Include="DAL\Vw_Brokerage_Summary.cs" />
+    <Compile Include="DAL\Vw_CashMovement.cs" />
+    <Compile Include="DAL\Vw_Expense_Voucher.cs" />
+    <Compile Include="DAL\Vw_GeneralLedger.cs" />
+    <Compile Include="DAL\Vw_ManualEntry.cs" />
     <Compile Include="DAL\Vw_Policy_Report.cs" />
+    <Compile Include="DAL\Vw_Transaction.cs" />
+    <Compile Include="DataEncryption.cs" />
     <Compile Include="dsReports.cs">
       <DependentUpon>dsReports.xsd</DependentUpon>
     </Compile>
@@ -385,6 +430,10 @@
     <Compile Include="HtmlHelpers\MenuHtmlHelper.cs" />
     <Compile Include="HtmlHelpers\SmartSessionManager.cs" />
     <Compile Include="Models\DateData.cs" />
+    <Compile Include="Models\TransactionFilter.cs" />
+    <Compile Include="Reports\IncomeStatement.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Reports\Invoice_Broker.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -401,7 +450,78 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Period_Cash_Book.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptBonus.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptCashBook.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptCashFlow.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptCashMovement.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptDrawerBalance.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptDrawerTransaction.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptDuplicateTransactionDetails.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptExpenseVoucher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptLedgerStatement.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptManualVoucher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptPeriodIncomeStatement.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptPrintIDPhotocopy.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptQuarterlyStatement.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptRealTimeBalances.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptReceipt.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptReceiptA4.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptReceiptShahansha.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptTellerReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptTransactionDetails.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptTransactionSummary.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\rptTrialBalance.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Statement.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Services\EmailSenderService.cs" />
+    <Compile Include="Services\ExpensesService.cs" />
+    <Compile Include="Services\TransactionService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Toolkit.cs" />
     <Compile Include="Utils\Utils.cs" />
@@ -412,117 +532,70 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\AdminLTE.min.css" />
-    <Content Include="Content\basic.css" />
-    <Content Include="Content\body.css" />
-    <Content Include="Content\bootstrap-1.1.0.css" />
-    <Content Include="Content\bootstrap-1.1.0.min.css" />
-    <Content Include="Content\bootstrap-datepicker.min.css" />
-    <Content Include="Content\bootstrap-datetimepicker.min.css" />
-    <Content Include="Content\bootstrap-mvc-validation.css" />
-    <Content Include="Content\bootstrap-responsive.css" />
-    <Content Include="Content\bootstrap-responsive.min.css" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap-toggle.css" />
-    <Content Include="Content\bootstrap-toggle.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap\bootstrap.css" />
+    <Content Include="Content\bootstrap\bootstrap.css.map" />
     <Content Include="Content\bootstrap\bootstrap.min.css" />
-    <Content Include="Content\dropzone.css" />
-    <Content Include="Content\font-awesome.css" />
-    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\bootstrap\bootstrap.min.css.map" />
     <Content Include="Content\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.css.map" />
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\Gridmvc.css" />
-    <Content Include="Content\images\glyphicons-halflings-white.png" />
-    <Content Include="Content\images\glyphicons-halflings.png" />
-    <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\index.css" />
-    <Content Include="Content\jquery-ui.css" />
-    <Content Include="Content\jquery-ui.min.css" />
-    <Content Include="Content\js\bootstrap.min.js" />
-    <Content Include="Content\select2.min.css" />
+    <Content Include="Content\gridmvc.datepicker.css" />
+    <Content Include="Content\gridmvc.datepicker.min.css" />
+    <Content Include="Content\lib\AdminLTE.min.css" />
+    <Content Include="Content\lib\skin-blue.min.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\smart_wizard.css" />
-    <Content Include="Content\smart_wizard.min.css" />
-    <Content Include="Content\smart_wizard_theme_arrows.css" />
-    <Content Include="Content\smart_wizard_theme_arrows.min.css" />
-    <Content Include="Content\smart_wizard_theme_circles.css" />
-    <Content Include="Content\smart_wizard_theme_circles.min.css" />
-    <Content Include="Content\smart_wizard_theme_dots.css" />
-    <Content Include="Content\smart_wizard_theme_dots.min.css" />
-    <Content Include="Content\template.css" />
-    <Content Include="Content\themes\base\accordion.css" />
-    <Content Include="Content\themes\base\all.css" />
-    <Content Include="Content\themes\base\autocomplete.css" />
-    <Content Include="Content\themes\base\base.css" />
-    <Content Include="Content\themes\base\button.css" />
-    <Content Include="Content\themes\base\core.css" />
-    <Content Include="Content\themes\base\datepicker.css" />
-    <Content Include="Content\themes\base\dialog.css" />
-    <Content Include="Content\themes\base\draggable.css" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_444444_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_555555_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_777620_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_777777_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cc0000_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_ffffff_256x240.png" />
-    <Content Include="Content\themes\base\jquery-ui.css" />
-    <Content Include="Content\themes\base\jquery-ui.min.css" />
-    <Content Include="Content\themes\base\menu.css" />
-    <Content Include="Content\themes\base\progressbar.css" />
-    <Content Include="Content\themes\base\resizable.css" />
-    <Content Include="Content\themes\base\selectable.css" />
-    <Content Include="Content\themes\base\selectmenu.css" />
-    <Content Include="Content\themes\base\slider.css" />
-    <Content Include="Content\themes\base\sortable.css" />
-    <Content Include="Content\themes\base\spinner.css" />
-    <Content Include="Content\themes\base\tabs.css" />
-    <Content Include="Content\themes\base\theme.css" />
-    <Content Include="Content\themes\base\tooltip.css" />
-    <Content Include="Content\themes\Images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\Images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\Images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\Images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\Images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\Images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\Images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\Images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\Images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\Images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\Images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\Images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\Images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\jquery-ui.css" />
-    <Content Include="Content\_all-skins.min.css" />
+    <Content Include="Content\Stylesheets\bootstrap\accordion.less" />
+    <Content Include="Content\Stylesheets\bootstrap\alerts.less" />
+    <Content Include="Content\Stylesheets\bootstrap\bootstrap.less" />
+    <Content Include="Content\Stylesheets\bootstrap\breadcrumbs.less" />
+    <Content Include="Content\Stylesheets\bootstrap\button-groups.less" />
+    <Content Include="Content\Stylesheets\bootstrap\buttons.less" />
+    <Content Include="Content\Stylesheets\bootstrap\carousel.less" />
+    <Content Include="Content\Stylesheets\bootstrap\close.less" />
+    <Content Include="Content\Stylesheets\bootstrap\code.less" />
+    <Content Include="Content\Stylesheets\bootstrap\component-animations.less" />
+    <Content Include="Content\Stylesheets\bootstrap\dropdowns.less" />
+    <Content Include="Content\Stylesheets\bootstrap\forms.less" />
+    <Content Include="Content\Stylesheets\bootstrap\grid.less" />
+    <Content Include="Content\Stylesheets\bootstrap\hero-unit.less" />
+    <Content Include="Content\Stylesheets\bootstrap\labels.less" />
+    <Content Include="Content\Stylesheets\bootstrap\layouts.less" />
+    <Content Include="Content\Stylesheets\bootstrap\mixins.less" />
+    <Content Include="Content\Stylesheets\bootstrap\modals.less" />
+    <Content Include="Content\Stylesheets\bootstrap\navbar.less" />
+    <Content Include="Content\Stylesheets\bootstrap\navs.less" />
+    <Content Include="Content\Stylesheets\bootstrap\pager.less" />
+    <Content Include="Content\Stylesheets\bootstrap\pagination.less" />
+    <Content Include="Content\Stylesheets\bootstrap\popovers.less" />
+    <Content Include="Content\Stylesheets\bootstrap\progress-bars.less" />
+    <Content Include="Content\Stylesheets\bootstrap\reset.less" />
+    <Content Include="Content\Stylesheets\bootstrap\responsive.less" />
+    <Content Include="Content\Stylesheets\bootstrap\scaffolding.less" />
+    <Content Include="Content\Stylesheets\bootstrap\sprites.less" />
+    <Content Include="Content\Stylesheets\bootstrap\tables.less" />
+    <Content Include="Content\Stylesheets\bootstrap\thumbnails.less" />
+    <Content Include="Content\Stylesheets\bootstrap\tooltip.less" />
+    <Content Include="Content\Stylesheets\bootstrap\type.less" />
+    <Content Include="Content\Stylesheets\bootstrap\utilities.less" />
+    <Content Include="Content\Stylesheets\bootstrap\variables.less" />
+    <Content Include="Content\Stylesheets\bootstrap\wells.less" />
+    <Content Include="Content\theme.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -550,94 +623,6 @@
     <Content Include="dsReports.xsc">
       <DependentUpon>dsReports.xsd</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap-datetimepicker-build.less" />
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-toggle.less" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap\alerts.less" />
-    <Content Include="Content\bootstrap\badges.less" />
-    <Content Include="Content\bootstrap\bootstrap.less" />
-    <Content Include="Content\bootstrap\breadcrumbs.less" />
-    <Content Include="Content\bootstrap\button-groups.less" />
-    <Content Include="Content\bootstrap\buttons.less" />
-    <Content Include="Content\bootstrap\carousel.less" />
-    <Content Include="Content\bootstrap\close.less" />
-    <Content Include="Content\bootstrap\code.less" />
-    <Content Include="Content\bootstrap\component-animations.less" />
-    <Content Include="Content\bootstrap\dropdowns.less" />
-    <Content Include="Content\bootstrap\forms.less" />
-    <Content Include="Content\bootstrap\glyphicons.less" />
-    <Content Include="Content\bootstrap\grid.less" />
-    <Content Include="Content\bootstrap\input-groups.less" />
-    <Content Include="Content\bootstrap\jumbotron.less" />
-    <Content Include="Content\bootstrap\labels.less" />
-    <Content Include="Content\bootstrap\list-group.less" />
-    <Content Include="Content\bootstrap\media.less" />
-    <Content Include="Content\bootstrap\mixins.less" />
-    <Content Include="Content\bootstrap\mixins\alerts.less" />
-    <Content Include="Content\bootstrap\mixins\background-variant.less" />
-    <Content Include="Content\bootstrap\mixins\border-radius.less" />
-    <Content Include="Content\bootstrap\mixins\buttons.less" />
-    <Content Include="Content\bootstrap\mixins\center-block.less" />
-    <Content Include="Content\bootstrap\mixins\clearfix.less" />
-    <Content Include="Content\bootstrap\mixins\forms.less" />
-    <Content Include="Content\bootstrap\mixins\gradients.less" />
-    <Content Include="Content\bootstrap\mixins\grid-framework.less" />
-    <Content Include="Content\bootstrap\mixins\grid.less" />
-    <Content Include="Content\bootstrap\mixins\hide-text.less" />
-    <Content Include="Content\bootstrap\mixins\image.less" />
-    <Content Include="Content\bootstrap\mixins\labels.less" />
-    <Content Include="Content\bootstrap\mixins\list-group.less" />
-    <Content Include="Content\bootstrap\mixins\nav-divider.less" />
-    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />
-    <Content Include="Content\bootstrap\mixins\opacity.less" />
-    <Content Include="Content\bootstrap\mixins\pagination.less" />
-    <Content Include="Content\bootstrap\mixins\panels.less" />
-    <Content Include="Content\bootstrap\mixins\progress-bar.less" />
-    <Content Include="Content\bootstrap\mixins\reset-filter.less" />
-    <Content Include="Content\bootstrap\mixins\reset-text.less" />
-    <Content Include="Content\bootstrap\mixins\resize.less" />
-    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />
-    <Content Include="Content\bootstrap\mixins\size.less" />
-    <Content Include="Content\bootstrap\mixins\tab-focus.less" />
-    <Content Include="Content\bootstrap\mixins\table-row.less" />
-    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />
-    <Content Include="Content\bootstrap\mixins\text-overflow.less" />
-    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />
-    <Content Include="Content\bootstrap\modals.less" />
-    <Content Include="Content\bootstrap\navbar.less" />
-    <Content Include="Content\bootstrap\navs.less" />
-    <Content Include="Content\bootstrap\normalize.less" />
-    <Content Include="Content\bootstrap\pager.less" />
-    <Content Include="Content\bootstrap\pagination.less" />
-    <Content Include="Content\bootstrap\panels.less" />
-    <Content Include="Content\bootstrap\popovers.less" />
-    <Content Include="Content\bootstrap\print.less" />
-    <Content Include="Content\bootstrap\progress-bars.less" />
-    <Content Include="Content\bootstrap\responsive-embed.less" />
-    <Content Include="Content\bootstrap\responsive-utilities.less" />
-    <Content Include="Content\bootstrap\scaffolding.less" />
-    <Content Include="Content\bootstrap\tables.less" />
-    <Content Include="Content\bootstrap\theme.less" />
-    <Content Include="Content\bootstrap\thumbnails.less" />
-    <Content Include="Content\bootstrap\tooltip.less" />
-    <Content Include="Content\bootstrap\type.less" />
-    <Content Include="Content\bootstrap\utilities.less" />
-    <Content Include="Content\bootstrap\variables.less" />
-    <Content Include="Content\bootstrap\wells.less" />
-    <Content Include="Content\font-awesome\css\font-awesome.css.map" />
-    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
-    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
-    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff2" />
-    <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Content\_bootstrap-datetimepicker.less" />
     <None Include="dsReports.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -655,85 +640,84 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\CIBS.pubxml" />
-    <Content Include="Scripts\adminlte.min.js" />
-    <Content Include="Scripts\ai.0.15.0-build58334.js" />
-    <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\app.js" />
-    <Content Include="Scripts\bootstrap-datepicker.min.js" />
-    <Content Include="Scripts\bootstrap-datetimepicker.js" />
-    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
-    <Content Include="Scripts\bootstrap-toggle.js" />
-    <Content Include="Scripts\bootstrap-toggle.min.js" />
+    <Content Include="Scripts\bootbox\bootbox.all.min.js" />
+    <Content Include="Scripts\bootbox\bootbox.locales.min.js" />
+    <Content Include="Scripts\bootbox\bootbox.min.js" />
+    <Content Include="Scripts\bootstrap-alert.js" />
+    <Content Include="Scripts\bootstrap-button.js" />
+    <Content Include="Scripts\bootstrap-carousel.js" />
+    <Content Include="Scripts\bootstrap-collapse.js" />
+    <Content Include="Scripts\bootstrap-dropdown.js" />
+    <Content Include="Scripts\bootstrap-modal.js" />
+    <Content Include="Scripts\bootstrap-popover.js" />
+    <Content Include="Scripts\bootstrap-scrollspy.js" />
+    <Content Include="Scripts\bootstrap-tab.js" />
+    <Content Include="Scripts\bootstrap-tooltip.js" />
+    <Content Include="Scripts\bootstrap-transition.js" />
+    <Content Include="Scripts\bootstrap-typeahead.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\bootstrap2-toggle.js" />
-    <Content Include="Scripts\bootstrap2-toggle.min.js" />
-    <Content Include="Scripts\dropzone.js" />
-    <Content Include="Scripts\dropzone.min.js" />
-    <Content Include="Scripts\dropzone\basic.css" />
-    <Content Include="Scripts\dropzone\basic.min.css" />
-    <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
-    <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />
-    <Content Include="Scripts\dropzone\dropzone.css" />
-    <Content Include="Scripts\dropzone\dropzone.js" />
-    <Content Include="Scripts\dropzone\dropzone.min.css" />
-    <Content Include="Scripts\dropzone\dropzone.min.js" />
-    <Content Include="Scripts\fastclick.js" />
+    <Content Include="Scripts\fastclick\fastclick.js" />
     <Content Include="Scripts\gridmvc.customwidgets.js" />
     <Content Include="Scripts\gridmvc.js" />
+    <Content Include="Scripts\gridmvc.lang.fr.js" />
     <Content Include="Scripts\gridmvc.lang.ru.js" />
     <Content Include="Scripts\gridmvc.min.js" />
-    <Content Include="Scripts\html5shiv.js" />
-    <Content Include="Scripts\init.js" />
-    <Content Include="Scripts\jquery-1.12.4.js" />
-    <Content Include="Scripts\jquery-1.12.4.min.js" />
-    <Content Include="Scripts\jquery-1.9.1.js" />
-    <Content Include="Scripts\jquery-1.9.1.min.js" />
-    <Content Include="Scripts\jquery-2.1.4.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.js" />
-    <Content Include="Scripts\jquery-3.1.1.js" />
-    <Content Include="Scripts\jquery-3.1.1.min.js" />
-    <Content Include="Scripts\jquery-3.1.1.slim.js" />
-    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
-    <Content Include="Scripts\jquery-migrate-3.0.0.js" />
-    <Content Include="Scripts\jquery-migrate-3.0.0.min.js" />
-    <Content Include="Scripts\jquery-ui-1.12.1.js" />
-    <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
-    <Content Include="Scripts\jquery-ui-1.8.20.js" />
-    <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
-    <Content Include="Scripts\jquery-ui.js" />
-    <Content Include="Scripts\jquery.min.js" />
-    <Content Include="Scripts\jquery.slimscroll.min.js" />
-    <Content Include="Scripts\jquery.smartWizard.js" />
-    <Content Include="Scripts\jquery.smartWizard.min.js" />
+    <Content Include="Scripts\gridmvc.min.js.map" />
+    <Content Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.3.1.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Scripts\jquery-3.3.1.slim.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
+    <Content Include="Scripts\jquery-slimscroll\jquery.slimscroll.js" />
+    <Content Include="Scripts\jquery-slimscroll\jquery.slimscroll.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\knockout-2.1.0.debug.js" />
-    <Content Include="Scripts\knockout-2.1.0.js" />
-    <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\moment-with-locales.js" />
-    <Content Include="Scripts\moment-with-locales.min.js" />
-    <Content Include="Scripts\moment.js" />
-    <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\select2.full.min.js" />
-    <Content Include="Scripts\templates\detect.js" />
-    <Content Include="Scripts\templates\fastclick.js" />
-    <Content Include="Scripts\templates\jquery.core.js" />
-    <Content Include="Scripts\templates\jquery.nicescroll.js" />
-    <Content Include="Scripts\templates\jquery.scrollTo.min.js" />
-    <Content Include="Scripts\templates\jquery.slimscroll.js" />
-    <Content Include="Scripts\templates\template.js" />
-    <Content Include="Scripts\templates\wow.min.js" />
-    <Content Include="Scripts\TwitterBootstrapMvcJs.js" />
-    <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\lib\adminlte.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Vendor\bootstrap-datepicker\bootstrap-datepicker.css" />
+    <Content Include="Vendor\bootstrap-datepicker\bootstrap-datepicker.js" />
+    <Content Include="Vendor\bootstrap-datepicker\bootstrap-datepicker.min.css" />
+    <Content Include="Vendor\bootstrap-datepicker\bootstrap-datepicker.min.js" />
+    <Content Include="Vendor\dt\dataTables.bootstrap.min.css" />
+    <Content Include="Vendor\dt\dataTables.bootstrap.min.js" />
+    <Content Include="Vendor\dt\jquery.dataTables.min.js" />
+    <Content Include="Vendor\easyAutoComplete\easy-autocomplete.min.css" />
+    <Content Include="Vendor\easyAutoComplete\easy-autocomplete.themes.min.css" />
+    <Content Include="Vendor\easyAutoComplete\jquery.easy-autocomplete.min.js" />
+    <Content Include="Vendor\Ionicons\css\ionicons.css" />
+    <Content Include="Vendor\Ionicons\css\ionicons.min.css" />
+    <Content Include="Vendor\Ionicons\fonts\ionicons.eot" />
+    <Content Include="Vendor\Ionicons\fonts\ionicons.svg" />
+    <Content Include="Vendor\Ionicons\fonts\ionicons.ttf" />
+    <Content Include="Vendor\Ionicons\fonts\ionicons.woff" />
+    <Content Include="Vendor\pace\pace.min.css" />
+    <Content Include="Vendor\pace\pace.min.js" />
+    <Content Include="Vendor\select2\select2.full.min.js" />
+    <Content Include="Vendor\select2\select2.min.css" />
+    <Content Include="Views\Currency\CurrencyInfo.cshtml" />
+    <Content Include="Views\Currency\_ListCurrencies.cshtml" />
+    <Content Include="Views\GlBalances\GetGlBalances.cshtml" />
+    <Content Include="Views\GlBalances\GlBalances.cshtml" />
+    <Content Include="Views\GlBalances\_date.cshtml" />
+    <Content Include="Views\Reconciliation\Index.cshtml" />
+    <Content Include="Views\Reconciliation\_Create.cshtml" />
+    <Content Include="Views\Reconciliation\_GlHistories.cshtml" />
+    <Content Include="Views\Reconciliation\_NoDataFound.cshtml" />
+    <Content Include="Views\Reporting\PDFReports.cshtml" />
+    <Content Include="Views\Shared\_CloseModal.cshtml" />
+    <Content Include="Views\Shared\_Filter.cshtml" />
+    <Content Include="Views\Shared\_ModalFooterButtons.cshtml" />
+    <Content Include="Views\Shared\_PrintView.cshtml" />
+    <Content Include="Views\Shared\_ToExcel.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -833,14 +817,49 @@
     <Content Include="Views\Invoicing\Tariff.cshtml" />
     <Content Include="Views\Invoicing\TariffInfo.cshtml" />
     <Content Include="Views\Shared\_Loader.cshtml" />
-    <Content Include="Scripts\bootstrap-toggle.min.js.map" />
-    <Content Include="Scripts\bootstrap2-toggle.min.js.map" />
-    <Content Include="Scripts\jquery-1.12.4.min.map" />
-    <Content Include="Scripts\jquery-1.9.1.min.map" />
-    <Content Include="Scripts\jquery-2.1.4.min.map" />
-    <Content Include="Scripts\jquery-3.1.1.min.map" />
-    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Views\Customer\NewCustomerReport.cshtml" />
+    <Content Include="Views\Banks\BankInfo.cshtml" />
+    <Content Include="Views\Banks\_ListBanks.cshtml" />
+    <Content Include="Views\CashMovement\CashMovementInfo.cshtml" />
+    <Content Include="Views\CashMovement\ViewCashMovement.cshtml" />
+    <Content Include="Views\CashMovement\_Create.cshtml" />
+    <Content Include="Views\CashMovement\_ListCashMovement.cshtml" />
+    <Content Include="Views\BankAccount\BankAccountInfo.cshtml" />
+    <Content Include="Views\BankAccount\_ListBankAccounts.cshtml" />
+    <Content Include="Views\Expense\ExpenseInfo.cshtml" />
+    <Content Include="Views\Expense\ViewExpense.cshtml" />
+    <Content Include="Views\Expense\_ListExpenses.cshtml" />
+    <Content Include="Views\GLAccount\GeneralLedgerInfo.cshtml" />
+    <Content Include="Views\GLAccount\GLAccountInfo.cshtml" />
+    <Content Include="Views\GLAccount\ViewGeneralLedger.cshtml" />
+    <Content Include="Views\GLAccount\ListGLAccount.cshtml" />
+    <Content Include="Views\ManualEntry\ManualEntryInfo.cshtml" />
+    <Content Include="Views\ManualEntry\ViewManulEntries.cshtml" />
+    <Content Include="Views\ManualEntry\_ListManualEntries.cshtml" />
+    <Content Include="Reports\IncomeStatement.rpt" />
+    <Content Include="Reports\Period_Cash_Book.rpt" />
+    <Content Include="Reports\rptBonus.rpt" />
+    <Content Include="Reports\rptCashBook.rpt" />
+    <Content Include="Reports\rptCashFlow.rpt" />
+    <Content Include="Reports\rptCashMovement.rpt" />
+    <Content Include="Reports\rptDrawerBalance.rpt" />
+    <Content Include="Reports\rptDrawerTransaction.rpt" />
+    <Content Include="Reports\rptDuplicateTransactionDetails.rpt" />
+    <Content Include="Reports\rptExpenseVoucher.rpt" />
+    <Content Include="Reports\rptLedgerStatement.rpt" />
+    <Content Include="Reports\rptManualVoucher.rpt" />
+    <Content Include="Reports\rptPeriodIncomeStatement.rpt" />
+    <Content Include="Reports\rptPrintIDPhotocopy.rpt" />
+    <Content Include="Reports\rptQuarterlyStatement.rpt" />
+    <Content Include="Reports\rptRealTimeBalances.rpt" />
+    <Content Include="Reports\rptReceipt.rpt" />
+    <Content Include="Reports\rptReceiptA4.rpt" />
+    <Content Include="Reports\rptReceiptShahansha.rpt" />
+    <Content Include="Reports\rptTellerReport.rpt" />
+    <Content Include="Reports\rptTransactionDetails.rpt" />
+    <Content Include="Reports\rptTransactionSummary.rpt" />
+    <Content Include="Reports\rptTrialBalance.rpt" />
+    <Content Include="Reports\Statement.rpt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

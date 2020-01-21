@@ -1,0 +1,71 @@
+﻿@using eBroker
+@using GridMvc.Html
+@model IEnumerable<eBroker.Vw_Expense_Voucher>
+@{
+    //ViewBag.Title = "List of Expenses";
+}
+@{
+    ViewBag.Title = "Expenses";
+    //var expenseCategories = ViewBag.ExpenseCategory as List<SelectListItem>;
+    //var currencies = ViewBag.Currency as List<SelectListItem>;
+    //var paymentLedgers = ViewBag.PaymentLedger as List<SelectListItem>;
+    //DateTime createdOn = ViewBag.CreatedOn;
+    //DateTime expenseDate = ViewBag.ExpenseDate;
+    //string user = ViewBag.UserID;
+}
+
+
+    <div>
+        <div class="box box-primary flat">
+            <div class="box-header with-border">
+                <h4>
+                    Expenses List {@Model.Count()}
+                    @Html.Partial("_Filter")
+                </h4>
+            </div>
+            <div class="box-body">
+                <div class="table table-hover table-condensed  table-responsive">
+                    @Html.Grid(Model).Named("ga").Columns(col =>
+                    {
+                        col.Add(e => e.Id, true);
+                        col.Add(e => e.ExpenseDate).Titled("Expense Date").Format("{0:yyyy-MM-dd}").Sortable(true).Filterable(true);
+                        col.Add(e => e.ExpenseLedger).Titled("Expense Ledger").Sortable(true).Filterable(true);
+                        col.Add(e => e.PaymentLedger).Titled("Payment Ledger").Sortable(true).Filterable(true);
+
+                        col.Add(e => e.Reversal).Titled("Reversed?")
+                            .Sortable(true).Filterable(true)
+                            .Sanitized(false)
+                            .Encoded(false)
+                            .RenderValueAs(e=>Html.Label(e.Reversal.ToString(),
+                                new {@class= e.Reversal ? "label label-warning" : "label label-info" }));
+
+                        col.Add(e => e.Amount).Titled("Amount").Format("{0:#,0.#####}").Sortable(true).Filterable(true);
+
+                        col.Add(e => e.IsoCode).Titled("Currency").Sortable(true).Filterable(true);
+
+                        col.Add()
+                            .Sanitized(false)
+                            .Encoded(false)
+                            .RenderValueAs(o => Html.ActionLink("Edit", "ExpenseEdit",
+                                new { Id = o.Id },
+                                new {@class = "btn btn-primary btn-sm BtnEditExpense" }));
+
+                        col.Add()
+                            .Sanitized(false)
+                            .Encoded(false)
+                            .RenderValueAs(o => Html.ActionLink("Reverse", "Reverse",
+                                new { id = o.Id },
+                                new {@class = "btn btn-info btn-sm" }));
+
+                        col.Add()
+                            .Sanitized(false)
+                            .Encoded(false)
+                            .RenderValueAs(o => Html.ActionLink("Print", "PrintExpense",
+                                new { EId = DataEncryption.Encrypt(o.Id.ToString()) },
+                                new {@class = "btn btn-primary btn-sm " }));
+
+                    }).WithPaging(10).Sortable(true).WithMultipleFilters()
+                </div>
+            </div>
+        </div>
+    </div>

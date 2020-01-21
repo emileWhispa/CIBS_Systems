@@ -1,0 +1,103 @@
+﻿@model eBroker.BankAccount
+@{
+    ViewBag.Title = "Bank Account";
+    var banks = ViewBag.Banks as List<SelectListItem>;
+    var currencies = ViewBag.Currencies as List<SelectListItem>;
+}
+<div class="content">
+
+    <button type="button" class="btn btn-primary flat BankAccountModal pull-right btn-sm">
+        <i class="fa fa-plus"></i> New Entry
+    </button>
+    <div class="clearfix"></div>
+
+
+    <div class="modal myModal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("CreateBankAccount", "BankAccount", FormMethod.Post, new { id = "submitForm" }))
+                {
+                    @Html.HiddenFor(model => model.Id, new { @Id = "txtID" })
+                    <div class="modal-header">
+                        <h4 class="box-title">
+                            Bank Account
+                            @Html.Partial("_CloseModal")
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            @Html.ValidationSummary(true)
+                        </div>
+                        @Html.Partial("_Loader")
+                        <div class="edit-result form-horizontal">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BankId, new { @class = "col-sm-3 control-label" })
+                                <div class="col-sm-9">
+                                    @Html.DropDownListFor(model => model.BankId, banks, "--Banks--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.BankId)
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AccountNo, new { @class = "col-sm-3 control-label" })
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(model => model.AccountNo, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.AccountNo)
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AccountDescription, new { @class = "col-sm-3 control-label" })
+                                <div class="col-sm-9">
+                                    @Html.TextAreaFor(model => model.AccountDescription, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.AccountDescription)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CurrencyID, new { @class = "col-sm-3 control-label" })
+                                <div class="col-sm-9">
+                                    @Html.DropDownListFor(model => model.CurrencyID, currencies, "--Currency--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CurrencyID)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.LedgerNo, new { @class = "col-sm-3 control-label" })
+                                <div class="col-sm-9">
+                                    @Html.TextBoxFor(model => model.LedgerNo, new { @class = "form-control", @Disabled = "Disabled", id = "Ledger" })
+                                    @Html.HiddenFor(model => model.LedgerNo)
+                                    @Html.ValidationMessageFor(model => model.LedgerNo)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer editFooter">
+                        @Html.Partial("_ModalFooterButtons")
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div id="ViewBankAccountResult">
+        @{
+            IEnumerable<eBroker.BankAccount> bankAccountList = ViewBag.lstTrans;
+            Html.RenderPartial("_ListBankAccounts", bankAccountList);
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('.BankAccountModal').click(function (e) {
+        e.preventDefault();
+        $('.myModal').modal({
+            show: true,
+            backdrop: 'static',
+            keyboard: false
+        });
+        $('#BtnSaveBankAccount').removeAttr('disabled');
+        $("#ClearBankAccountForm input[type=text]:not(#txtTranDate),select").val('');
+        $('#txtID').val('0');
+    });
+</script>

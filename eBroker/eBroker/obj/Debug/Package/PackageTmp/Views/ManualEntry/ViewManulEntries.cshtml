@@ -1,0 +1,57 @@
+﻿@using eBroker
+@using GridMvc.Html
+@model IEnumerable<eBroker.Vw_ManualEntry>
+
+@{
+    ViewBag.Title = "Manul Entries";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<h2>
+    Manual Entries
+
+    <span class="small">
+        From: <small>@ViewBag.StartDate</small>
+        To: <small>@ViewBag.EndDate</small>
+    </span>
+
+
+    @{
+        ViewBag.url = Url.Action("ToExcel", "ManualEntry");
+    }
+    @Html.Partial("_ToExcel")
+</h2>
+
+
+<div class="table table-hover table-bordered">
+    @Html.Grid(Model).Named("ga").Columns(col =>
+    {
+        col.Add(e => e.Id, true);
+        col.Add(e => e.EntryDate).Titled("Entry Date").Format("{0:yyyy-MM-dd}").Sortable(true).Filterable(true);
+        col.Add(e => e.DebitLedger).Titled("Debit Ledger").Sortable(true).Filterable(true);
+        col.Add(e => e.CreditLedger).Titled("Credit Ledger").Sortable(true).Filterable(true);
+        col.Add(e => e.Amount).Titled("Amount").Sortable(true).Filterable(true);
+        col.Add(e => e.IsoCode).Titled("Currency").Sortable(true).Filterable(true);
+        col.Add(e => e.UserID).Titled("Created By").Sortable(true).Filterable(true);
+        col.Add(e => e.Description).Titled("Description").Format("{0:dd-MMM-yyyy}").Sortable(true).Filterable(true);
+
+        col.Add(e => e.Reversal).Titled("Reversed?")
+            .Sortable(true).Filterable(true)
+            .Sanitized(false)
+            .Encoded(false)
+            .RenderValueAs(e=>Html.Label(e.Reversal.ToString(),
+                new {@class= e.Reversal ? "text-warning" : "text-info" }));
+
+ 
+
+        col.Add()
+            .Sanitized(false)
+            .Encoded(false)
+            .RenderValueAs(o => Html.ActionLink("Print", "ManualEntryReceipt",
+                new { MId = DataEncryption.Encrypt(o.Id) },
+                new {@class = "btn btn-primary btn-sm " }));
+
+
+    }).WithPaging(10).Sortable(true).WithMultipleFilters()
+</div>
+

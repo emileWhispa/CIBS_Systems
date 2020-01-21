@@ -80,7 +80,7 @@ namespace eBroker.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Error processing request! contact the Admin.");
+                ModelState.AddModelError("", "Error processing request! contact the Admin. "+ex.Message);
             }
             return View(model);
         }

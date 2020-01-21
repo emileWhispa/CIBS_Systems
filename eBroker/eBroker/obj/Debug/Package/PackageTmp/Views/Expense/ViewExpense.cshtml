@@ -1,0 +1,67 @@
+﻿@using eBroker
+@using GridMvc.Html
+@model IEnumerable<eBroker.Vw_Expense_Voucher>
+
+@{
+    ViewBag.Title = "View Expenses";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<h2>
+    Expenses
+
+    <span class="small">
+        From: <small>@ViewBag.StartDate</small>
+        To: <small>@ViewBag.EndDate</small>
+    </span>
+
+
+    @{
+        ViewBag.url = Url.Action("ToExcel", "Expense");
+    }
+    @Html.Partial("_ToExcel")
+</h2>
+
+<div class="table table-hover table-condensed  table-responsive">
+    @Html.Grid(Model).Named("ga").Columns(col =>
+    {
+        col.Add(e => e.Id, true);
+        col.Add(e => e.ExpenseDate).Titled("Expense Date").Format("{0:yyyy-MM-dd}").Sortable(true).Filterable(true);
+        col.Add(e => e.ExpenseLedger).Titled("Expense Ledger").Sortable(true).Filterable(true);
+        col.Add(e => e.PaymentLedger).Titled("Payment Ledger").Sortable(true).Filterable(true);
+
+        col.Add(e => e.Reversal).Titled("Reversed?")
+            .Sortable(true).Filterable(true)
+            .Sanitized(false)
+            .Encoded(false)
+            .RenderValueAs(e=>Html.Label(e.Reversal.ToString(),
+                new {@class= e.Reversal ? "text-warning" : "text-info" }));
+
+        col.Add(e => e.Amount).Titled("Amount").Sortable(true).Filterable(true);
+
+        col.Add(e => e.IsoCode).Titled("Currency").Sortable(true).Filterable(true);
+        col.Add(e => e.UserID).Titled("Created By").Sortable(true).Filterable(true);
+
+      /*  col.Add()
+            .Sanitized(false)
+            .Encoded(false)
+            .RenderValueAs(o => Html.ActionLink("Edit", "ExpenseEdit",
+                new { Id = o.Id },
+                new {@class = "btn btn-primary btn-sm BtnEditExpense" }));
+
+        col.Add()
+            .Sanitized(false)
+            .Encoded(false)
+            .RenderValueAs(o => Html.ActionLink("Reverse", "Reverse",
+                new { id = o.Id },
+                new {@class = "btn btn-info btn-sm" }));*/
+
+        col.Add()
+            .Sanitized(false)
+            .Encoded(false)
+            .RenderValueAs(o => Html.ActionLink("Print", "PrintExpense",
+                new { EId = DataEncryption.Encrypt(o.Id.ToString()) },
+                new {@class = "btn btn-primary btn-sm " }));
+
+    }).WithPaging(10).Sortable(true).WithMultipleFilters()
+</div>

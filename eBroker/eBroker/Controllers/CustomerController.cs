@@ -15,18 +15,18 @@ namespace eBroker.Controllers
 {
     public class CustomerController : BaseController
     {
-        eBroker.BrokerDataContext dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
+        eBroker.BrokerDataContext _dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
         public ActionResult ListCustomer(string query)
         {
-            var Model = new List<Client>();
+            var model = new List<Client>();
             try
             {
                 this.CustomerInfo(0);
                 if (string.IsNullOrEmpty(query))
-                    Model = dc.Client.OrderByDescending(x => x.Id).ToList();
+                    model = _dc.Client.OrderByDescending(x => x.Id).ToList();
                 else
-                    Model = dc.Client.Where(x => x.client_name.Contains(query) || x.contact_person.Contains(query) || x.mobile.Contains(query)).ToList();
-                return View(Model);
+                    model = _dc.Client.Where(x => x.client_name.Contains(query) || x.contact_person.Contains(query) || x.mobile.Contains(query)).ToList();
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -38,18 +38,18 @@ namespace eBroker.Controllers
 
         public ActionResult NewCustomerReport(DateData date)
         {
-            List<Client> clients = dc.Client.Where(e=>e.create_dt <= date.end && e.create_dt>=date.start).ToList();
+            List<Client> clients = _dc.Client.Where(e=>e.create_dt <= date.end && e.create_dt>=date.start).ToList();
             return View(clients);
         }
 
 
         public ActionResult DeleteCustomer(int id)
         {
-            Client client = dc.Client.Find(id);
+            Client client = _dc.Client.Find(id);
             if( client != null)
             {
-                dc.Client.Remove(client);
-                dc.SaveChanges();
+                _dc.Client.Remove(client);
+                _dc.SaveChanges();
             }
             return RedirectToAction("ListCustomer");
         }
@@ -65,7 +65,7 @@ namespace eBroker.Controllers
                 try
                 {
                     string message = "";
-                    Client entity = dc.Client.Where<Client>(e => e.client_national_id == clt.client_national_id || e.mobile == clt.mobile).FirstOrDefault<Client>();
+                    Client entity = _dc.Client.FirstOrDefault(e => e.client_national_id == clt.client_national_id || e.mobile == clt.mobile || e.Id == clt.Id);
                     if (entity != null)
                     {
                         entity.client_national_id = clt.client_national_id;
@@ -81,22 +81,22 @@ namespace eBroker.Controllers
                         entity.physical_address = clt.physical_address;
                         entity.physical_address = clt.physical_address;
                         entity.recruited_by = clt.recruited_by;
-                        this.dc.Entry(entity).State = EntityState.Modified;
-                        this.dc.SaveChanges();
+                        this._dc.Entry(entity).State = EntityState.Modified;
+                        this._dc.SaveChanges();
                         return this.Content("1");
                     }
                     if (clt.Id == 0)
                     {
                         clt.create_dt = DateTime.Now;
-                        this.dc.Client.Add(clt);
-                        if (this.dc.SaveChanges() <= 0)
+                        this._dc.Client.Add(clt);
+                        if (this._dc.SaveChanges() <= 0)
                             throw new Exception(message);
                         this.Success("Record Saved Successfully", true);
                     }
                     else
                     {
-                        this.dc.Entry(clt).State = EntityState.Modified;
-                        this.dc.SaveChanges();
+                        this._dc.Entry(clt).State = EntityState.Modified;
+                        this._dc.SaveChanges();
                     }
                     return this.Content("1");
                 }
@@ -111,7 +111,7 @@ namespace eBroker.Controllers
 
         public ActionResult SearchCustomer(string id)
         {
-            Client client = this.dc.Client.Where<Client>(e => e.client_national_id == id || e.mobile == id).FirstOrDefault<Client>();
+            Client client = this._dc.Client.Where<Client>(e => e.client_national_id == id || e.mobile == id).FirstOrDefault<Client>();
             if (client == null)
                 return this.Content("0");
             this.CustomerInfo(client.Id);
@@ -119,29 +119,29 @@ namespace eBroker.Controllers
         }
 
         [HttpGet]
-        public ActionResult CustomerInfo(int Id = 0)
+        public ActionResult CustomerInfo(int id = 0)
         {
             try
             {
-                var Model = dc.Client.Where(x => x.Id == Id).FirstOrDefault();
-                if (Model == null)
+                var model = _dc.Client.FirstOrDefault(x => x.Id == id);
+                if (model == null)
                 {
-                    Model = new Client();
-                    Model.Id = 0;
-                    Model.create_dt = DateTime.Now;
-                    Model.user_id = AppUserData.Login;
+                    model = new Client();
+                    model.Id = 0;
+                    model.create_dt = DateTime.Now;
+                    model.user_id = AppUserData.Login;
 
                     //Model.recruited_by = AppUserData.Login;
                 }
                 //Reading Customer Recruiter
-                var recruiter = (from r in dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
-                var rec = (from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
+                var recruiter = (from r in _dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
+                var rec = (from a in _dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
                 recruiter.AddRange(rec);
                 ViewBag.recruiter = recruiter;
                 //ViewData["recruit"] = recruiter;
                 //TempData["recr"] = recruiter;
                 var tst = ViewBag.recruiter;
-                return PartialView(Model);
+                return PartialView(model);
             }
             catch (Exception ex)
             {
@@ -156,7 +156,7 @@ namespace eBroker.Controllers
             try
             {
                 Toolkit.ExportListUsingEPPlus("select * from Client order by client_name", "Client Listing");
-                return View();
+                return Content("1");
             }
             catch (Exception ex)
             {
@@ -259,7 +259,7 @@ namespace eBroker.Controllers
             var uploadedData = new List<Temp_Client>();
             try
             {
-                uploadedData = dc.Temp_Client.ToList();
+                uploadedData = _dc.Temp_Client.ToList();
                 return View(uploadedData);
             }
             catch (Exception ex)
