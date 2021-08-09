@@ -24,7 +24,6 @@ namespace eBroker
         [Display(Name = "National ID,TIN")]
         [Column("client_national_id")]
         [StringLength(100)]
-        [Required]
         public string client_national_id { get; set; }
         [Display(Name = "Client Type")]
         [Column("client_type")]
@@ -34,7 +33,6 @@ namespace eBroker
         [Display(Name = "Contact Person")]
         [Column("contact_person")]
         [StringLength(50)]
-        [Required]
         public string contact_person { get; set; }
         [Display(Name = "Physical Address")]
         [Column("physical_address")]
@@ -67,6 +65,7 @@ namespace eBroker
         [MaxLength(30)]
         public string user_id { get; set; }
         [Column("create_dt")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? create_dt { get; set; }
 
     }

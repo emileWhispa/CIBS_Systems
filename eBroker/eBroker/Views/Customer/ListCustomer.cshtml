@@ -96,7 +96,7 @@
                                                      col.Add(m => m.recruited_by).Titled("Recruiter");
                                                      //col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Insurance Policy(ies)", "InsurancePolicy"));
                                                      col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Insurance Policy(ies)", "CustomerPolicy", "Policy").RouteValues(new { ccode = m.Id }));
-                                                     col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "CustomerInfo", "Customer", new { Id = m.Id }, new { @class = "edit-button btn-sm btn-flat btn-primary" }));
+                                                     col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "CustomerInfoJson", "CustomerApi", new { Id = m.Id }, new { @class = "edit-v2 btn-sm btn-flat btn-primary" }));
                                                      col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Delete", "DeleteCustomer", "Customer", new { Id = m.Id }, new { @class = " btn-sm btn-flat btn-danger",onclick="return confirm('are you sure to delete?')" }));
                                                  }).WithPaging(10).Sortable(true)
 

@@ -9,6 +9,7 @@ using System.IO;
 using Excel;
 using System.Data.SqlClient;
 using System.Data;
+using System.Web.WebPages;
 using eBroker.Models;
 
 namespace eBroker.Controllers
@@ -65,7 +66,7 @@ namespace eBroker.Controllers
                 try
                 {
                     string message = "";
-                    Client entity = _dc.Client.FirstOrDefault(e => e.client_national_id == clt.client_national_id || e.mobile == clt.mobile || e.Id == clt.Id);
+                    Client entity = _dc.Client.FirstOrDefault(e => (e.client_national_id == clt.client_national_id && e.client_national_id != null && e.client_national_id.Trim() != "") || e.mobile == clt.mobile || e.Id == clt.Id);
                     if (entity != null)
                     {
                         entity.client_national_id = clt.client_national_id;
@@ -105,18 +106,21 @@ namespace eBroker.Controllers
                     this.Danger(ex.Message, true);
                 }
             }
+            
             this.CustomerInfo(clt.Id);
             return PartialView("CustomerInfo", clt);
         }
 
         public ActionResult SearchCustomer(string id)
         {
-            Client client = this._dc.Client.Where<Client>(e => e.client_national_id == id || e.mobile == id).FirstOrDefault<Client>();
+            Client client = this._dc.Client.Where<Client>(e => (e.client_national_id == id && e.client_national_id != null && e.client_national_id.Trim() != "") || e.mobile == id).FirstOrDefault<Client>();
             if (client == null)
                 return this.Content("0");
             this.CustomerInfo(client.Id);
             return this.PartialView("CustomerInfo",client);
         }
+
+        
 
         [HttpGet]
         public ActionResult CustomerInfo(int id = 0)

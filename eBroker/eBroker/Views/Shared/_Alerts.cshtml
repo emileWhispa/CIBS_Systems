@@ -1,26 +1,26 @@
-﻿
-@using eBroker
+﻿@using eBroker
 @{
     var alerts = TempData.ContainsKey(eBroker.Alert.TempDataKey)
-                ? (List<eBroker.Alert>)TempData[eBroker.Alert.TempDataKey]
-                : new List<eBroker.Alert>();
+        ? (List<eBroker.Alert>) TempData[eBroker.Alert.TempDataKey]
+        : new List<eBroker.Alert>();
 
     if (alerts.Any())
     {
-
     }
 
     foreach (var alert in alerts)
     {
         var dismissableClass = alert.Dismissable ? "alert-dismissable" : null;
-        <div class="alert alert-@alert.AlertStyle @dismissableClass">
-            @if (alert.Dismissable)
-            {
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                    &times;
-                </button>
-            }
-            @Html.Raw(alert.Message)
+        <div style="padding: 1rem;">
+            <div class="alert alert-@alert.AlertStyle @dismissableClass">
+                @if (alert.Dismissable)
+                {
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                        &times;
+                    </button>
+                }
+                @Html.Raw(alert.Message)
+            </div>
         </div>
     }
 }

@@ -202,12 +202,12 @@ namespace eBroker.Controllers
                           ,convert(varchar(25),[BookedOn]) as [Booked On]
                           ,[BookedBy] as [Booked By]
                           ,[Language]
-                          FROM [eBrokerage].[dbo].[Appointment] a, [eBrokerage].[dbo].[AppointmentType] b
+                          FROM Appointment a, AppointmentType b
                           where a.AppointmentTypeId=b.AppointmentTypeId ";
-                if (startDate != null && startDate.Length > 10)
-                    cmd = cmd + " and AppointmentDate > = '" + startDate + "'";
-                if (endDate != null && endDate.Length > 10)
-                    cmd = cmd + " and AppointmentDate < = '" + endDate + "'";
+                if (startDate != null && startDate.Length >= 10)
+                    cmd = cmd + " and AppointmentDate >= '" + startDate + "'";
+                if (endDate != null && endDate.Length >= 10)
+                    cmd = cmd + " and AppointmentDate <= '" + endDate + "'";
                 Toolkit.ExportListUsingEPPlus(cmd, fileName);
                 return View();
             }

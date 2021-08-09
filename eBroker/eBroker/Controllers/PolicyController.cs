@@ -283,7 +283,7 @@ namespace eBroker.Controllers
         public ActionResult CreatePolicy(InsurancePolicy ip)
         {
             bool flag1 = ip.Id == 0;
-            bool flag2 = ip.renewal_policy_id != null & flag1;
+            bool flag2 = ip.renewal_policy_id != null && flag1;
             try
             {
                 if (ModelState.IsValid)

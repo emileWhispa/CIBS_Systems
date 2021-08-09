@@ -56,12 +56,12 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="#tab_1" class="bold" data-toggle="tab" aria-expanded="false">
+                        <a data-href=".tab_1" class="bold" data-toggle="tab" aria-expanded="false">
                             Policy Information
                         </a>
                     </li>
                     <li class="">
-                        <a href="#tab_2" class="bold" data-toggle="tab" aria-expanded="true">
+                        <a data-href=".tab_2" class="bold" data-toggle="tab" aria-expanded="true" id="nav-link-one">
 
                             Payment Information
 
@@ -72,7 +72,7 @@
                     <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active" id="tab_1">
+                    <div class="tab-pane active tab_1" id="tab_1">
 
                         <script>
                         </script>
@@ -168,10 +168,14 @@
                             </div>
                         </div>
 
-
+                        <div class="clearfix">
+                            <div class="pull-right">
+                                    <button class="btn btn-primary" type="button" onclick="$('#nav-link-one').click();"><i class="fa fa-save"></i> Next</button>
+                                   </div>       
+                        </div>
                     </div>
                     <!-- /.tab-pane -->
-                    <div class="tab-pane" id="tab_2">
+                    <div class="tab-pane tab_2" id="tab_2">
 
 
                         <div class="col-md-12 col-centered">
@@ -259,7 +263,12 @@
                             <span class="didHide">@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>
                         </div>
 
-
+                        <div class="clearfix">
+                            <div class="pull-right">
+                                
+        <button class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.tab-pane -->
                 </div>
@@ -267,6 +276,10 @@
             </div>
             <!-- SmartWizard html -->
             <script>
+            $.validator.setDefaults({ 
+                ignore: [],
+                // any other default options and/or rules
+            });
                 $(".picker").datepicker({ format: "yyyy-mm-dd" });
             </script>
         </div>
@@ -274,8 +287,6 @@
 
 
     </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
-    </div>
+    
 
         }

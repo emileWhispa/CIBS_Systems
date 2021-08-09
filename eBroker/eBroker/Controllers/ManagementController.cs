@@ -25,9 +25,9 @@ namespace eBroker.Controllers
             try
             {
                 if (string.IsNullOrEmpty(query))
-                    users = dc.eUser.OrderBy(x => x.Names).ToList();
+                    users = dc.eUser.OrderByDescending(x => x.Id).ToList();
                 else
-                    users = dc.eUser.Where(x => x.Names.Contains(query) || x.Login.Contains(query)).OrderBy(x => x.Login).ToList();
+                    users = dc.eUser.Where(x => x.Names.Contains(query) || x.Login.Contains(query)).OrderByDescending(x => x.Id).ToList();
                 return View(users);
             }
             catch (Exception ex)
@@ -117,8 +117,10 @@ namespace eBroker.Controllers
                 x.ExcludeSymbols = true;
                 x.ConsecutiveCharacters = false;
                 x.RepeatCharacters = false;
-                resetUser.Password = securityComponents.Cryptography.Encrypt(x.Generate());
-                resetUser.ChangePassword = true;
+                string gen = x.Generate();
+                resetUser.Password = securityComponents.Cryptography.Encrypt(gen);
+                resetUser.ChangePassword = true;   
+                BackgroundJob.Enqueue(() => EmailSenderService.SendEmail("User " + resetUser.Login + " Successfully reset his Password: <h4>" + gen + "</h4><br/> Kindly log to the system and change the password", resetUser.Email, "CBIS Password reset"));
                 resetUser.PwdChangeDate = DateTime.Today.AddMonths(3);
                 dc.eUser.Add(resetUser);
                 dc.Entry(resetUser).State = EntityState.Modified;
@@ -200,6 +202,11 @@ namespace eBroker.Controllers
             BrokerDataContext dc = new BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
             if (this.ModelState.IsValid)
             {
+                if (dc.eUser.Any(user => user.Login == usr.Login))
+                {
+                    Danger("User Login already existed");
+                    return Content("1");
+                }
                 try
                 {
                     string message = "";

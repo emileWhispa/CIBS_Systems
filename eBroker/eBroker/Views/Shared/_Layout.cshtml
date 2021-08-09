@@ -91,13 +91,11 @@
 
             <div class="content-wrapper">
                 <!-- Start content -->
-
-                @RenderBody()
-                <div class="content">
                     <div id="AlertsContainer">
                         @{ Html.RenderPartial("_Alerts"); }
                     </div>
-                </div>
+
+                @RenderBody()
                 <!-- End container -->
                 <!-- End content -->
                 <div class="footer text-right">
@@ -134,7 +132,7 @@
         </footer>
     </div>
 
-<script src="~/Scripts/app.js"></script>
+<script src="~/Scripts/app.js?app=1678"></script>
 @RenderSection("scripts", required: false)
 </body>
 </html>

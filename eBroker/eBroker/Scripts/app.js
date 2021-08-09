@@ -1,5 +1,4 @@
-﻿﻿
-$(window).on('load',
+﻿$(window).on('load',
     function() {
         $('.loader').fadeOut(500);
         $('#submitForm').validate();
@@ -12,9 +11,9 @@ function printDoc() {
 }
 
 
-$(document).on('change', '#interest_transfer', function () {
+$(document).on('change', '.interest_transfer', function () {
 
-    $("#interest_bank_id").attr("disabled", !this.checked);
+    $(document).find(".interest_bank_id").attr("disabled", !this.checked);
 
     if (!this.checked) $("#interest_bank_id").prop('selectedIndex', 0);
 });
@@ -27,6 +26,13 @@ $(document).on('change', '#renewable', function () {
     if (!this.checked) $("#renewal_basis").prop('selectedIndex', 0);
 });
 
+
+$(document).on('click', '.nav-tabs a', function(e){
+    e.preventDefault();
+    $(".tab-pane").addClass('hidden').removeClass('active');
+    //alert($(this).attr("href"));
+    $($(this).attr("data-href")).removeClass('hidden').addClass('active');
+});
 
 $(document).on('click', '.edit-button', function (e) {
     e.preventDefault();
@@ -49,13 +55,30 @@ $(document).on('click', '.edit-button', function (e) {
             success: function (res) {
                 $(m).find(".modal-content").html(res);
 
-                $(m).find('#submitForm').validate();
+                $('#submitForm').validate();
             }
         });
     }
     return false;
 });
 
+$(document).on('click','.edit-v2',function (e) {
+    e.preventDefault();
+    $.ajax({
+        type: "GET",
+        url: this.href,
+        success: function (res) {
+            $("#modal-default").modal('show');
+            for(var x in res.data){
+
+                if (res.data.hasOwnProperty(x))
+                {
+                    $("#" + x).val(res.data[x]);
+                }
+            }
+        }
+    });
+});
 
 
 
