@@ -33,6 +33,7 @@ namespace eBroker.Controllers
             }
 
             ViewBag.Banks = banks;
+            ViewBag.AppUserData = AppUserData;
             return View();
         }
 
@@ -73,6 +74,7 @@ namespace eBroker.Controllers
                 banks = (from r in _dc.Bank.Where(x => x.Id == AppUserData.CompanyID).ToList() select new SelectListItem { Text = r.BankName, Value = r.BankName }).ToList();
             }
             ViewBag.Banks = banks;
+            ViewBag.AppUserData = AppUserData;
             return View();
         }
 
@@ -116,6 +118,8 @@ namespace eBroker.Controllers
                 {
                     banks = (from r in _dc.Bank.Where(x=>x.Id == AppUserData.CompanyID).ToList() select new SelectListItem { Text = r.BankName, Value = r.BankName }).ToList();
                 }
+
+                ViewBag.AppUserData = AppUserData;
                 ViewBag.Banks = banks;
             }
             catch (Exception ex)

@@ -169,11 +169,18 @@ namespace eBroker.Controllers
                     model.Password = Cryptography.Encrypt(x.Generate());
                     //Model.recruited_by = AppUserData.Login;
                 }
+                
+                if (model.CategoryId == 3 && model.CompanyID != null)
+                {
+                    model.BankID = (int) model.CompanyID;
+                }
                 //Reading Customer Recruiter
                 var profile = (from r in dc.eUserCategory.ToList() select new SelectListItem { Text = r.Category, Value = r.Id.ToString() }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
                 ViewBag.profile = profile;
                 var company = (from r in dc.Partner.Where(x => x.partnership_type != "Agent").ToList() select new SelectListItem { Text = r.company_short_name, Value = r.Id.ToString() }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
                 ViewBag.company = company;
+                var banks = (from r in dc.Bank.ToList() select new SelectListItem { Text = r.BankName, Value = r.Id.ToString() }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
+                ViewBag.banks = banks;
                 //TempData["recr"] = recruiter;
                 var tst = ViewBag.recruiter;
                 return PartialView(model);
@@ -202,13 +209,19 @@ namespace eBroker.Controllers
             BrokerDataContext dc = new BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
             if (this.ModelState.IsValid)
             {
-                if (dc.eUser.Any(user => user.Login == usr.Login))
+                if (dc.eUser.Any(user => user.Login == usr.Login && user.Id != usr.Id))
                 {
                     Danger("User Login already existed");
                     return Content("1");
                 }
                 try
                 {
+
+                    if (usr.CategoryId == 3 && usr.BankID != null)
+                    {
+                        usr.CompanyID = (int) usr.BankID;
+                    }
+                    
                     string message = "";
                     dc.eUser.Add(usr);
                     usr.Category = "";

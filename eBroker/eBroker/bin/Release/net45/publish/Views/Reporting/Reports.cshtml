@@ -1,0 +1,128 @@
+﻿@model eBroker.SystemReports
+
+@{
+    ViewBag.Title = "Report Extraction Tool";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var reports = ViewBag.Reports as List<SelectListItem>; 
+}
+@using (Html.BeginForm("ExportToExcel", "Reporting", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="box box-primary">
+        <div class="box-header">
+            <h4 class="box-title">Report Extraction Tool</h4>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                @Html.ValidationSummary(true)
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-2">
+                        @Html.Label("Report Name")
+                    </label>
+                    <div class="col-sm-4">
+                        @Html.DropDownList("ReportId", reports, "--Select Report--", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-2">
+                        @Html.Label("Start Date")
+                    </label>
+                    <div class="col-sm-2">
+                        @Html.TextBox("startDate", "", new { @id = "startDate", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-2">
+                        @Html.Label("End Date")
+                    </label>
+                    <div class="col-sm-2">
+                        @Html.TextBox("endDate", "", new { @id = "endDate", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-2">
+                        @Html.Label("lblSearchKey","Search Key")
+                    </label>
+                    <div class="col-sm-2">
+                        @Html.TextBox("searchKey", "", new { @id = "searchKey", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+
+                <div class="row">
+                    <hr />
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-6">
+                        <span>@Html.Bootstrap().SubmitButton().Text("Extract Report").PrependIcon("fa fa-file-excel-o")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $('#startDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-30:+5"
+            });
+            $('#endDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-30:+5"
+            });
+        </script>
+
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ReportId").change(function () {
+                var Id = $(this).val();
+                loadReportDetails(Id);
+            });
+            $("#ReportId").change();
+        });
+
+        loadReportDetails = function (ReportId) {
+            $.getJSON("@Url.Action("GetReportDetails", "Reporting")", { ReportId: ReportId },
+                     function (data) {
+                         $("#startDate").val('');
+                         $("#endDate").val('');
+                         $('#searchKey').val('');
+                         $('#startDate').attr("placeholder", data.DateFilterDescription);
+                         $('#endDate').attr("placeholder", data.DateFilterDescription);
+                         $('#searchKey').attr("placeholder", data.SearchFilterDescription);
+                         if (data.DateFilter == false) {
+                             $("#startDate").attr("disabled", "disabled");
+                             $("#endDate").attr("disabled", "disabled");
+                         }
+                         else {
+                             $("#startDate").removeAttr("disabled", "disabled");
+                             $("#endDate").removeAttr("disabled", "disabled");
+                         }
+                         if (data.SearchFilter == "") {
+                             $("#searchKey").attr("disabled", "disabled");
+                         }
+                         else if (data.SearchFilter == null) {
+                             $("#searchKey").attr("disabled", "disabled");
+                         }
+                         else
+                         {
+                             $("#searchKey").removeAttr("disabled", "disabled");
+                         }
+                     });
+    };
+    </script>
+}

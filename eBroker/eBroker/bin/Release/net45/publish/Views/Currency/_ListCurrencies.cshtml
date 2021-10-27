@@ -1,0 +1,69 @@
+﻿﻿@using GridMvc.Html
+@using GridMvc.Html
+@model IEnumerable<eBroker.Currency>
+
+@{
+    ViewBag.Title = "Currencies";
+}
+
+
+    <div>
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h4>Currencies{@Model.Count()}</h4>
+            </div>
+            <div class="box-body">
+                <div class="table table-hover table-condensed">
+                    @Html.Grid(Model).Named("ga").Columns(col =>
+               {
+                   col.Add(p => p.Id, true);
+                   col.Add(p => p.IsoCode).Titled("Currency Code").Sortable(true).Filterable(true);
+                   col.Add(p => p.CurrencyName).Titled("Currency Name").Sortable(true).Filterable(true);
+
+                   col.Add(e => e.Active).Titled("Active")
+                       .Sortable(true).Filterable(true)
+                       .Sanitized(false)
+                       .Encoded(false)
+                       .RenderValueAs(e=>Html.Label(e.Active.ToString(),
+                           new {@class= e.Active ? "label label-warning" : "label label-info" }));
+
+                   col.Add()
+                       .Sanitized(false)
+                       .Encoded(false)
+                       .RenderValueAs(o => Html.ActionLink("Edit", "CurrencyEdit",
+                           new { Id = o.Id },
+                           new {@class = "btn btn-info btn-sm BtnEditCurrency" }));
+                   
+               }).WithPaging(10).Sortable(true).Filterable(true).WithMultipleFilters()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+    $(document).on('click',
+        '.BtnEditCurrency',
+        function(e) {
+            e.preventDefault();
+            viewCurrency($(this));
+            });
+        function viewCurrency(cashmove)
+        {
+            $('.myModal').modal();
+            showLoader();
+            var url = cashmove.attr('href');
+            $.getJSON(url,
+                function (data)
+                {
+                    hideLoader();
+                    $("#txtID").val(data.Id);
+                    $("#IsoCode").val(data.IsoCode);
+                    $("#IsoCode").trigger('change');
+                    $("#CurrencyName").val(data.CurrencyName);
+                    $("#Active").val(""+data.Active);
+                    $("#CreatedOn").val(new Date(parseInt(data.CreatedOn.substr(6))).toDateString());
+                    $("#CreatedBy").val(data.CreatedBy);
+                });
+        }
+    </script>

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -9,6 +11,8 @@ namespace eBroker.Controllers
 {
     public class ExpiryNoticeController : BaseController
     {
+        
+        private static readonly HttpClient client = new HttpClient();
         eBroker.BrokerDataContext _dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
 
         public ActionResult ExpiryNoticeView(string startDate, string endDate)
@@ -16,9 +20,11 @@ namespace eBroker.Controllers
             try
             {
                 var policies = new List<InsurancePolicy>();
-                if (String.IsNullOrEmpty(startDate) || String.IsNullOrEmpty(endDate))
+                if (String.IsNullOrEmpty(startDate) || String.IsNullOrEmpty(endDate)){
+                    startDate = DateTime.Now.ToString("yyyy-MM-dd");
+                    endDate = DateTime.Now.ToString("yyyy-MM-dd");
                     policies = _dc.InsurancePolicy.Where(x => x.expiry_dt == DateTime.Today && x.renewable == true && x.Clients != null).ToList();
-                else
+                }else
                 {
                     DateTime start = DateTime.Parse(startDate);
                     DateTime end = DateTime.Parse(endDate);
@@ -36,11 +42,12 @@ namespace eBroker.Controllers
             return View();
         }
 
-        public ActionResult SendSmsNotice(string startDate, string endDate)
+        public async Task<ActionResult> SendSmsNotice(string startDate, string endDate)
         {
-            try
-            {
+            // try
+            // {
                 var policies = new List<InsurancePolicy>();
+                var responseString = "SMS sent to customers";
                 if (!String.IsNullOrEmpty(startDate) && !String.IsNullOrEmpty(endDate))
                 {
                     DateTime start = DateTime.Parse(startDate);
@@ -55,7 +62,7 @@ namespace eBroker.Controllers
                         string status = "";
                         string msg = "";
                         string msgId = "";
-                        SMSApi.ksms smsSender = new SMSApi.ksms();
+                        //SMSApi.ksms smsSender = new SMSApi.ksms();
                         Console.Out.WriteLine();
                         Console.Out.WriteLine();
                         Console.Out.WriteLine();
@@ -64,7 +71,7 @@ namespace eBroker.Controllers
                         Console.Out.WriteLine();
                         Console.Out.WriteLine();
                         Console.Out.WriteLine();
-                        Console.Out.WriteLine(smsSender.kchk(smsAccount,smsPin,out balance,out status));
+                       // Console.Out.WriteLine(smsSender.kchk(smsAccount,smsPin,out balance,out status));
                         Console.Out.WriteLine();
                         Console.Out.WriteLine();
                         Console.Out.WriteLine();
@@ -75,8 +82,8 @@ namespace eBroker.Controllers
                         Console.Out.WriteLine();
                         for (int i = 0; i < policies.Count; i++)
                         {
-                            try
-                            {
+                            // try
+                            // {
                                 string phone = policies[i].ClientOptionalMobile;
                                 if (phone.Length == 10)
                                     phone = "25" + phone;
@@ -98,23 +105,36 @@ namespace eBroker.Controllers
                                 {
                                     msg = policies[i].ClientOptionalName + ", CIBS voudrait vous informer que votre assurance No. " + policies[i].policy_no + " de " + policies[i].PartnerOptionalName + " expire le " + policies[i].expiry_dt.ToString("yyyy-MM-dd") + ". Contact " + ConfigurationManager.AppSettings["Contact_Phone"];
                                 }
-                                smsSender.ksend(smsAccount, smsPin, "CIBS", ref msg, phone, ref msgId, "", "", "", out balance, out status);
+                                var values = new Dictionary<string, string>
+                                {
+                                    { "token", "Q5G2NFOvi0FAPTXVWwFitg2VFCKIdZFr" },
+                                    { "phone", phone },
+                                    { "message", msg },
+                                    { "sender_name", "CIBS" },
+                                };
+
+                                var content = new FormUrlEncodedContent(values);
+                                //
+                                var response = await client.PostAsync("http://sms.besoft.rw/api/v1/client/bulksms", content);
+                                
+                                await response.Content.ReadAsStringAsync();
+                                // smsSender.ksend(smsAccount, smsPin, "CIBS", ref msg, phone, ref msgId, "", "", "", out balance, out status);
                                 Toolkit.RunSQLCommand("Insert into SMS_Log (client_name,phone, policy_no, insurer,expiry_date, status, balance,user_id) values ('" + policies[i].ClientOptionalName.Replace("'", "''") + "','" + phone + "','" + policies[i].policy_no + "','" +
                                   policies[i].PartnerOptionalName + "','" + policies[i].expiry_dt + "','" + balance + "','" + status + "','"+ AppUserData.Login+"')");
-                            }
-                            catch (Exception ex)
-                            {
-                                Danger(ex.Message, true);
-                            }
+                            // }
+                            // catch (Exception ex)
+                            // {
+                            //     Danger(ex.Message, true);
+                            // }
                         }
-                        Success("SMS sent to customers", true);
+                        Success(responseString, true);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Danger(ex.Message, true);
-            }
+            // }
+            // catch (Exception ex)
+            // {
+            //     Danger(ex.Message, true);
+            // }
             return RedirectToAction("ExpiryNoticeView", new { startDate = startDate, endDate = endDate });
         }
 

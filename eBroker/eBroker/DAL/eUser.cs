@@ -35,7 +35,10 @@ namespace eBroker
         public virtual eUserCategory eUserCategories { get; set; }
         [Column("CompanyID")]
         [Display(Name = "Company")]
-        public int CompanyID { get; set; }
+        public int? CompanyID { get; set; }
+        [Display(Name = "Bank")]
+        [NotMapped]
+        public int? BankID { get; set; }
         [Column("Phone")]
         [Display(Name = "Mobile Phone")]
         [Required()]

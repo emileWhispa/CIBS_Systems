@@ -15,10 +15,10 @@ namespace eBroker
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            routes.MapHttpRoute (
-                "DefaultApi" ,
-                "api/{controller}/{action}/{id}" 
-            );
+            // routes.MapHttpRoute ( 
+            //     "DefaultApi" ,
+            //     "api/{controller}/{action}/{id}" 
+            // );
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

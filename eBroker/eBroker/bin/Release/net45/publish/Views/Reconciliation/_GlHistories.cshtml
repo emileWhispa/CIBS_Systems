@@ -1,0 +1,71 @@
+﻿﻿@using Forex.DAL
+@using GridMvc.Html
+@model IEnumerable<GL_History>
+@{
+    var reconciliation = ViewBag.Reconciliation as Reconciliation;
+//    var bankAccount = ViewBag.BankAccount as BankAccount;
+    var glBalance = ViewBag.GlBalance as GlBalance;
+}
+
+
+@if (glBalance != null && reconciliation!=null)
+{
+<p>
+    <strong>Ending Balance:</strong>
+    @glBalance.Balance.ToString("N")
+    @{
+        var diff = glBalance.Balance - reconciliation.StatementAmount;
+    }
+    |
+    <strong class="text-danger">Difference:</strong>
+    @diff.ToString("N")
+</p>
+}
+   
+<h4>GL History { @Model.Count() }</h4>
+<div class="table table-hover table-responsive">
+    @Html.Grid(Model).Named("ga").Columns(col =>
+    {
+        col.Add(p => p.Id, true);
+        col.Add(p => p.LedgerNo).Titled("Ledger No")
+            .Sortable(false).Filterable(false);
+
+        col.Add(p => p.EffectiveDate).Titled("Effective Date")
+            .Format("{0:yyyy-MM-dd}")
+            .Sortable(false).Filterable(false);
+
+        col.Add(p => p.Amount).Titled("Amount").Format("{0:#,0.##}").Sortable(false)
+            .Filterable(false);
+        col.Add(p => p.Currency.IsoCode).Titled("Currency")
+            .Sortable(false).Filterable(false);
+
+
+        col.Add(p => p.Sign).Titled("Operation");
+        col.Add(p => p.Description).Titled("Narration")
+            .Sortable(false).Filterable(false);
+    })
+</div>
+
+<div>
+    @if (Model.Any())
+    {
+        if (glBalance != null && reconciliation != null)
+        {
+            if (glBalance.Balance - reconciliation.StatementAmount == 0)
+            {
+                <button type="button" id="btnReconcile" onclick="reconcile();" class="btn btn-primary">
+                    Reconcile
+                </button>
+            }
+        }
+
+
+        <a href="@if (reconciliation != null)
+                 {
+                     @Url.Action("ToExcel", "Reconciliation", new {ledgerNo = reconciliation.AccountNumber})
+                 }" class="btn btn-success">
+            <i class="fa fa-file-excel-o"></i>
+            Export To Excel
+        </a>
+    }
+</div>

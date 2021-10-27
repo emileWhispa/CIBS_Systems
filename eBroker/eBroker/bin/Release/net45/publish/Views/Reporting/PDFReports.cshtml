@@ -1,0 +1,88 @@
+﻿﻿@{
+    ViewBag.Title = "PDF Reports";
+
+    var finTypes = new List<SelectListItem>
+    {
+        new SelectListItem {Text = "Balance Sheet", Value = "BS"},
+        new SelectListItem {Text = "Income Statement", Value = "IS"},
+        new SelectListItem {Text = "Cash Book", Value = "CB"},
+        new SelectListItem {Text = "Teller Report", Value = "TR"},
+        new SelectListItem {Text = "Available Balances", Value = "AB"},
+        new SelectListItem {Text = "Trial Balance", Value = "TB"}
+    };
+}
+<section class="content">
+    @using (Html.BeginForm("FinancialReportView", "Reporting", FormMethod.Get, new {autocomplete = "off"}))
+    {
+        <div class="col-md-8 col-md-offset-2">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h4 class="box-title">Printable Reports [PDF]</h4>
+                </div>
+                <div class="box-body form-horizontal">
+                    <div class="row">
+                        @Html.ValidationSummary(true)
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            @Html.Label("Report Name")
+                        </label>
+                        <div class="col-sm-9">
+                            @Html.DropDownList("reportId", finTypes, "--Select Report--", new {@class = "form-control",@required=""})
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            @Html.Label("Start Date")
+                        </label>
+                        <div class="col-sm-9">
+                            @Html.TextBox("startDate", "", new {@id = "startDate", @class = "form-control datepicker",@required=""})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">
+                            @Html.Label("End Date")
+                        </label>
+                        <div class="col-sm-9">
+                            @Html.TextBox("endDate", "", new {@id = "endDate", @class = "form-control datepicker"})
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <button class="btn btn-primary pull-right border-radius-10px" type="submit">
+                        <i class="fa fa-print"></i>
+                        Extract report
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+</section>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#reportId").change(function() {
+                var id = $(this).val();
+                if (id === 'TR') {
+                    $('#branchGroup').removeClass('div-hide');
+                } else {
+                    $('#branchGroup').addClass('div-hide');
+                }
+                if (id !== "CB" && id !== "TB") {
+                    $("#endDate").attr("disabled", "disabled");
+                } else
+                    $("#endDate").removeAttr("disabled", "disabled");
+
+                if (id === "AB") {
+                    $("#startDate").attr("disabled", "disabled");
+                } else
+                    $("#startDate").removeAttr("disabled", "disabled");
+
+
+            });
+            $("#reportId").change();
+        });
+    </script>
+}

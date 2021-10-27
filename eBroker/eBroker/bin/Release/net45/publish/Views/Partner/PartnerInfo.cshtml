@@ -1,0 +1,123 @@
+﻿@model eBroker.Partner
+
+@{
+    ViewBag.Title = "Partner Info";
+}
+
+@using (Html.BeginForm("CreatePartner", "Partner",FormMethod.Post,new { id = "submitForm" }))
+{
+     List<SelectListItem>
+            partnershipTypes = new List<SelectListItem>
+                ();
+                partnershipTypes.Add(new SelectListItem
+                {
+                Text = "Agent",
+                Value = "Agent"
+                });
+                partnershipTypes.Add(new SelectListItem
+                {
+                Text = "Bank",
+                Value = "Bank",
+                });
+                partnershipTypes.Add(new SelectListItem
+                {
+                Text = "Insurance",
+                Value = "Insurance"
+                });
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Partner</h4>
+    </div>
+    <div class="modal-body modal-data">
+        @Html.HiddenFor(m => m.Id)
+       
+
+
+                <div class="box-body">
+                    <div class="row">
+                        @Html.ValidationSummary(true)
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                @Html.LabelFor(model => model.company_name)
+                                @Html.TextBoxFor(model => model.company_name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.company_name)
+                            </div>
+                            <div class="col-sm-6">
+                                @Html.LabelFor(model => model.company_short_name)
+                                @Html.TextBoxFor(model => model.company_short_name, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.company_short_name)
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                @Html.LabelFor(model => model.contact_person)
+                                @Html.TextBoxFor(model => model.contact_person, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.contact_person)
+                            </div>
+                            <div class="col-sm-6">
+                                @Html.LabelFor(model => model.TIN)
+                                @Html.TextBoxFor(model => model.TIN, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.TIN)
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                @Html.LabelFor(model => model.partnership_type)
+                                @Html.DropDownListFor(model => model.partnership_type, partnershipTypes, "-- Partnership Type --", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.partnership_type)
+                            </div>
+                            <div class="col-sm-6">
+                                @Html.LabelFor(model => model.mobile1)
+                                @Html.TextBoxFor(model => model.mobile1, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.mobile1)
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                @Html.LabelFor(model => model.mobile2)
+                                @Html.TextBoxFor(model => model.mobile2, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.mobile2)
+                            </div>
+                            <div class="col-sm-6">
+                                @Html.LabelFor(model => model.group_email)
+                                @Html.TextBoxFor(model => model.group_email, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.group_email)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                @Html.LabelFor(model => model.physical_address)
+                                @Html.TextBoxFor(model => model.physical_address, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.physical_address)
+                            </div>
+                        </div>
+                    </div>
+                    <span class="didHide">@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>
+
+                </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
+    </div>
+}

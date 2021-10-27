@@ -1,0 +1,214 @@
+﻿@model eBroker.GL_Account
+@{
+    ViewBag.Title = "GL Account Info";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var glLevels = new List<SelectListItem>
+{
+        new SelectListItem()
+        {
+            Text = "HEADER", Value = "2"
+        },
+        new SelectListItem()
+        {
+            Text = "DETAIL", Value = "3"
+        }
+    };
+
+    var glTypes = new List<SelectListItem>
+{
+        new SelectListItem() {Text = "Debit", Value = "D"},
+        new SelectListItem() {Text = "Credit", Value = "C"}
+    };
+    var isActive = new List<SelectListItem>
+{
+        new SelectListItem {Text = "Yes", Value = "true"},
+        new SelectListItem {Text = "No", Value = "false"}
+    };
+}
+<section class="content">
+    <div class="alert alert-success GLAccountsuccess alert-dismissable" hidden>
+        Record Successfully
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            &times;
+        </button>
+    </div>
+    @if (ViewBag.ForexId == 0)
+    {
+        <button type="button" class="btn btn-success GLAccountModal " data-target=".bs-example-modal-lg">
+            <i class="fa fa-plus"></i> New Entry
+        </button>
+        <div class="clearfix"></div>
+    }
+    <div class="modal myModal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                @using (Ajax.BeginForm("CreateGlAccount", "GLAccount", new AjaxOptions { UpdateTargetId = "ViewGLAccountResult", HttpMethod = "POST", OnSuccess = "OnSuccess", OnBegin = "OnBegin" }, new { id = "ClearGLAccountForm" }))
+                {
+                    @Html.HiddenFor(model => model.ID, new { @Id = "txtID" })
+                    <div class="modal-header">
+                        <h4 class="box-title">GL Account Details</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            @Html.ValidationSummary(true)
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.LabelFor(model => model.GL_Level)
+                                </label>
+                                <div class="col-sm-2">
+                                    @Html.DropDownListFor(model => model.GL_Level, glLevels, "--GL Level--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.GL_Level)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.LabelFor(model => model.ParentLedgerNo)
+                                </label>
+                                <div class="col-sm-4">
+                                    @Html.DropDownListFor(model => model.ParentLedgerNo, new List<SelectListItem>(), "--Parent GL--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ParentLedgerNo)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.LabelFor(model => model.LedgerDescription)
+                                </label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(model => model.LedgerDescription, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.LedgerDescription)
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.LabelFor(model => model.LedgerType)
+                                </label>
+                                <div class="col-sm-3">
+                                    @Html.DropDownListFor(model => model.LedgerType, glTypes, "--GL Type--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.LedgerType)
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.LabelFor(model => model.Active)
+                                </label>
+                                <div class="col-sm-2">
+                                    @Html.DropDownListFor(model => model.Active, isActive, "--Is Active--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Active)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-2">
+                                    @Html.LabelFor(model => model.LedgerNo)
+                                </label>
+                                <div class="col-sm-1">
+                                    @Html.TextBoxFor(model => model.LedgerNo, new { @class = "form-control", @Disabled = "Disabled" })
+                                    @Html.ValidationMessageFor(model => model.LedgerNo)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="form-group">
+                                <div class="row">
+                                    @*  <span>@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>*@
+                                    <button type="button" class="btn btn-danger" id="reset" data-cache="false" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <script type="text/javascript">
+                    $('.GLAccountModal').click(function (e) {
+                        e.preventDefault();
+                        $('.myModal').modal({
+                            show: true,
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                        $("#ClearGLAccountForm input[type=text],select").val('');
+                        $('#txtID').val('0');
+                    });
+
+                    function OnBegin() {
+                        $('#BtnSaveGLAccount').html('Saving ...');
+                    }
+
+                    function OnSuccess(data) {
+
+                        $(".modal-backdrop").remove();
+                        //$('.myModal').modal('close').remove();
+                        $('.myModal .close').click();
+                        $('.myModal').modal('hide');
+                        $('.GLAccountsuccess').removeAttr('hidden');
+                        $('#BtnSaveGLAccount').html('Save');
+                        $('#ClearGLAccountForm').reset();
+                    }
+                </script>
+
+                @section Scripts {
+                    @Scripts.Render("~/bundles/jqueryval")
+
+                    <script type="text/javascript">
+
+                        $(document).ready(function() {
+                            $(function() {
+                                $("#GL_Level").change(function() {
+                                    $("#ParentLedgerNo").empty();
+                                    var glLevel = $(this).val();
+                                    loadParentLedgers(glLevel);
+                                });
+                                $("#GL_Level").change();
+                            });
+                        });
+
+                        //---- Load BioData
+                        loadParentLedgers = function(glLevel) {
+                            $.getJSON("@Url.Action("GetParentGLs", "JsonData")",
+                                { GLLevel: glLevel },
+                                function(data) {
+                                    $('#ParentLedgerNo')
+                                        .append('<option value="">' + "--Parent Ledger No.--" + '</option');
+                                    for (i = 0; i < data.length; i++) {
+                                        $('#ParentLedgerNo').append('<option value="' +
+                                            data[i].Value +
+                                            '">' +
+                                            data[i].Text +
+                                            '</option');
+                                    }
+                                    var fundsSourceList = document.getElementById('ParentLedgerNo');
+                                    fundsSourceList.value = '@Model.ParentLedgerNo';
+                                });
+                        };
+
+
+                    </script>
+                }
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js ")"></script>
+    <div id="ViewGLAccountResult">
+        @{
+            IEnumerable<eBroker.GL_Account> glAccountList = ViewBag.GLAccountList;
+            Html.RenderPartial("ListGLAccount", glAccountList);
+        }
+    </div>
+</section>

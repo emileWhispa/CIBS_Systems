@@ -1,0 +1,153 @@
+﻿@model eBroker.Appointment
+
+@{
+    ViewBag.Title = "Appointment Info";
+    var appointmentType = ViewBag.AppointmentTypes as List<SelectListItem>;
+    var dt = Model.Id == 0 ? "" : Model.AppointmentDate.ToString();
+}
+@using (Html.BeginForm("CreateAppointment", "Appointment",FormMethod.Post,new { id = "submitForm" }))
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.BookedBy)
+    @Html.HiddenFor(m => m.BookedOn)
+    @Html.HiddenFor(m => m.Status)
+    List<SelectListItem> listLanguages = new List<SelectListItem>();
+    listLanguages.Add(new SelectListItem
+    {
+        Text = "Kinyarwanda",
+        Value = "Kinyarwanda"
+    });
+    listLanguages.Add(new SelectListItem
+    {
+        Text = "English",
+        Value = "English",
+    });
+    listLanguages.Add(new SelectListItem
+    {
+        Text = "French",
+        Value = "French"
+    });
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Appointment</h4>
+    </div>
+    <div class="modal-body modal-data">
+        <div class="box-body">
+            <div class="row">
+                @Html.ValidationSummary(true)
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.AppointmentDate)
+                        <input class="form-control" data-val="true" data-val-date="The field Appointment Date must be a date." data-val-required="The Appointment Date field is required." id="AppointmentDate" name="AppointmentDate" type="text" value="@dt">
+                        @Html.ValidationMessageFor(model => model.AppointmentDate)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.AppointmentTime)
+                        @Html.TextBoxFor(model => model.AppointmentTime, new { @id = "txtAppointmentTime", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AppointmentTime)
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.AppointmentVenue)
+                        @Html.TextBoxFor(model => model.AppointmentVenue, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AppointmentVenue)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.AppointmentTypeID)
+                        @Html.DropDownListFor(model => model.AppointmentTypeID, appointmentType, "-- Select Type --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AppointmentTypeID)
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.ClientName)
+                        @Html.TextBoxFor(model => model.ClientName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ClientName)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.ClientPhone)
+                        @Html.TextBoxFor(model => model.ClientPhone, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ClientPhone)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.ClientEmail)
+                        @Html.TextBoxFor(model => model.ClientEmail, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ClientEmail)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.Language)
+                        @Html.DropDownListFor(model => model.Language, listLanguages, "-- Select Language --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Language)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.Comments)
+                        @Html.TextBoxFor(model => model.Comments, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Comments)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.SendReminderToClient)
+                        @Html.CheckBoxFor(model => model.SendReminderToClient, new { @id = "SendReminderToClient", @class = "" })
+                        @Html.ValidationMessageFor(model => model.SendReminderToClient)
+                    </div>
+                </div>
+            </div>
+
+            <span class="didHide">@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
+
+    </div>
+    <script>
+        $('#AppointmentDate').datepicker({
+            dateFormat: "dd-M-yy",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-20:+0"
+        });
+        $('#SendReminderToClient').bootstrapToggle({
+            on: 'Yes',
+            off: 'No'
+        });
+    </script>
+
+    @section Scripts{
+        <script type="text/javascript">
+            $(function () {
+                $('#SendReminderToClient').bootstrapToggle({
+                    on: 'Yes',
+                    off: 'No'
+                });
+
+
+            })
+        </script>
+    }
+}

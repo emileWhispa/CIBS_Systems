@@ -15,6 +15,7 @@ namespace eBroker.Models
         public string Login { get; set; }
         public string Names { get; set; }
         public string Category { get; set; }
+        public string CompanyName { get; set; }
         public int? CompanyID { get; set; }
         public string Password { get; set; }
         public bool Active { get; set; }

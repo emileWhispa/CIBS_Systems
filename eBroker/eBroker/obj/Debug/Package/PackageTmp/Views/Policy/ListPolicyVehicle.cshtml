@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<eBroker.Policy_Vehicle>
+@using eBroker.Models
 @using GridMvc.Html
 @{
     ViewBag.Title = "Policy Vehicle List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userData = ViewBag.AppUserData as UserModel;
 }
                       <div class="content">
 
@@ -18,9 +20,12 @@
                           </div>
                           @if (ViewBag.DisableAddNew == 0 || ViewBag.DisableAddNew == null)//
                           {
+                              if (!(userData != null && userData.Category == "3"))
+                              {
                       <div class="clearfix">
                           <button type="button" class="btn btn-primary edit-button pull-right"> <i class="fa fa-pencil-square"></i> New policy Vehicle</button>
                       </div>
+                          }
                           }
                           <div class="box box-primary">
                               <div class="box-header">Policy Vehicle List</div>
@@ -42,8 +47,12 @@
                                                  col.Add(m => m.value).Titled("Value").Format("{0:#,##}");
                                                  col.Add(m => m.number_occupants).Titled("Occupants");
                                                  col.Add(m => m.VehicleUsages.usage).Titled("Usage");
-                                                 col.Add().Titled("Edit").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Edit", "PolicyVehicleInfo").RouteValues(new { Id = m.Id, CId = m.contract_id }).PrependIcon("fa fa-pencil-square-o").HtmlAttributes(new { @class="btn btn-primary edit-button btn-sm"}));
-                                                 col.Add().Titled("Delete").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("", "DeleteVehicle","Policy").RouteValues(new { Id = m.Id, CId = m.contract_id }).PrependIcon("fa fa-trash").HtmlAttributes(new { @class="btn btn-danger btn-sm",onclick="return confirm('are you sure to delete ?');"}));
+
+                                                 if (!(userData != null && userData.Category == "3"))
+                                                 {
+                                                     col.Add().Titled("Edit").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Edit", "PolicyVehicleInfo").RouteValues(new {Id = m.Id, CId = m.contract_id}).PrependIcon("fa fa-pencil-square-o").HtmlAttributes(new {@class = "btn btn-primary edit-button btn-sm"}));
+                                                     col.Add().Titled("Delete").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("", "DeleteVehicle", "Policy").RouteValues(new {Id = m.Id, CId = m.contract_id}).PrependIcon("fa fa-trash").HtmlAttributes(new {@class = "btn btn-danger btn-sm", onclick = "return confirm('are you sure to delete ?');"}));
+                                                 }
                                              }).WithPaging(10).Sortable(true)
 
                                               </div>

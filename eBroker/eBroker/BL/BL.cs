@@ -25,6 +25,17 @@ namespace eBroker.BL
             //----- Validate User Password
             if (user.Password == securityComponents.Cryptography.Encrypt(password))
             {
+                string companyName = "";
+
+                if (user.CategoryId == 3)
+                {
+                    companyName = dc.Bank.First(e => e.Id == user.CompanyID)?.BankName;
+                }
+                else
+                {
+                    companyName = dc.Partner.First(e => e.Id == user.CompanyID)?.company_name;
+                }
+                
                 UserModel userModel = new UserModel
                 {
                     Id = user.Id,
@@ -32,6 +43,7 @@ namespace eBroker.BL
                     Login = user.Login,
                     Category = user.CategoryId.ToString(),
                     CompanyID = user.CompanyID,
+                    CompanyName = companyName,
                     Password = user.Password,
                     Active = user.Active,
                     Locked = user.Locked

@@ -98,6 +98,7 @@ namespace eBroker.Controllers
             serializeModel.CompanyID = user.CompanyID;
             serializeModel.Category = user.Category;
             serializeModel.Locked = user.Locked;
+            serializeModel.CompanyName = user.CompanyName;
             serializeModel.Active = user.Active;
             serializeModel.Password = expiredPolicyCounter.ToString();//Storing the expired policies for bage
             string value = JsonConvert.SerializeObject(serializeModel);

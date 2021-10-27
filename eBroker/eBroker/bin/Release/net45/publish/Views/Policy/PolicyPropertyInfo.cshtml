@@ -1,0 +1,142 @@
+﻿@model eBroker.Policy_Property
+
+@{
+    ViewBag.Title = "Policy Property Info";
+    var wallMaterial = ViewBag.WallMaterial as List<SelectListItem>;
+    var roofMaterial = ViewBag.RoofMaterial as List<SelectListItem>;
+    var windowMaterial = ViewBag.WindowMaterial as List<SelectListItem>;
+    var propertyUse = ViewBag.PropertyUse as List<SelectListItem>;
+
+}
+
+
+
+@using (Html.BeginForm("CreatePolicyProperty", "Policy",FormMethod.Post,new { id = "submitForm" }))
+{
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Property</h4>
+    </div>
+    <div class="modal-body modal-data">
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.contract_id)
+        @Html.HiddenFor(m => m.entry_date)
+        @Html.HiddenFor(m => m.entry_user)
+
+
+        <div class="box-body">
+            <div class="row">
+                @Html.ValidationSummary(true)
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.plot_number)
+                        @Html.TextBoxFor(model => model.plot_number, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.plot_number)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.property_description)
+                        @Html.TextBoxFor(model => model.property_description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.property_description)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.physical_address)
+                        @Html.TextBoxFor(model => model.physical_address, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.physical_address)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.property_use)
+                        @Html.DropDownListFor(model => model.property_use, propertyUse, "--Property Use--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.property_use)
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.wall_material)
+                        @Html.DropDownListFor(model => model.wall_material, wallMaterial, "--Wall Material--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.wall_material)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.roof_material)
+                        @Html.DropDownListFor(model => model.roof_material, roofMaterial, "--Roof Material--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.roof_material)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.window_material)
+                        @Html.DropDownListFor(model => model.window_material, windowMaterial, "--Windows Material--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.window_material)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.floors)
+                        @Html.TextBoxFor(model => model.floors, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.floors)
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.insured_value)
+                        @Html.TextBoxFor(model => model.insured_value, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.insured_value)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.volcanic_region)
+                        @Html.CheckBoxFor(model => model.volcanic_region, new { @id = "volcanic_region", @class = "" })
+                        @Html.ValidationMessageFor(model => model.volcanic_region)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        @Html.LabelFor(model => model.inflammable_neighborhood)
+                        @Html.CheckBoxFor(model => model.inflammable_neighborhood, new { @id = "inflammable_neighborhood", @class = "" })
+                        @Html.ValidationMessageFor(model => model.inflammable_neighborhood)
+                    </div>
+                </div>
+            </div>
+
+
+            <span class="didHide">@Html.Bootstrap().SubmitButton().Text("Save").PrependIcon("fa fa-floppy-o")</span>
+        </div>
+        <script>
+            $(function () {
+                $('#volcanic_region').bootstrapToggle({
+                    on: 'Yes',
+                    off: 'No'
+                });
+
+                $('#inflammable_neighborhood').bootstrapToggle({
+                    on: 'Yes',
+                    off: 'No'
+                });
+            })
+        </script>
+    </div>
+    <div class="modal-footer">
+
+        <button class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
+    </div>
+}

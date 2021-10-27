@@ -1,0 +1,167 @@
+﻿@model eBroker.CashMovement
+@{
+    ViewBag.Title = "Cash Movement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var banks = ViewBag.Banks as List<SelectListItem>;
+    var currencies = ViewBag.Currencies as List<SelectListItem>;
+    var tranTypes = new List<SelectListItem> { new SelectListItem() { Text = "CASH WITHDRAWAL", Value = "CASH WITHDRAWAL" }, new SelectListItem() { Text = "CASH DEPOSIT", Value = "CASH DEPOSIT" } };
+
+    DateTime currentDate = ViewBag.CurrentDate;
+    string referenceNo = ViewBag.ReferenceNo;
+}
+<section class="content">
+    <div class="alert alert-success CashMovementsuccess alert-dismissable" hidden>
+        Record Successfully
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            &times;
+        </button>
+    </div>
+    <button type="button" class="btn btn-primary pull-right btn-sm CashMovementModal" data-target=".bs-example-modal-lg">
+        <i class="fa fa-plus"></i> New Entry
+    </button>
+    <div class="clearfix"></div>
+
+    @Html.Partial("_Create", Model)
+
+    <div id="ViewCashMovementResult">
+        @{
+            IEnumerable<eBroker.CashMovement> cashMovementList = ViewBag.cashMovements;
+            Html.RenderPartial("_ListCashMovement", cashMovementList);
+        }
+    </div>
+</section>
+
+
+@section Scripts {
+    <script type="text/javascript">
+
+        $('.myModal').on('shown.bs.modal',
+            function(e) {
+                $('#closingBalance').text('');
+                $('#insufficientBalance').text('');
+                document.getElementById('createBtn').disabled = false;
+                $('#closingBalanceBadge').addClass('div-hide');
+            });
+
+        $('.CashMovementModal').click(function(e) {
+            e.preventDefault();
+            $('.myModal').modal();
+            $('#BtnSaveCashMovement').removeAttr('disabled');
+            $("#ClearCashMovementForm input[type=text]:not(#txtTranDate),select").val('');
+            $('#txtID').val('0');
+        });
+
+
+
+        $(document).ready(function () {
+
+            $('#TransactionType').on('change',
+                function () {
+                    var amount = $('#Amount').val();
+                    if (amount !== "" || amount !== 0) {
+                        $('#Amount').trigger('input');
+                    }
+                });
+
+
+                $("#BankID").change(function() {
+                    $("#AccountNo").empty();
+                    var bankId = $(this).val();
+                    loadAccounts(bankId);
+                });
+                
+                
+             
+                $(document).on('change',
+                    '#Currency',
+                    function() {
+                        var CurrencyId = $(this).val();
+                        loadBalance(CurrencyId);
+
+                    });
+
+            
+                $(document).on('change',
+                    '#AccountNo',
+                    function () {
+                        var accountNo = $(this).val();
+                        loadCurrency(accountNo);
+                    });
+
+            $(document).on("input",
+                "#Amount",
+                function() {
+                    var amt = $(this).val();
+                    /*if (amt !== '0') {
+                        var balance = $('#closingBalanceHidden').val();
+                        //console.log('Bal'+balance);
+                        var balanceAfterTran = balance - amt;
+                        //console.log('Bal' + balanceAfterTran);
+                        if (balanceAfterTran < 0) {
+                            var tranType = $("#TransactionType").val();
+                            if (tranType === 'CASH DEPOSIT') {
+                                $('#insufficientBalance').text('Insufficient Funds');
+                                document.getElementById('createBtn').disabled = true;
+                            }
+                            else {
+                                $('#insufficientBalance').text('');
+                                document.getElementById('createBtn').disabled = false;
+                            }
+                        } else {
+                            $('#insufficientBalance').text('');
+                            document.getElementById('createBtn').disabled = false;
+                        }
+                    }*/
+                });
+
+            $("#Amount").change();
+        });
+
+        function formatNumber(num) {
+            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+        }
+
+        var loadBalance = function(CurrencyId) {
+            $.getJSON("@Url.Action("GetClosingBalance", "JsonData")",
+                { currencyId: CurrencyId, transactionType: $("#TransactionType").val() },
+                function(data) {
+                    $('#closingBalanceBadge').removeClass('div-hide');
+                    $('#closingBalance').text(":" + formatNumber(data));
+                    $('#closingBalanceHidden').val(data);
+                });
+        };
+
+        var loadCurrency = function (AccountNo) {
+            $.getJSON("@Url.Action("GetAccountCurrency", "JsonData")",
+                { AccountNo: AccountNo},
+                function(data) {
+                    $('#Currency').val(data[0].Text);
+                    $('#CurrencyID').val(data[0].Value);
+                    loadBalance(data[0].Value);
+                });
+        };
+
+
+        loadAccounts = function(BankID) {
+            $.getJSON("@Url.Action("GetAssignGLAccounts", "JsonData")",
+                { BankID: BankID },
+                function(data) {
+                var aj = $('#ajaxBusy'); 
+                    aj.show();
+                    $('#AccountNo').append('<option value="">' + "--Account No.--" + '</option');
+                    for (i = 0; i < data.length; i++) {
+                        $('#AccountNo').append('<option value="' +
+                            data[i].Value +
+                            '">' +
+                            data[i].Text +
+                            '</option');
+                    }
+                    var AssignGLAccount = document.getElementById('AccountNo');
+                    AssignGLAccount.value = '@Model.AccountNo';
+                    //$("#CurrencyID").change()
+                    aj.hide();
+                });
+        };
+
+    </script>
+}

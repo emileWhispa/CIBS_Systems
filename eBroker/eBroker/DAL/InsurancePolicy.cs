@@ -109,14 +109,14 @@ namespace eBroker
         [Display(Name = "Renewal Policy ID")]
         public int? renewal_policy_id { get; set; }
 
-        public string BankOptionalName => Banks != null ? Banks.BankName : "--";
+        public string BankOptionalName => Banks?.BankName ?? "--";
 
-        public string PartnerOptionalName => Partners != null ? Partners.company_short_name : "--";
+        public string PartnerOptionalName => Partners?.company_short_name ?? "--";
 
-        public string ProductOptionalName => InsuranceProducts != null ? InsuranceProducts.product_name : "--";
+        public string ProductOptionalName => InsuranceProducts?.product_name ?? "--";
 
-        public string ClientOptionalName => Clients != null ? Clients.client_name : "--";
+        public string ClientOptionalName => Clients?.client_name ?? "--";
 
-        public string ClientOptionalMobile => Clients != null ? Clients.mobile : "";
+        public string ClientOptionalMobile =>  Clients?.mobile ?? "";
     }
 }

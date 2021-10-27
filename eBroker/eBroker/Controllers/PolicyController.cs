@@ -34,28 +34,29 @@ namespace eBroker.Controllers
                 ViewBag.expEndDate = expEndDate;
                 ViewBag.effStartDate = effStartDate;
                 ViewBag.effEndDate = effEndDate;
+                ViewBag.AppUserData = AppUserData;
                 if (string.IsNullOrEmpty(query))
                 {
-                    policy = _dc.Vw_Policy_Report.OrderByDescending(x => x.Id).ToList();
+                    policy = _dc.Vw_Policy_Report.Where(x=>x.interest_bank_id == AppUserData.CompanyID || AppUserData.Category != "3").OrderByDescending(x => x.Id).ToList();
                     if ( policy.Count == 0)
                         return View(policy);
                 }
                 else
-                    policy = _dc.Vw_Policy_Report.Where(x => x.client_name.Contains(query) || x.product_name.Contains(query) || x.insurer.Contains(query) || x.policy_no.Contains(query)).ToList();
+                    policy = _dc.Vw_Policy_Report.Where(x=>x.interest_bank_id == AppUserData.CompanyID || AppUserData.Category != "3").Where(x => x.client_name.Contains(query) || x.product_name.Contains(query) || x.insurer.Contains(query) || x.policy_no.Contains(query)).ToList();
                 if (!string.IsNullOrEmpty(expStartDate))
-                    policy = policy.Where(x => x.expiry_dt >= expStartDate1).ToList();
+                    policy = policy.Where(x => x.expiry_dt >= expStartDate1).Where(x=>x.interest_bank_id == AppUserData.CompanyID || AppUserData.Category != "3").ToList();
                 //else if (!string.IsNullOrEmpty(ExpStartDate) && string.IsNullOrEmpty(query))
                 //    policy = dc.Vw_Policy_Report.Where(x => x.expiry_dt >= _ExpStartDate).ToList();
                 if (!string.IsNullOrEmpty(expEndDate))
-                    policy = policy.Where(x => x.expiry_dt <= expEndDate1).ToList();
+                    policy = policy.Where(x => x.expiry_dt <= expEndDate1).Where(x=>x.interest_bank_id == AppUserData.CompanyID || AppUserData.Category != "3").ToList();
                 //else if (!string.IsNullOrEmpty(ExpEndDate) && string.IsNullOrEmpty(query))
                 //    policy = dc.Vw_Policy_Report.Where(x => x.expiry_dt <= _ExpEndDate).ToList();
                 if (!string.IsNullOrEmpty(effStartDate))
-                    policy = policy.Where(x => x.effective_dt >= effStartDate1).ToList();
+                    policy = policy.Where(x => x.effective_dt >= effStartDate1).Where(x=>x.interest_bank_id == AppUserData.CompanyID || AppUserData.Category != "3").ToList();
                 //else if (!string.IsNullOrEmpty(EffStartDate) && string.IsNullOrEmpty(query))
                 //    policy = dc.Vw_Policy_Report.Where(x => x.expiry_dt >= _EffStartDate).ToList();
                 if (!string.IsNullOrEmpty(effEndDate))
-                    policy = policy.Where(x => x.effective_dt <= effEndDate1).ToList();
+                    policy = policy.Where(x => x.effective_dt <= effEndDate1).Where(x=>x.interest_bank_id == AppUserData.CompanyID || AppUserData.Category != "3").ToList();
                 //else if (!string.IsNullOrEmpty(EffEndDate) && string.IsNullOrEmpty(query))
                 //    policy = dc.Vw_Policy_Report.Where(x => x.expiry_dt <= _EffEndDate).ToList();
                 return View(policy.OrderByDescending(x=>x.Id));
@@ -120,6 +121,7 @@ namespace eBroker.Controllers
             {
                 policyVehicle = _dc.Policy_Vehicle.Where(x => x.contract_id == cId).ToList();
                 ViewBag.PolicyId = cId;
+                ViewBag.AppUserData = AppUserData;
                 return View(policyVehicle);
             }
             catch (Exception ex)
@@ -136,6 +138,7 @@ namespace eBroker.Controllers
             {
                 policyProperty = _dc.Policy_Property.Where(x => x.contract_id == cId).ToList();
                 ViewBag.PolicyId = cId;
+                ViewBag.AppUserData = AppUserData;
                 return View(policyProperty);
             }
             catch (Exception ex)
@@ -396,7 +399,7 @@ namespace eBroker.Controllers
             ViewBag.Products = products;
             var clients = (from a in _dc.Client.OrderBy(x => x.client_name).ToList() select new SelectListItem { Text = a.client_name, Value = a.Id.ToString() }).ToList();
             ViewBag.Clients = clients;
-            var banks = (from a in _dc.Bank.OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
+            var banks = (from a in _dc.Bank.Where(x=>x.Id == AppUserData.CompanyID || AppUserData.Category != "3").OrderBy(x => x.BankName).ToList() select new SelectListItem { Text = a.BankName, Value = a.Id.ToString() }).ToList();
             ViewBag.Banks = banks;
             ViewBag.UserId = id;
         }
@@ -623,6 +626,7 @@ namespace eBroker.Controllers
             {
                 policyLoans = _dc.Policy_Loan_Account.Where(x => x.contract_id == cId).ToList();
                 ViewBag.PolicyId = cId;
+                ViewBag.AppUserData = AppUserData;
                 return View(policyLoans);
             }
             catch (Exception ex)

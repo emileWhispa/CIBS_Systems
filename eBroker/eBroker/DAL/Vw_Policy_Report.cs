@@ -29,5 +29,7 @@ namespace eBroker
         public int? renewal_policy_id { get; set; }
         public string BankName { get; set; }
         public bool? interest_transfer { get; set; }
+        [Column("interest_bank_id"), Display(Name = "Interest Transfer Bank")]
+        public int? interest_bank_id { get; set; }
     }
 }

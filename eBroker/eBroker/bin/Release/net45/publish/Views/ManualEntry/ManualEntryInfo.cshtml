@@ -1,0 +1,205 @@
+﻿@model eBroker.ManualEntry
+
+@{
+    ViewBag.Title = "Manual Entries";
+
+    var ledgerGroups = ViewBag.LedgerGroup as List<SelectListItem>;
+    var debitLegers = ViewBag.DebitLeger as List<SelectListItem>;
+    var creditLegers = ViewBag.CreditLeger as List<SelectListItem>;
+    var currencies = ViewBag.Currency as List<SelectListItem>;
+}
+<div class="content">
+    <div class="alert alert-success expsuccess alert-dismissable" hidden>
+        Record Successfully
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            &times;
+        </button>
+    </div>
+    <button type="button" class="btn btn-primary btn-sm pull-right ManualEntryModal"><i class="fa fa-plus"></i> New Entry</button>
+    <div class="clearfix"></div>
+    <div class="modal myModal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="myModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @using (Html.BeginForm("CreateManualEntry", "ManualEntry", FormMethod.Post, new { id = "submitForm" }))
+                {
+                    @Html.HiddenFor(model => model.Id, new { @Id = "txtID" })
+                    @Html.HiddenFor(model => model.CreatedOn)
+                    @Html.HiddenFor(model => model.UserID)
+                    @Html.HiddenFor(model => model.EntryDate)
+                    <div class="modal-header">
+                        @Html.Partial("_CloseModal")
+                        <h4 class="modal-title">Manual Entry</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            @Html.ValidationSummary(true)
+                        </div>
+                        @Html.Partial("_Loader")
+                        <div class="edit-result form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    @Html.LabelFor(model => model.EntryDate)
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.EntryDate, "{0:dd-MMM-yyyy}", new { @id = "txtCreationDate", @class = "form-control", disabled = "" })
+                                    @Html.ValidationMessageFor(model => model.EntryDate)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    @Html.LabelFor(model => model.DebitLedgerGroup)
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(model => model.DebitLedgerGroup, ledgerGroups, "--Debit Ledger Group--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DebitLedgerGroup)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    @Html.LabelFor(model => model.DebitLedgerNo)
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(model => model.DebitLedgerNo, new List<SelectListItem>(), "--Debit Ledger--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.DebitLedgerNo)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    @Html.LabelFor(model => model.CreditLedgerGroup)
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(model => model.CreditLedgerGroup, ledgerGroups, "--Credit Ledger Group--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CreditLedgerGroup)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    @Html.LabelFor(model => model.CreditLedgerNo)
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(model => model.CreditLedgerNo, new List<SelectListItem>(), "--Credit Ledger--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CreditLedgerNo)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    @Html.LabelFor(model => model.CurrencyID)
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(model => model.CurrencyID, currencies, "--Currency--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CurrencyID)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    @Html.LabelFor(model => model.Amount)
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.Amount, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Amount)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    @Html.LabelFor(model => model.Description)
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Description)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer editFooter">
+                        @Html.Partial("_ModalFooterButtons")
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div id="ViewManualEntryResult">
+        @{
+            IEnumerable<eBroker.Vw_ManualEntry> manualEntryList = ViewBag.lstTrans;
+            Html.RenderPartial("_ListManualEntries", manualEntryList);
+        }
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $('.ManualEntryModal').click(function(e) {
+            e.preventDefault();
+            $('.myModal').modal();
+            $('#BtnSaveManualEntry').removeAttr('disabled');
+            $("#ClearManualEntryForm input[type=text]:not(#txtCreationDate),select").val('');
+            $('#txtID').val('0');
+        });
+
+
+        $(document).ready(function() {
+            $("#DebitLedgerGroup").change(function() {
+                $("#DebitLedgerNo").empty();
+                var LedgerNo = $(this).val();
+                loadDebitLedgerNumbers(LedgerNo);
+            });
+            $("#DebitLedgerGroup").change();
+
+        });
+
+        loadDebitLedgerNumbers = function(LedgerNo) {
+            $.getJSON("@Url.Action("GetLedger", "ExpenseGL")",
+                { LedgerNo: LedgerNo },
+                function(data) {
+                    $('#ajaxBusyDebit').show();
+                    $('#DebitLedgerNo').append('<option value="">' + "--Debit Ledger--" + '</option');
+                    for (var i = 0; i < data.length; i++) {
+                        $('#DebitLedgerNo').append('<option value="' +
+                            data[i].Value +
+                            '">' +
+                            data[i].Text +
+                            '</option');
+                    }
+                    var expCatList = document.getElementById('DebitLedgerNo');
+                    expCatList.value = '@Model.DebitLedgerNo';
+                    $('#ajaxBusyDebit').hide();
+                });
+        };
+
+        $(document).ready(function() {
+            $("#CreditLedgerGroup").change(function() {
+                $("#CreditLedgerNo").empty();
+                var LedgerNo = $(this).val();
+                loadCreditLedgerNumbers(LedgerNo);
+            });
+            $("#CreditLedgerGroup").change();
+
+        });
+
+        //---- Load Credit Ledger Numbers
+        loadCreditLedgerNumbers = function(LedgerNo) {
+            $.getJSON("@Url.Action("GetLedger", "ExpenseGL")",
+                { LedgerNo: LedgerNo },
+                function(data) {
+                    $('#ajaxBusyCredit').show();
+                    $('#CreditLedgerNo').append('<option value="">' + "--Credit Ledger--" + '</option');
+                    for (var i = 0; i < data.length; i++) {
+                        $('#CreditLedgerNo').append('<option value="' +
+                            data[i].Value +
+                            '">' +
+                            data[i].Text +
+                            '</option');
+                    }
+                    var expCatList = document.getElementById('CreditLedgerNo');
+                    expCatList.value = '@Model.CreditLedgerNo';
+                    $('#ajaxBusyCredit').hide();
+                });
+        };
+    </script>
+}

@@ -1,0 +1,93 @@
+﻿@model eBroker.Policy_Loan_Account
+
+@{
+    ViewBag.Title = "Policy Loan Info";
+    var loanTypes = ViewBag.LoanTypes as List<SelectListItem>;
+    var ds_date = Model.Id == 0 || Model.loan_disbursement_date == null ? "" : Model.loan_disbursement_date.ToString();
+    var ex_date = Model.Id == 0 ? "" : Model.loan_expiry_date.ToString();
+}
+@using (Html.BeginForm("CreatePolicyLoan", "Policy",FormMethod.Post,new { id = "submitForm" }))
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.contract_id)
+    @Html.HiddenFor(m => m.entry_date)
+    @Html.HiddenFor(m => m.entered_by)
+
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Policy Loan</h4>
+    </div>
+    <div class="modal-body modal-data">
+        <div class="box-body">
+            <div class="row">
+                @Html.ValidationSummary(true)
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.loan_account)
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.loan_account, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.loan_account)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.loan_type_id)
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(model => model.loan_type_id, loanTypes, "-- Loan Type --", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.loan_type_id)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.loan_disbursement_date)
+                    </label>
+                    <div class="col-sm-9">
+                        <input class="form-control" data-val="true" data-val-date="The field Disbursement Date must be a date." data-val-required="The Disbursement Date field is required." id="txtDisbursementDate" name="loan_disbursement_date" type="text" value="@ds_date">
+                        @Html.ValidationMessageFor(model => model.loan_disbursement_date)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-3">
+                        @Html.LabelFor(model => model.loan_expiry_date)
+                    </label>
+                    <div class="col-sm-9">
+                        <input class="form-control" data-val="true" data-val-date="The field Expiry Date must be a date." data-val-required="The Expiry Date field is required." id="txtExpiryDate" name="loan_expiry_date" type="text" value="@ex_date">
+                        @Html.ValidationMessageFor(model => model.loan_expiry_date)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+
+        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
+
+    </div>
+    <script>
+        $('#txtDisbursementDate').datepicker({
+            format: "yyyy-mm-dd",
+            changeMonth: true,
+            changeYear: true,
+        });
+
+        $('#txtExpiryDate').datepicker({
+            format: "yyyy-mm-dd",
+            changeMonth: true,
+            changeYear: true,
+        });
+    </script>
+}

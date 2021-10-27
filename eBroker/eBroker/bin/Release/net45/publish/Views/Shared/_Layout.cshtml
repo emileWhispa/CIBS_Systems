@@ -1,0 +1,139 @@
+﻿@using eBroker
+@using eBroker.Models
+@{
+    UserModel currentUser = (UserModel)this.ViewData["UserData"];
+    var exp = this.ViewData["expiredPolicies"];
+    string policyCounter = exp == null ? "" : exp.ToString();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/Vendor/Ionicons/css/ionicons.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    
+    
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+
+</head>
+<body class="hold-transition skin-blue fixed sidebar-mini sidebar-collapse">
+
+    <div class="wrapper">
+        @{Html.RenderAction("Menus", "Shared", null);}
+        <header class="main-header light-shadow">
+            <!-- Logo -->
+            <a href="#" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>E</b>BR</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>Smart Broker</b></span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- Messages: style can be found in dropdown.less-->
+                        <!-- Notifications: style can be found in dropdown.less -->
+                        <!-- Tasks: style can be found in dropdown.less -->
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/Imgs/user.png" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@currentUser.Names</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="~/Imgs/user.png" class="img-circle" alt="User Image">
+
+                                    <p>
+                                        @currentUser.Names
+                                        <small>@currentUser.Category</small>
+                                    </p>
+                                </li>
+                                <!-- Menu Body -->
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">My Account</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="@Url.Action("LogOff", "Account")" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <!-- Left Sidebar End -->
+
+            <div class="content-wrapper">
+                <!-- Start content -->
+                    <div id="AlertsContainer">
+                        @{ Html.RenderPartial("_Alerts"); }
+                    </div>
+
+                @RenderBody()
+                <!-- End container -->
+                <!-- End content -->
+                <div class="footer text-right">
+                    @*<footer class="footer text-right">*@
+                    <span style="color: #171d52; font-weight: bold"></span>
+                    @*</footer>*@
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var resizefunc = [];
+        </script>
+
+
+                          <div class="modal fade f-modal" id="modal-update">
+                              <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                          </div>
+
+
+
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 2.4.0
+            </div>
+            Orion Systems & Design Ltd &copy; @DateTime.Now.Year - All Rights Reserved.
+            reserved.
+        </footer>
+    </div>
+
+<script src="~/Scripts/app.js?app=1678"></script>
+@RenderSection("scripts", required: false)
+</body>
+</html>
+

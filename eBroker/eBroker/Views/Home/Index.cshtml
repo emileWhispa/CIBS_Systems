@@ -22,7 +22,7 @@
             <div class="row">
             </div>
             <div class="row">
-                @if (ViewBag.UserCategoryId != "5")//Not a bank staff
+                @if (ViewBag.UserCategoryId != "3")//Not a bank staff
                 {
 
                     <div class="col-lg-3 col-xs-6">
@@ -110,46 +110,33 @@
                     </a>
                 </div>
             </div>*@
+                    
                     <div class="col-lg-6 col-md-6">
-                        <div class="box box-primary">
-                            <div class="box-header">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-bank fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div>Bank Policies</div>
-                                    </div>
-                                </div>
+                        
+                        <div class="small-box bg-red">
+                            <div class="inner">
+                                <h3>@ViewBag.BankPolicies.ToString("N0")</h3>
+
+                                <p>Bank Policies</p>
                             </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">@ViewBag.BankPolicies.ToString("N0")</span>
-                                    <span class="pull-right">@ViewBag.BankNetPremium.ToString("N0")<i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
+                            <div class="icon">
+                                <i class="fa fa-bank"></i>
+                            </div>
+                            <a href="#" class="small-box-footer"> @ViewBag.BankNetPremium.ToString("N0") <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
-                        <div class="panel panel-yellow">
-                            <div class="box-header">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-users fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div>Customers</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-right">@ViewBag.BankCustomers.ToString("N0")</span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
+                        <div class="small-box bg-green">
+                                                    <div class="inner">
+                                                        <h3>@ViewBag.BankCustomers.ToString("N0")</h3>
+                        
+                                                        <p>Customers</p>
+                                                    </div>
+                                                    <div class="icon">
+                                                        <i class="fa fa-bank"></i>
+                                                    </div>
+                                                    <a href="#" class="small-box-footer">  <i class="fa fa-arrow-circle-right"></i></a>
+                                                </div>
                     </div>@*
 
 
@@ -185,7 +172,7 @@
                         </div>
                         <div class="box-body">
                             <div class="list-group">
-                                @if (ViewBag.UserCategoryId != "5")//Not a bank staff
+                                @if (ViewBag.UserCategoryId != "3")//Not a bank staff
                                 {
                                     <a href="#" class="list-group-item">
                                         <span class="badge">@Model.MotorPolicies.Value.ToString("N0")</span>

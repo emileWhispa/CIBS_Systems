@@ -61,31 +61,36 @@ namespace eBroker.Controllers
         [HttpPost]
         public ActionResult CreateCustomer(Client clt)
         {
+            foreach (ModelState modelState in this.ModelState.Values) {
+                foreach (ModelError error in modelState.Errors) {
+                    Console.Out.Write(error.ErrorMessage);
+                }
+            }
             if (this.ModelState.IsValid)
             {
                 try
                 {
                     string message = "";
-                    Client entity = _dc.Client.FirstOrDefault(e => (e.client_national_id == clt.client_national_id && e.client_national_id != null && e.client_national_id.Trim() != "") || e.mobile == clt.mobile || e.Id == clt.Id);
-                    if (entity != null)
-                    {
-                        entity.client_national_id = clt.client_national_id;
-                        entity.mobile = clt.mobile;
-                        entity.client_name = clt.client_name;
-                        entity.contact_person = clt.contact_person;
-                        entity.contact_person = clt.contact_person;
-                        entity.client_type = clt.client_type;
-                        entity.language = clt.language;
-                        entity.language = clt.language;
-                        entity.mobile2 = clt.mobile2;
-                        entity.email = clt.email;
-                        entity.physical_address = clt.physical_address;
-                        entity.physical_address = clt.physical_address;
-                        entity.recruited_by = clt.recruited_by;
-                        this._dc.Entry(entity).State = EntityState.Modified;
-                        this._dc.SaveChanges();
-                        return this.Content("1");
-                    }
+                    // Client entity = _dc.Client.FirstOrDefault(e => (e.client_national_id == clt.client_national_id && e.client_national_id != null && e.client_national_id.Trim() != "") || e.mobile == clt.mobile || e.Id == clt.Id);
+                    // if (entity != null && clt.Id == 0)
+                    //  {
+                    //     entity.client_national_id = clt.client_national_id;
+                    //     entity.mobile = clt.mobile;
+                    //     entity.client_name = clt.client_name;
+                    //     entity.contact_person = clt.contact_person;
+                    //     entity.contact_person = clt.contact_person;
+                    //     entity.client_type = clt.client_type;
+                    //     entity.language = clt.language;
+                    //     entity.language = clt.language;
+                    //     entity.mobile2 = clt.mobile2;
+                    //     entity.email = clt.email;
+                    //     entity.physical_address = clt.physical_address;
+                    //     entity.physical_address = clt.physical_address;
+                    //     entity.recruited_by = clt.recruited_by;
+                    //     this._dc.Entry(entity).State = EntityState.Modified;
+                    //     this._dc.SaveChanges();
+                    //     return this.Content("1");
+                    // }
                     if (clt.Id == 0)
                     {
                         clt.create_dt = DateTime.Now;
@@ -116,7 +121,12 @@ namespace eBroker.Controllers
             Client client = this._dc.Client.Where<Client>(e => (e.client_national_id == id && e.client_national_id != null && e.client_national_id.Trim() != "") || e.mobile == id).FirstOrDefault<Client>();
             if (client == null)
                 return this.Content("0");
-            this.CustomerInfo(client.Id);
+            //Reading Customer Recruiter
+            var recruiter = (from r in _dc.eUser.ToList() select new SelectListItem { Text = r.Names, Value = r.Names }).ToList();//.Union((from a in dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList());
+            var rec = (from a in _dc.Partner.Where(x => x.partnership_type == "Agent").ToList() select new SelectListItem { Text = a.company_name, Value = a.company_name }).ToList();
+            recruiter.AddRange(rec);
+            ViewBag.recruiter = recruiter;
+
             return this.PartialView("CustomerInfo",client);
         }
 

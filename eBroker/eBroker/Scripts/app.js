@@ -62,7 +62,7 @@ $(document).on('click', '.edit-button', function (e) {
     return false;
 });
 
-$(document).on('click','.edit-v2',function (e) {
+    $(document).on('click','.edit-v2',function (e) {
     e.preventDefault();
     $.ajax({
         type: "GET",
@@ -90,6 +90,7 @@ $(document).on('blur', '.search-customer', function () {
         url: "/Customer/SearchCustomer/" + encodeURIComponent(this.value),
         success: function (res) {
             el.removeClass("img-loader");
+            console.log(res);
             if (res !== "0") $(el).closest(".modal-content").html(res);
         }
     })

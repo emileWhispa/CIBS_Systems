@@ -1,0 +1,157 @@
+﻿@model eBroker.CashMovement
+@{
+    var banks = ViewBag.Banks as List<SelectListItem>;
+    var currencies = ViewBag.Currencies as List<SelectListItem>;
+    var tranTypes = new List<SelectListItem>
+{
+new SelectListItem()
+{
+Text = "CASH WITHDRAWAL", Value = "CASH WITHDRAWAL"
+},
+new SelectListItem() {Text = "CASH DEPOSIT", Value = "CASH DEPOSIT"}
+};
+
+    var listCashMovement = ViewData.ToList();
+
+    DateTime currentDate = ViewBag.CurrentDate;
+    string referenceNo = ViewBag.ReferenceNo;
+}
+
+
+<div class="modal myModal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("CreateCashMovement", "CashMovement", FormMethod.Post, new { id = "submitForm" }))
+            {
+                @Html.HiddenFor(model => model.Id, new { @Id = "txtID" })
+                @Html.HiddenFor(model => model.DestinationLedger)
+                @Html.HiddenFor(model => model.SourceLedger)
+                @Html.HiddenFor(model => model.CurrencyID)
+                <div class="modal-header">
+                    @Html.Partial("_CloseModal")
+                    <h4 class="modal-title">Cash movement</h4>
+                </div>
+
+
+                <div class="modal-body">
+                    @Html.Partial("_Loader")
+                    <div class="edit-result">
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TransactionDate, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.TransactionDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @Disabled = "Disabled" })
+                                    @Html.ValidationMessageFor(model => model.TransactionDate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TransactionType, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(model => model.TransactionType, tranTypes, "--Transaction Type--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.TransactionType, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BankID, "Bank", htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(model => model.BankID, banks, "--Bank--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.BankID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AccountNo, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(model => model.AccountNo, new List<SelectListItem>(), "--Account No.--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.AccountNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CurrencyID, "Currency", htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBox("Currency", "", new { @class = "form-control", @Disabled = "Disabled" })
+                                    @*@Html.DropDownList(currencies, "--Currency--", new { @class = "form-control", @Disabled = "Disabled" })*@
+                                    @*@Html.ValidationMessageFor(model => model.CurrencyID, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.Amount,  new { @class = "form-control",type="number" } )
+                                    @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextAreaFor(model => model.Reason, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Reason, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CheckNo, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.CheckNo, new { @class = "form-control" } )
+                                    @Html.ValidationMessageFor(model => model.CheckNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer editFooter">
+                    <span class="badge label-info pull-left div-hide" id="closingBalanceBadge">
+                        Source Balance
+                        <span id="closingBalance"></span>
+                        <input type='hidden' id='closingBalanceHidden' />
+                    </span>
+                    <span class="text-danger pull-left">
+                        <strong>
+                            &nbsp;   <span id="insufficientBalance">
+                            </span>
+                        </strong>
+                    </span>
+                    @Html.Partial("_ModalFooterButtons")
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+@*@section Scripts{
+
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+                $(function () {
+                    $(document).on('change','#CurrencyID',function() {
+                        var CurrencyId = $(this).val();
+                        loadBalance(CurrencyId);
+
+                    });
+
+                    $("#CurrencyID").change();
+                });
+            });
+            var loadBalance = function(CurrencyId) {
+                $.getJSON("@Url.Action("GetClosingBalance", "JsonData")",
+                    { currencyId: CurrencyId, transactionType: $("#TransactionType").val() },
+                    function(data) {
+                        $('#closingBalance').text(":" + data);
+                    });
+            };
+
+
+        </script>
+    }*@
+
+

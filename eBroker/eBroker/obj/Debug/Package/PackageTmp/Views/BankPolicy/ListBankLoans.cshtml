@@ -1,10 +1,11 @@
 ﻿@*@model IEnumerable<eBroker.BankLoan>*@
+@using eBroker.Models
 @using GridMvc.Html
 @{
     ViewBag.Title = "Bank Loans";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var banks = ViewBag.Banks as List<SelectListItem>;
-
+    var userData = ViewBag.AppUserData as UserModel;
 }
 @using (Html.BeginForm("ListBankLoansView", "BankPolicy", FormMethod.Get))
 {
@@ -16,8 +17,16 @@
                     <div class="box-body">
                         <div class="row">
                             <div class="col-sm-3">
-                                @Html.DropDownList("BankName", banks, "-- Select Bank --", new { @class = "form-control" })
-                            </div>
+                                @if (userData != null && userData.Category == "3")
+                                                            {
+                                                                <input type="text" readonly name="BankName" value="@userData.CompanyName" class="form-control">
+                                                            }
+                                else
+                                {
+                                    @Html.DropDownList("BankName", banks, "-- Select Bank --", new {@class = "form-control"})
+
+                                }
+                                </div>
                             <div class="col-sm-9">
                                 <div id="custom-search-input">
                                     <div class="input-group  text-center">

@@ -1,0 +1,142 @@
+﻿@model IEnumerable<eBroker.Vw_Policy_Report>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Insurance Policies";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+                      <div class="content">
+                          <div class="modal fade f-modal" id="modal-default"  role="dialog" aria-labelledby="myLargeModalLabel">
+                              <div class="modal-dialog modal-lg" role="document">
+                                  <div class="modal-content">
+                                      @Html.Partial("PolicyInfo", new eBroker.InsurancePolicy { renewable = true,effective_dt = DateTime.Now,expiry_dt = DateTime.Now,payment_date = DateTime.Now,invoiceable=true })
+
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                          </div>
+                          <div class="clearfix">
+                              <button type="button" class="btn btn-primary pull-right edit-button"> <i class="fa fa-pencil-square"></i> New policy</button>
+
+                          </div>
+                          <div class="box box-primary">
+                              <div class="box-header">
+                                  <h3 class="box-title">Insurance Policy List</h3>
+                              </div>
+                              <div class="box-body">
+                                  <div class="row">
+                                      <div class="box-body">
+                                          <div class="row">
+                                              <div class="col-sm-10">
+                                                  @using (Html.BeginForm("ListPolicy", "Policy", FormMethod.Get))
+                                                  {
+                                                      <table class="table table-bordered">
+                                                          <tr>
+                                                              <td colspan="3">
+                                                                  <div class="input-group  text-center col-sm-12">
+                                                                      <input type="text" name="query" id="query" class="form-control input-sm" placeholder="Search by Client Name, Policy No., Product or Insurer....." />
+                                                                      <span class="input-group-btn">
+                                                                          <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                                                      </span>
+                                                                  </div>
+                                                              </td>
+                                                          </tr>
+
+                                                          <tr>
+                                                              <td>Search by Expiry Date</td>
+                                                              <td>
+                                                                  <input type="text" name="ExpStartDate" id="ExpStartDate" class="form-control input-sm" placeholder="Start Date" />
+                                                              </td>
+                                                              <td>
+                                                                  <div class="input-group  text-center">
+                                                                      <input type="text" name="ExpEndDate" id="ExpEndDate" class="form-control input-sm" placeholder="End Date" />
+                                                                      <span class="input-group-btn">
+                                                                          <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                                                      </span>
+                                                                  </div>
+                                                              </td>
+                                                          </tr>
+                                                          <tr>
+                                                              <td>Search by Effective Date</td>
+                                                              <td>
+                                                                  <input type="text" name="EffStartDate" id="EffStartDate" class="form-control input-sm" placeholder="Start Date" />
+                                                              </td>
+                                                              <td>
+                                                                  <div class="input-group  text-center">
+                                                                      <input type="text" name="EffEndDate" id="EffEndDate" class="form-control input-sm" placeholder="End Date" />
+                                                                      <span class="input-group-btn">
+                                                                          <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                                                      </span>
+                                                                  </div>
+                                                              </td>
+                                                          </tr>
+                                                      </table>
+                                                  }
+                                              </div>
+
+                                          </div>
+
+                                          <div class="table-responsive">
+                                              <div class="table table-bordered">
+                                                  @Html.Grid(Model).Named("ga").Columns(col =>
+                                             {
+                                                 col.Add(m => m.Id, true);
+                                                 col.Add(m => m.policy_no).Titled("Policy No.");
+                                                 //col.Add(m => m.policy_type).Titled("Type");
+                                                 col.Add(m => m.product_name).Titled("Product");
+                                                 col.Add(m => m.insurer).Titled("Insurer");
+                                                 col.Add(m => m.client_name).Titled("Client Name");
+                                                 col.Add(m => m.effective_dt).Titled("Effective Date").Format("{0:yyyy-MM-dd}");
+                                                 col.Add(m => m.expiry_dt).Titled("Expiry Date").Format("{0:yyyy-MM-dd}");
+                                                 col.Add(m => m.net_premium).Titled("Premium").Format("{0:#,##0}");
+                                                 //col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("View Insurance Policy(ies)", "InsurancePolicy"));
+                                                 col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Items", "PolicyItems").RouteValues(new { CId = m.Id }).PrependIcon("fa fa-search-plus"));
+                                                 col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Loan Acct", "ListPolicyLoan").RouteValues(new { CId = m.Id }).PrependIcon("fa fa-search-plus"));
+                                                 //col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Renew", "PolicyRenew").RouteValues(new { CId = m.Id }).PrependIcon("fa fa-search-plus"));
+
+                                                 col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "PolicyInfo", "Policy", new { Id = m.Id, @data_toggle = "#modal" }, new { @class = "edit-button btn btn-sm btn-primary" }));
+
+                                                 col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => m.renewed ? Html.ActionLink("Renew", "Renew", "Policy", new { Id = m.Id}, new { @class = "btn btn-sm btn-primary btn-flat",disabled = true,onclick="return false;" }) : Html.ActionLink("Renew", "Renew", "Policy", new { Id = m.Id}, new { @class = "edit-button btn btn-sm btn-primary" }));
+                                                 col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Delete", "DeletePolicy", "Policy", new { Id = m.Id, @data_toggle = "#modal" }, new { @class = "btn btn-sm btn-danger",onclick="return confirm('are you sure to delete?');" }));
+                                             }).WithPaging(10).Sortable(true)
+
+                                              </div>
+                                              @Html.ActionLink("Excel", "ExportToExcel", "Policy",new { query = ViewBag.query,expStartDate=ViewBag.expStartDate,expEndDate=ViewBag.expEndDate,effStartDate=ViewBag.effStartDate,effEndDate=ViewBag.effEndDate },new { @class="btn btn-default" })
+                                          </div>
+                                      </div>
+
+                                  </div>
+                              </div>
+
+                          </div>
+                          <script>
+                              $('#ExpStartDate').datepicker({
+                                  dateFormat: "dd-M-yy",
+                                  changeMonth: true,
+                                  changeYear: true,
+                                  yearRange: "-20:+1"
+                              });
+
+                              $('#ExpEndDate').datepicker({
+                                  dateFormat: "dd-M-yy",
+                                  changeMonth: true,
+                                  changeYear: true,
+                                  yearRange: "-20:+20"
+                              });
+
+                              $('#EffStartDate').datepicker({
+                                  dateFormat: "dd-M-yy",
+                                  changeMonth: true,
+                                  changeYear: true,
+                                  yearRange: "-20:+1"
+                              });
+                              $('#EffEndDate').datepicker({
+                                  dateFormat: "dd-M-yy",
+                                  changeMonth: true,
+                                  changeYear: true,
+                                  yearRange: "-20:+1"
+                              });
+                          </script>
+
+                      </div>

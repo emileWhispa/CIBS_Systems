@@ -1,0 +1,56 @@
+﻿@model IEnumerable<eBroker.eUserCategory>
+@using GridMvc.Html;
+
+@{
+    ViewBag.Title = "User Group List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+                      <div class="content">
+                          <div class="modal fade f-modal" id="modal-default">
+                              <div class="modal-dialog">
+                                  <div class="modal-content">
+                                      @Html.Partial("UserCategoryInfo", new eBroker.eUserCategory { insert = true}))
+                                  </div>
+                                  <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                          </div>
+                          <div class="clearfix">
+                              <button class="btn btn-primary edit-button pull-right"><i class="fa fa-plus-square"></i> New Entry</button>
+                          </div>
+                          <div class="box box-primary ">
+                              <div class="box-header">
+                                  <h3 class="box-title">
+                                      <i class="fa fa-info"></i>
+                                      User Groups Info
+                                  </h3>
+                              </div>
+
+                              <div class="box-body">
+                                  @using (Html.BeginForm("ListUserCategory", "EUserCategory", FormMethod.Get))
+                                  {
+                                      <div class="table-responsive">
+                                          <br />
+                                          <div class="table table-bordered">
+                                              @Html.Grid(Model).Named("ga").Columns(col =>
+                                         {
+                                             col.Add(uc => uc.Id, true);
+                                             col.Add(uc => uc.Category).Titled("Category");
+                                             col.Add(uc => uc.Description).Titled("Description");
+                                             col.Add().Sanitized(false).Encoded(false).RenderValueAs(b => Html.Bootstrap().ActionLink("Menus", "ListMenu", "Security").RouteValues(new { CategoryId = b.Id }).PrependIcon("fa fa-list-ul"));
+
+                                             col.Add().Sanitized(false).Encoded(false).RenderValueAs(b => Html.Bootstrap().ActionLink("Users", "ListProfileUsers", "Security").RouteValues(new { CategoryId = b.Id }).PrependIcon("fa fa-users"));
+
+                                             col.Add()
+                                             .Sanitized(false)
+                                             .Encoded(false).RenderValueAs(b => Html.Bootstrap().ActionLink("Edit", "UserCategoryInfo", "eUserCategory").RouteValues(new { Id = b.Id }).HtmlAttributes(new {@class="btn btn-primary btn-sm btn-flat edit-button" }).PrependIcon("fa fa-pencil-square"));
+
+                                         }).WithPaging(10).Sortable(true)
+                                          </div>
+                                      </div>
+                                  }
+                              </div>
+                          </div>
+                      </div>

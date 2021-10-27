@@ -1,0 +1,65 @@
+﻿@model IEnumerable<eBroker.BankCollateral>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Bank Collateral";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //var banks = ViewBag.Banks as List<SelectListItem>;
+    string BankName = ViewBag.BankName;
+    int counter = 0;
+    if (@Model != null)
+    {
+        counter = @Model.Count();
+    }
+}
+@using (Html.BeginForm("ListBankCollateralView", "BankPolicy", FormMethod.Get))
+{
+    @Html.Hidden("BankName",BankName)
+<div class="content">
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title"> <i class="fa fa-info"></i> Bank Collateral {@counter.ToString()}</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="box-body">
+                    <div class="row">
+                        @*<div class="col-sm-3">
+                                @Html.DropDownList("BankId", banks, "-- Select Bank --", new { @class = "form-control"})
+                            </div>*@
+                        <div class="col-sm-12">
+                            <div id="custom-search-input">
+                                <div class="input-group  text-center">
+                                    <input type="text" name="query" id="query" class="form-control input-sm" placeholder="Search by Loan Account, Customer Name, Collateral Type, Collateral Description....." />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-info btn-sm" value="Search" type="submit"><i class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <div class="table table-bordered">
+                            @Html.Grid(Model).Named("ga").Columns(col =>
+                           {
+                               col.Add(m => m.Id, true);
+                               col.Add(m => m.AccountNumber).Titled("Loan Account");
+                               col.Add(m => m.getAccName).Titled("Account Name");
+                               col.Add(m => m.CollateralDescription).Titled("Collateral Description");
+                               col.Add(m => m.CollateralType).Titled("Collateral Type");
+                               col.Add(m => m.MarketValue).Titled("Market Value").Format("{0:#,##0}");
+                               col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Policies", "ListLoanPolicy").RouteValues(new { AN = m.AccountNumber}).PrependIcon("fa fa-pencil-square-o"));
+                           }).WithPaging(10).Sortable(true)
+
+                        </div>
+                        @*@Html.Bootstrap().ActionLinkButton("Excel", "ExportCollateralToExcel", "BankPolicy").PrependIcon("fa fa-file-excel-o").RouteValues(new { BankId = 0})*@
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+}

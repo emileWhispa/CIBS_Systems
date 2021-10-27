@@ -17,7 +17,7 @@ namespace eBroker.Controllers
                 //var model = dc.Vw_Brokerage_Summary.ToList();
             List<Vw_Policy_Report> sc = new List<Vw_Policy_Report>();
             DateTime today=DateTime.Today;
-            if (AppUserData.Category == "5")//Bank User
+            if (AppUserData.Category == "3")//Bank User
             {
                 var bankName=dc.Bank.Where(x=>x.Id==AppUserData.CompanyID).FirstOrDefault();
                 sc = dc.Vw_Policy_Report.Where(x => x.expiry_dt == today && x.BankName== bankName.BankName).OrderByDescending(x => x.Id).ToList();

@@ -1,0 +1,41 @@
+﻿@using GridMvc.Html
+@model IEnumerable<eBroker.DAL.Vw_GeneralLedger>
+
+@{
+    ViewBag.Title = "ViewGeneralLedger";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<h2>
+    General Ledger
+
+    <span class="small">
+        From: <small>@ViewBag.StartDate</small>
+        To: <small>@ViewBag.EndDate</small>
+    </span>
+
+
+    @{
+        ViewBag.url = Url.Action("ToExcel", "GlAccount");
+    }
+    @Html.Partial("_ToExcel")
+</h2>
+
+<div class="table table-hover table-responsive table-bordered">
+    @Html.Grid(Model).Named("ga").Columns(col =>
+{
+    col.Add(p => p.Id, true);
+    col.Add(p => p.EffectiveDate).Titled("Date").Format("{0:yyyy-MM-dd}").Sortable(true).Filterable(true);
+
+    col.Add(p => p.LedgerNo).Titled("Ledger No.").Sortable(true).Filterable(true);
+    col.Add(p => p.LedgerDescription).Titled("Ledger Description").Sortable(true).Filterable(true);
+    col.Add(p => p.IsoCode).Titled("Currency").Sortable(true).Filterable(true);
+    col.Add(p => p.Description).Titled("Description").Sortable(true).Filterable(true);
+    col.Add(p => p.Debit).Titled("Debit").Format("{0:#,##0}").Sortable(true).Filterable(true);
+    col.Add(p => p.Credit).Titled("Credit").Format("{0:#,##0}").Sortable(true).Filterable(true);
+
+}).WithPaging(10).Sortable(true).WithMultipleFilters()
+</div>
+
+

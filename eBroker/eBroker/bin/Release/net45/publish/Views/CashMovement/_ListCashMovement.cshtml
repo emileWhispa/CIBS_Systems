@@ -1,0 +1,117 @@
+﻿@using eBroker
+@using GridMvc.Html
+@model IEnumerable<eBroker.CashMovement>
+
+
+    <div>
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h4>
+                    Cash Movement Transactions{@Model.Count()}
+                    @Html.Partial("_Filter")
+                </h4>
+            </div>
+            <div class="box-body">
+                <div class="table table-hover table-responsive">
+                    @Html.Grid(Model).Named("ga").Columns(col =>
+                    {
+                        col.Add(p => p.Id, true);
+                        col.Add(p => p.TransactionDate).Titled("Date").Format("{0:yyyy-MM-dd}").Sortable(true).Filterable(true);
+                        col.Add(p => p.Currencies.IsoCode).Titled("Currency").Sortable(true).Filterable(true);
+                        col.Add(p => p.Amount).Titled("Amount").Format("{0:#,##0}").Sortable(true).Filterable(true);
+                        col.Add(p => p.TransactionType).Titled("Transaction Type").Sortable(true).Filterable(true);
+                        col.Add(p => p.Banks.BankName).Titled("Bank Name").Sortable(true).Filterable(true);
+                        col.Add(p => p.AccountNo).Titled("Account No.").Sortable(true).Filterable(true);
+//                        col.Add(p => p.Reason).Titled("Reason").Sortable(true).Filterable(true);
+                        col.Add(e => e.Reversal).Titled("Reversed?")
+                            .Sortable(true).Filterable(true)
+                            .Sanitized(false)
+                            .Encoded(false)
+                            .RenderValueAs(e=>Html.Label(e.Reversal.ToString(),
+                                new {@class= e.Reversal ? "label label-warning" : "label label-info" }));
+
+                        col.Add()
+                            .Sanitized(false)
+                            .Encoded(false)
+                            .RenderValueAs(o => Html.ActionLink("Edit", "CashMovementEdit",
+                                new {Id = o.Id},
+                                new {@class = "btn btn-info btn-sm BtnEditCashMovement"}));
+                        col.Add()
+                            .Sanitized(false)
+                            .Encoded(false)
+                            .RenderValueAs(o => Html.ActionLink("Reverse", "ReverseCashMovement",
+                                new {id = o.Id},
+                                new {@class = "btn btn-warning btn-sm "}));
+                        col.Add()
+                            .Sanitized(false)
+                            .Encoded(false)
+                            .RenderValueAs(o => Html.ActionLink("Print", "CashMovementReceipt",
+                                new {cId = DataEncryption.Encrypt(o.Id.ToString())},
+                                new {@class = "btn btn-primary btn-sm "}));
+                    }).WithPaging(10).Sortable(true).WithMultipleFilters()
+                </div>
+
+            </div>
+        </div> <script type="text/javascript">
+
+            $(document).on('click',
+                '.BtnEditCashMovement',
+                function(e) {
+                    e.preventDefault();
+                    ViewCashMovement($(this));
+                });
+
+            function ViewCashMovement(cashmove) {
+                $('.myModal').modal();
+                showLoader();
+                var url = cashmove.attr('href');
+                var loadAccounts;
+                $.getJSON(url,
+                    function (data) {
+                        hideLoader();
+                        $("#txtID").val(data.Id);
+                        $("#TransactionDate").val(data.TransactionDateString);
+                        $("#CurrencyID").val(data.CurrencyID);
+                        $("#BankID").val(data.BankID);
+                        $("#BankID").change();
+                        loadAccounts(data.BankID, data.AccountNo);
+                        $("#AccountNo").val(data.AccountNo);
+                        $("#Amount").val(data.Amount);
+                        $("#TransactionType").val(data.TransactionType);
+                        $("#Reason").val(data.Reason);
+                        $("#CheckNo").val(data.CheckNo);    
+                        $("#DestinationLedger").val(data.DestinationLedger);
+                      
+                    });
+
+                loadAccounts = function(bankId, selectedValue) {
+                    $.getJSON("@Url.Action("GetAssignGLAccounts", "JsonData")",
+                        { BankID: bankId },
+                        function(data) {
+                            $('#AccountNo').empty();
+                            $('#AccountNo')
+                                .append('<option value="">' + "--Account No.--" + '</option');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#AccountNo').append('<option value="' +
+                                    data[i].Value +
+                                    '">' +
+                                    data[i].Text +
+                                    '</option');
+                            }
+                            var assignGlAccount = document.getElementById('AccountNo');
+                            assignGlAccount.value = selectedValue;
+                            $('#AccountNo').trigger('change');
+                        });
+                };
+            }
+        </script>
+        <script>
+            $('#TranDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-80:+0"
+            });
+        </script>
+
+    </div>
