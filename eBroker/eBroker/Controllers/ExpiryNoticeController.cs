@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using eBroker.DAL;
+using Newtonsoft.Json;
 
 namespace eBroker.Controllers
 {
@@ -14,6 +16,80 @@ namespace eBroker.Controllers
         
         private static readonly HttpClient client = new HttpClient();
         eBroker.BrokerDataContext _dc = new eBroker.BrokerDataContext(ConfigurationManager.ConnectionStrings["eBrokerageEntities"].ConnectionString);
+
+        public ActionResult CustomSMSView()
+        {
+            var people = _dc.Client.Where(x => x.mobile != null && x.mobile.Trim().Length > 0).ToList();
+            return View(people);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SendMultipleSMS(IEnumerable<string> clients,string content)
+        {
+            string resp = "response";
+            if (clients != null && content != null)
+            {
+                var phones = new List<string>();
+                var names = new List<string>();
+                foreach (var px in clients)
+                {
+                    var num = int.Parse(px);
+                    var user = _dc.Client.FirstOrDefault(x=>x.Id == num);
+                    
+                    if(user == null || string.IsNullOrEmpty(user.mobile) ) continue;
+                    
+                    var phone = user.mobile;
+                    if (phone.Length == 10)
+                        phone = "25" + phone;
+                    else if (phone.StartsWith("+") && phone.Length == 13)
+                        phone = phone.Replace("+", "");
+                    else if (phone.Length != 12)
+                        continue;   
+                    
+                    phones.Add(phone);
+                    names.Add(user.client_name??"---");
+                    
+                }
+                
+                var values = new Dictionary<string, string>
+                {
+                    { "token", "Q5G2NFOvi0FAPTXVWwFitg2VFCKIdZFr" },
+                    { "phone", string.Join(",",phones) },
+                    { "message", content },
+                    { "sender_name", "CIBS" },
+                };
+
+                var data = new FormUrlEncodedContent(values);
+                //
+                var response = await client.PostAsync("http://sms.besoft.rw/api/v1/client/bulksms", data);
+                                
+                resp = await response.Content.ReadAsStringAsync();
+
+                var log = JsonConvert.DeserializeObject<SmsResponse>(resp);
+
+                if (log != null && log.statusCode == 201)
+                {
+                    resp = log.response;
+                    Success(resp);
+                    var index = 0;
+                    foreach (var item in phones)
+                    {
+                
+                        // smsSender.ksend(smsAccount, smsPin, "CIBS", ref msg, phone, ref msgId, "", "", "", out balance, out status);
+                        Toolkit.RunSQLCommand("Insert into SMS_Log (client_name,phone, policy_no, insurer,expiry_date, status, balance,user_id,content) values ('" + names[index] + "','" + item + "','---','---','"+DateTime.Now.ToString("yyyy-MM-dd")+"','','','"+ AppUserData.Login+"','"+content.Replace("'", "''")+"')");
+                        index++;
+                    }
+                }
+                else
+                {
+                    resp = "SMS Failed To Send";
+                    Danger(resp);
+                }
+                
+
+            }
+            return RedirectToAction("CustomSMSView");
+        }
 
         public ActionResult ExpiryNoticeView(string startDate, string endDate)
         {
@@ -82,15 +158,25 @@ namespace eBroker.Controllers
                         Console.Out.WriteLine();
                         for (int i = 0; i < policies.Count; i++)
                         {
-                            // try
-                            // {
+                             try
+                             {
                                 string phone = policies[i].ClientOptionalMobile;
+
+                                if (string.IsNullOrEmpty(phone))
+                                {
+                                    Danger("No Phone number");
+                                    continue;
+                                }
+
                                 if (phone.Length == 10)
                                     phone = "25" + phone;
                                 else if (phone.StartsWith("+") && phone.Length == 13)
                                     phone = phone.Replace("+", "");
                                 else if (phone.Length != 12)
+                                {
+                                    Danger("Invalid Phone Number `"+phone+"`");
                                     continue;
+                                }
                                 language = policies[i].Clients != null ? policies[i].Clients.language : "Kinyarwanda";
                                 msgId = DateTime.Now.ToFileTime().ToString();
                                 if (language == "Kinyarwanda")
@@ -117,17 +203,31 @@ namespace eBroker.Controllers
                                 //
                                 var response = await client.PostAsync("http://sms.besoft.rw/api/v1/client/bulksms", content);
                                 
-                                await response.Content.ReadAsStringAsync();
-                                // smsSender.ksend(smsAccount, smsPin, "CIBS", ref msg, phone, ref msgId, "", "", "", out balance, out status);
-                                Toolkit.RunSQLCommand("Insert into SMS_Log (client_name,phone, policy_no, insurer,expiry_date, status, balance,user_id) values ('" + policies[i].ClientOptionalName.Replace("'", "''") + "','" + phone + "','" + policies[i].policy_no + "','" +
-                                  policies[i].PartnerOptionalName + "','" + policies[i].expiry_dt + "','" + balance + "','" + status + "','"+ AppUserData.Login+"')");
-                            // }
-                            // catch (Exception ex)
-                            // {
-                            //     Danger(ex.Message, true);
-                            // }
+                                var resp = await response.Content.ReadAsStringAsync();
+
+                                var log = JsonConvert.DeserializeObject<SmsResponse>(resp);
+
+                                if (log != null && log.statusCode >= 200 && log.statusCode <=299)
+                                {
+                                    Success(log.response);
+                                    // smsSender.ksend(smsAccount, smsPin, "CIBS", ref msg, phone, ref msgId, "", "", "", out balance, out status);
+                                    Toolkit.RunSQLCommand(
+                                        "Insert into SMS_Log (client_name,phone, policy_no, insurer,expiry_date, status, balance,user_id,content) values ('" +
+                                        policies[i].ClientOptionalName.Replace("'", "''") + "','" + phone + "','" +
+                                        policies[i].policy_no + "','" +
+                                        policies[i].PartnerOptionalName + "','" + policies[i].expiry_dt + "','" +
+                                        balance + "','" + status + "','" + AppUserData.Login + "','"+msg.Replace("'", "''")+"')");
+                                }
+                                else
+                                {
+                                    Danger((log != null ?log.response:"")+" \n SMS Failed To Send To "+policies[i].ClientOptionalName);
+                                }
+                                 }
+                             catch (Exception ex)
+                             {
+                                 Danger(ex.Message, true);
+                             }
                         }
-                        Success(responseString, true);
                     }
                 }
             // }

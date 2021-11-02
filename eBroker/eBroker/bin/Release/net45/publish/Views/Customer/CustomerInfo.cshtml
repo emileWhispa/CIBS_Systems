@@ -45,9 +45,11 @@
 @using (Html.BeginForm("CreateCustomer", "Customer", FormMethod.Post, new { id = "submitForm" }))
 {
     
-    @Html.HiddenFor(model => model.Id)
+    <input data-val="true" data-val-number="The field Id must be a number." data-val-required="The Id field is required." id="Id" name="Id" type="hidden" value="@Model.Id" />
     @Html.HiddenFor(model => model.user_id)
+    
     @Html.HiddenFor(model => model.create_dt)
+    
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -64,12 +66,12 @@
             <div class="row">
                 <div class="col-sm-6">
                     @Html.LabelFor(model => model.client_national_id)
-                    @Html.TextBoxFor(model => model.client_national_id, new { @class = "form-control search-customer" })
+                    @Html.TextBoxFor(model => model.client_national_id, new { @class = Model.Id > 0 ? "form-control" : "form-control search-customer" })
                     @Html.ValidationMessageFor(model => model.client_national_id)
                 </div>
                 <div class="col-sm-6">
                     @Html.LabelFor(model => model.mobile)
-                    @Html.TextBoxFor(model => model.mobile, new { @class = "form-control search-customer" })
+                    @Html.TextBoxFor(model => model.mobile, new { @class = Model.Id > 0 ? "form-control" : "form-control search-customer" })
                     @Html.ValidationMessageFor(model => model.mobile)
                 </div>
             </div>

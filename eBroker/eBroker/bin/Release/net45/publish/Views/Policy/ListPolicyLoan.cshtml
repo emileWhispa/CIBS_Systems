@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<eBroker.Policy_Loan_Account>
+@using eBroker.Models
 @using GridMvc.Html
 @{
     ViewBag.Title = "Policy Loan Accounts";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userData = ViewBag.AppUserData as UserModel;
 }
                       <div class="content">
                           <div class="modal fade f-modal" id="modal-default">
@@ -16,9 +18,11 @@
                               <!-- /.modal-dialog -->
                           </div>
                           <div class="clearfix">
-
-                              <button class="btn btn-primary edit-button pull-right"><i class="fa fa-briefcase"></i> Attach New Loan</button>
-                          </div>
+                              @if (!(userData != null && userData.Category == "3"))
+                              {
+                                  <button class="btn btn-primary edit-button pull-right"><i class="fa fa-briefcase"></i> Attach New Loan</button>
+                              }
+                              </div>
                           <div class="box box-primary">
                               <div class="box-header">
                                   <h3 class="box-title"><i class="fa fa-info-circle"></i> Policy Loan Accounts</h3>
@@ -41,7 +45,11 @@
                                                  col.Add(m => m.LoanTypes.loan_type).Titled("Loan Type");
                                                  col.Add(m => m.loan_disbursement_date).Titled("Disbursement Date").Format("{0:yyyy-MM-dd}");
                                                  col.Add(m => m.loan_expiry_date).Titled("Expiry Date").Format("{0:yyyy-MM-dd}");
-                                                 col.Add().Titled("Edit").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "PolicyLoanInfo", "Policy", new { Id = m.Id, CId = m.contract_id }, new { @class = "edit-button btn btn-sm btn-primary btn-flat" }));
+
+                                                 if (!(userData != null && userData.Category == "3"))
+                                                 {
+                                                     col.Add().Titled("Edit").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "PolicyLoanInfo", "Policy", new {Id = m.Id, CId = m.contract_id}, new {@class = "edit-button btn btn-sm btn-primary btn-flat"}));
+                                                 }
                                              }).WithPaging(10).Sortable(true)
 
                                               </div>

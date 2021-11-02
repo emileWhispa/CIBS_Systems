@@ -398,6 +398,7 @@
     <Compile Include="DAL\Reconciliation.cs" />
     <Compile Include="DAL\Right.cs" />
     <Compile Include="DAL\Sector.cs" />
+    <Compile Include="DAL\SmsResponse.cs" />
     <Compile Include="DAL\SMS_Log.cs" />
     <Compile Include="DAL\SystemReports.cs" />
     <Compile Include="DAL\Temp_Client.cs" />
@@ -706,6 +707,7 @@
     <Content Include="Vendor\select2\select2.min.css" />
     <Content Include="Views\Currency\CurrencyInfo.cshtml" />
     <Content Include="Views\Currency\_ListCurrencies.cshtml" />
+    <Content Include="Views\ExpiryNotice\CustomSMSView.cshtml" />
     <Content Include="Views\GlBalances\GetGlBalances.cshtml" />
     <Content Include="Views\GlBalances\GlBalances.cshtml" />
     <Content Include="Views\GlBalances\_date.cshtml" />

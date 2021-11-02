@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<eBroker.Vw_Policy_Report>
+@using eBroker.Models
 @using GridMvc.Html
 @{
     ViewBag.Title = "Insurance Policies";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userData = ViewBag.AppUserData as UserModel;
 }
 
                       <div class="content">
@@ -10,15 +12,17 @@
                               <div class="modal-dialog modal-lg" role="document">
                                   <div class="modal-content">
                                       @Html.Partial("PolicyInfo", new eBroker.InsurancePolicy { renewable = true,effective_dt = DateTime.Now,expiry_dt = DateTime.Now,payment_date = DateTime.Now,invoiceable=true })
-
                                   </div>
                                   <!-- /.modal-content -->
                               </div>
                               <!-- /.modal-dialog -->
                           </div>
                           <div class="clearfix">
-                              <button type="button" class="btn btn-primary pull-right edit-button"> <i class="fa fa-pencil-square"></i> New policy</button>
-
+                              @if (!(userData != null && userData.Category == "3"))
+                              {
+                                  <button type="button" class="btn btn-primary pull-right edit-button"> <i class="fa fa-pencil-square"></i> New policy</button>
+                              }
+                            
                           </div>
                           <div class="box box-primary">
                               <div class="box-header">
@@ -95,10 +99,13 @@
                                                  col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Loan Acct", "ListPolicyLoan").RouteValues(new { CId = m.Id }).PrependIcon("fa fa-search-plus"));
                                                  //col.Add().Sanitized(false).Encoded(false).RenderValueAs(m => Html.Bootstrap().ActionLink("Renew", "PolicyRenew").RouteValues(new { CId = m.Id }).PrependIcon("fa fa-search-plus"));
 
-                                                 col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "PolicyInfo", "Policy", new { Id = m.Id, @data_toggle = "#modal" }, new { @class = "edit-button btn btn-sm btn-primary" }));
+                                                 if (!(userData != null && userData.Category == "3"))
+                                                 {
+                                                     col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Edit", "PolicyInfo", "Policy", new {Id = m.Id, @data_toggle = "#modal"}, new {@class = "edit-button btn btn-sm btn-primary"}));
 
-                                                 col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => m.renewed ? Html.ActionLink("Renew", "Renew", "Policy", new { Id = m.Id}, new { @class = "btn btn-sm btn-primary btn-flat",disabled = true,onclick="return false;" }) : Html.ActionLink("Renew", "Renew", "Policy", new { Id = m.Id}, new { @class = "edit-button btn btn-sm btn-primary" }));
-                                                 col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Delete", "DeletePolicy", "Policy", new { Id = m.Id, @data_toggle = "#modal" }, new { @class = "btn btn-sm btn-danger",onclick="return confirm('are you sure to delete?');" }));
+                                                     col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => m.renewed ? Html.ActionLink("Renew", "Renew", "Policy", new {Id = m.Id}, new {@class = "btn btn-sm btn-primary btn-flat", disabled = true, onclick = "return false;"}) : Html.ActionLink("Renew", "Renew", "Policy", new {Id = m.Id}, new {@class = "edit-button btn btn-sm btn-primary"}));
+                                                     col.Add().Titled("").Sanitized(false).Encoded(false).RenderValueAs(m => Html.ActionLink("Delete", "DeletePolicy", "Policy", new {Id = m.Id, @data_toggle = "#modal"}, new {@class = "btn btn-sm btn-danger", onclick = "return confirm('are you sure to delete?');"}));
+                                                 }
                                              }).WithPaging(10).Sortable(true)
 
                                               </div>

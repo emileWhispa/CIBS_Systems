@@ -18,6 +18,9 @@ public int Id{get;set;}
 [Column("client_name")]
 [StringLength(50)]
 public string client_name{get;set;}
+[Column("content")]
+[StringLength(2000)]
+public string Content{get;set;}
 [Column("phone")]
 [StringLength(50)]
 public string phone{get;set;}
