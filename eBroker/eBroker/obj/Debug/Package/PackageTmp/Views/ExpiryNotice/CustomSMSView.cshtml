@@ -1,0 +1,142 @@
+﻿@model List<eBroker.Client>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Custom SMS Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    
+  <div class="box box-primary">
+            <div class="box-header">Custom SMS Notifications</div>
+      <div class="box-body">
+          @using (Html.BeginForm("SendMultipleSMS", "ExpiryNotice", FormMethod.Post, new { id = "send-sms-form" }))
+          {
+
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="p-2">
+                          <input type="text" onkeyup="search(this)" class="form-control form-control-sm" placeholder="Filter clients" title="Filter clients">
+                      </div>
+                      <div class="form-check" style="margin: 10px 0">
+                          <input type="checkbox" onchange="selectAll(this)" class="form-check-input" id="exampleCheck1">
+                          <label class="form-check-label" for="exampleCheck1" style="margin-left: 10px;font-size: 22px">Select all clients (@Model.Count.ToString("#,#"))</label>
+                      </div>
+                      <div class="card-body" style="max-height: 300px;overflow-y: auto;margin: 10px 0">
+                          <div class="form-group">
+                              <div class="checkbox-list" id="sector-list">
+
+                              </div>
+                          </div>
+                      </div>
+
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <textarea name="content" id="content" cols="30" rows="6" class="form-control" placeholder="SMS Content" required="required"></textarea>
+                      </div>
+                      <div class="form-group">
+                          <button type="submit" class="btn btn-primary pull-right">Send SMS</button>
+                      </div>
+                  </div>
+              </div>
+          }
+      </div>
+
+        </div>
+</div>
+      
+      
+          <style>
+        .checkbox > span {
+            background-color: #e0e3e4;
+            border: 1px solid transparent;
+        }
+        .form-group {
+            margin-bottom: 0.70rem;
+        }
+    </style>
+    <script>
+
+        let sectors = [
+            @foreach (var item in Model) {
+                                 @Html.Raw("{value :"+item.Id+",name :\""+ item.client_name+"\",checked:false,mobile:\""+item.mobile+"\"},")                        
+                            }
+        ];
+
+        
+        
+        function selectAll(elem){
+           
+                sectors.forEach(function(e) {
+                  e.checked = elem.checked;
+                })
+            buildSectors(sectors);
+        }
+
+
+        function buildSectors(sectors) {
+            let parent = $("#sector-list");
+            parent.empty();
+            sectors.forEach(function (e) {
+                let group = document.createElement("div");
+                group.className = "form-check";
+                let label = document.createElement("label");
+                label.className = "form-check-label";
+                label.setAttribute("for","client-id-"+e.value);
+                label.style.marginLeft = "10px";
+                let input = document.createElement("input");
+                input.type = "checkbox";
+                //input.setAttribute("required","required");
+                input.id = "client-id-"+e.value;
+                input.className = "check-sector form-check-input";
+                input.name = "clients";
+                input.value = e.value;
+                input.onchange = function () {
+                    e.checked = this.checked;
+                }
+                input.checked = e.checked;
+                label.textContent = e.name + " ("+e.mobile+")";
+
+
+                group.appendChild(input);
+                group.appendChild(label);
+
+                parent.append(group);
+            })
+        }
+
+
+        function search(elem) {
+            buildSectors(sectors.filter(e=>e.name.toLowerCase().indexOf(elem.value.trim().toLowerCase()) > -1 || e.mobile.toLowerCase().indexOf(elem.value.trim().toLowerCase()) > -1));
+        }
+
+
+   
+
+        $(function () {
+
+            buildSectors(sectors);
+            //buildDistricts(districts);
+            
+
+            var loading = false;
+            $(document).on('submit','#send-sms-form',function(e) {
+                if(sectors.filter(function(e) {
+                  return e.checked
+                }).length<=0){
+                    alert("select clients required !");
+                    e.preventDefault();
+                 return;
+                }
+                
+              if(!loading){
+                  loading = true;
+              }else{
+                  e.preventDefault();
+              }
+            })
+
+        })
+
+    </script>

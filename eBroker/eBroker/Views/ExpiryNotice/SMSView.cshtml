@@ -6,7 +6,7 @@
     string startDate = ViewBag.StartDate;
     string endDate = ViewBag.EndDate;
 }
-<form action="SMSView" method="post" class="form-inline">
+<form action="SMSView" method="get" class="form-inline">
     <div class="content">
         <div class="box box-primary">
             <div class="box-header">View SMS Notice History {@ViewBag.StartDate To @ViewBag.EndDate} ** Count: @Model.Count()</div>

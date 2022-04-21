@@ -268,6 +268,7 @@ namespace eBroker.Controllers
                 {
                     DateTime start = DateTime.Parse(startDate);
                     DateTime end = DateTime.Parse(endDate);
+                    end = end.Add(TimeSpan.FromDays(1));
                     sms = _dc.SMS_Log.Where(x => x.system_date >= start && x.system_date <= end).ToList();
 
                 }
